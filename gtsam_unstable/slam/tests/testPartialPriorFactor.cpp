@@ -83,7 +83,7 @@ TEST(PartialPriorFactor, JacobianPartialTranslation2) {
   // Calculate numerical derivatives.
   Matrix expectedH1 = numericalDerivative11<Vector, Pose2>(
       std::bind(&TestPartialPriorFactor2::evaluateError, &factor,
-                std::placeholders::_1, boost::none),
+                std::placeholders::_1, std::nullopt),
       pose);
 
   // Use the factor to calculate the derivative.
@@ -108,7 +108,7 @@ TEST(PartialPriorFactor, JacobianFullTranslation2) {
   // Calculate numerical derivatives.
   Matrix expectedH1 = numericalDerivative11<Vector, Pose2>(
       std::bind(&TestPartialPriorFactor2::evaluateError, &factor,
-                std::placeholders::_1, boost::none),
+                std::placeholders::_1, std::nullopt),
       pose);
 
   // Use the factor to calculate the derivative.
@@ -131,7 +131,7 @@ TEST(PartialPriorFactor, JacobianTheta) {
 
   // Calculate numerical derivatives.
   Matrix expectedH1 = numericalDerivative11<Vector, Pose2>(
-      std::bind(&TestPartialPriorFactor2::evaluateError, &factor, std::placeholders::_1, boost::none), pose);
+      std::bind(&TestPartialPriorFactor2::evaluateError, &factor, std::placeholders::_1, std::nullopt), pose);
 
   // Use the factor to calculate the derivative.
   Matrix actualH1;
@@ -182,7 +182,7 @@ TEST(PartialPriorFactor, JacobianAtIdentity3) {
 
   // Calculate numerical derivatives.
   Matrix expectedH1 = numericalDerivative11<Vector, Pose3>(
-      std::bind(&TestPartialPriorFactor3::evaluateError, &factor, std::placeholders::_1, boost::none), pose);
+      std::bind(&TestPartialPriorFactor3::evaluateError, &factor, std::placeholders::_1, std::nullopt), pose);
 
   // Use the factor to calculate the derivative.
   Matrix actualH1;
@@ -204,7 +204,7 @@ TEST(PartialPriorFactor, JacobianPartialTranslation3) {
 
   // Calculate numerical derivatives.
   Matrix expectedH1 = numericalDerivative11<Vector, Pose3>(
-      std::bind(&TestPartialPriorFactor3::evaluateError, &factor, std::placeholders::_1, boost::none), pose);
+      std::bind(&TestPartialPriorFactor3::evaluateError, &factor, std::placeholders::_1, std::nullopt), pose);
 
   // Use the factor to calculate the derivative.
   Matrix actualH1;
@@ -228,7 +228,7 @@ TEST(PartialPriorFactor, JacobianFullTranslation3) {
 
   // Calculate numerical derivatives.
   Matrix expectedH1 = numericalDerivative11<Vector, Pose3>(
-      std::bind(&TestPartialPriorFactor3::evaluateError, &factor, std::placeholders::_1, boost::none), pose);
+      std::bind(&TestPartialPriorFactor3::evaluateError, &factor, std::placeholders::_1, std::nullopt), pose);
 
   // Use the factor to calculate the derivative.
   Matrix actualH1;
@@ -252,7 +252,7 @@ TEST(PartialPriorFactor, JacobianTxTz3) {
 
   // Calculate numerical derivatives.
   Matrix expectedH1 = numericalDerivative11<Vector, Pose3>(
-      std::bind(&TestPartialPriorFactor3::evaluateError, &factor, std::placeholders::_1, boost::none), pose);
+      std::bind(&TestPartialPriorFactor3::evaluateError, &factor, std::placeholders::_1, std::nullopt), pose);
 
   // Use the factor to calculate the derivative.
   Matrix actualH1;
@@ -275,7 +275,7 @@ TEST(PartialPriorFactor, JacobianFullRotation3) {
 
   // Calculate numerical derivatives.
   Matrix expectedH1 = numericalDerivative11<Vector, Pose3>(
-      std::bind(&TestPartialPriorFactor3::evaluateError, &factor, std::placeholders::_1, boost::none), pose);
+      std::bind(&TestPartialPriorFactor3::evaluateError, &factor, std::placeholders::_1, std::nullopt), pose);
 
   // Use the factor to calculate the derivative.
   Matrix actualH1;

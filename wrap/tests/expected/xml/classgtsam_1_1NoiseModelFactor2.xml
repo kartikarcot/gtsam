@@ -186,7 +186,7 @@
       <memberdef kind="function" id="classgtsam_1_1NoiseModelFactor2_1a9640bbbb433383f0b40b5c2d9439415e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
         <type>Vector</type>
         <definition>virtual Vector gtsam::NoiseModelFactor2&lt; VALUE1, VALUE2 &gt;::unwhitenedError</definition>
-        <argsstring>(const Values &amp;x, boost::optional&lt; std::vector&lt; Matrix &gt; &amp; &gt; H=boost::none) const </argsstring>
+        <argsstring>(const Values &amp;x, std::optional&lt; std::vector&lt; Matrix &gt; &amp; &gt; H=std::nullopt) const </argsstring>
         <name>unwhitenedError</name>
         <reimplements refid="classgtsam_1_1NoiseModelFactor_1afd61874915a8076bf83f9d8311fc0e26">unwhitenedError</reimplements>
         <param>
@@ -194,9 +194,9 @@
           <declname>x</declname>
         </param>
         <param>
-          <type>boost::optional&lt; std::vector&lt; Matrix &gt; &amp; &gt;</type>
+          <type>std::optional&lt; std::vector&lt; Matrix &gt; &amp; &gt;</type>
           <declname>H</declname>
-          <defval>boost::none</defval>
+          <defval>std::nullopt</defval>
         </param>
         <briefdescription>
         </briefdescription>
@@ -209,7 +209,7 @@
       <memberdef kind="function" id="classgtsam_1_1NoiseModelFactor2_1a9aa6dcd7db6734479e2212213b021ec1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
         <type>Vector</type>
         <definition>virtual Vector gtsam::NoiseModelFactor2&lt; VALUE1, VALUE2 &gt;::evaluateError</definition>
-        <argsstring>(const X1 &amp;, const X2 &amp;, boost::optional&lt; Matrix &amp; &gt; H1=boost::none, boost::optional&lt; Matrix &amp; &gt; H2=boost::none) const =0</argsstring>
+        <argsstring>(const X1 &amp;, const X2 &amp;, std::optional&lt; Matrix &amp; &gt; H1=std::nullopt, std::optional&lt; Matrix &amp; &gt; H2=std::nullopt) const =0</argsstring>
         <name>evaluateError</name>
         <param>
           <type>const X1 &amp;</type>
@@ -218,14 +218,14 @@
           <type>const X2 &amp;</type>
         </param>
         <param>
-          <type>boost::optional&lt; Matrix &amp; &gt;</type>
+          <type>std::optional&lt; Matrix &amp; &gt;</type>
           <declname>H1</declname>
-          <defval>boost::none</defval>
+          <defval>std::nullopt</defval>
         </param>
         <param>
-          <type>boost::optional&lt; Matrix &amp; &gt;</type>
+          <type>std::optional&lt; Matrix &amp; &gt;</type>
           <declname>H2</declname>
-          <defval>boost::none</defval>
+          <defval>std::nullopt</defval>
         </param>
         <briefdescription>
         </briefdescription>

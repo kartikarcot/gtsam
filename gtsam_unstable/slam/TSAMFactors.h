@@ -46,8 +46,8 @@ public:
 
   /// Evaluate measurement error h(x)-z
   Vector evaluateError(const Pose2& pose, const Point2& point,
-      boost::optional<Matrix&> H1 = boost::none, boost::optional<Matrix&> H2 =
-          boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt, std::optional<Matrix&> H2 =
+          std::nullopt) const override {
     return pose.transformTo(point, H1, H2) - measured_;
   }
 };
@@ -76,10 +76,10 @@ public:
   /// Evaluate measurement error h(x)-z
   Vector evaluateError(const Pose2& base1, const Pose2& pose,
       const Pose2& base2, const Point2& point, //
-      boost::optional<Matrix&> H1 = boost::none, //
-      boost::optional<Matrix&> H2 = boost::none, //
-      boost::optional<Matrix&> H3 = boost::none, //
-      boost::optional<Matrix&> H4 = boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt, //
+      std::optional<Matrix&> H2 = std::nullopt, //
+      std::optional<Matrix&> H3 = std::nullopt, //
+      std::optional<Matrix&> H4 = std::nullopt) const override {
     if (H1 || H2 || H3 || H4) {
       // TODO use fixed-size matrices
       Matrix D_pose_g_base1, D_pose_g_pose;
@@ -131,10 +131,10 @@ public:
   /// Evaluate measurement error h(x)-z
   Vector evaluateError(const Pose2& base1, const Pose2& pose1,
       const Pose2& base2, const Pose2& pose2, //
-      boost::optional<Matrix&> H1 = boost::none, //
-      boost::optional<Matrix&> H2 = boost::none, //
-      boost::optional<Matrix&> H3 = boost::none, //
-      boost::optional<Matrix&> H4 = boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt, //
+      std::optional<Matrix&> H2 = std::nullopt, //
+      std::optional<Matrix&> H3 = std::nullopt, //
+      std::optional<Matrix&> H4 = std::nullopt) const override {
     if (H1 || H2 || H3 || H4) {
       // TODO use fixed-size matrices
       Matrix D_pose1_g_base1, D_pose1_g_pose1;

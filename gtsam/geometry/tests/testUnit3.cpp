@@ -78,12 +78,12 @@ TEST(Unit3, rotate) {
   // Use numerical derivatives to calculate the expected Jacobian
   {
     expectedH = numericalDerivative21(rotate_, R, p);
-    R.rotate(p, actualH, boost::none);
+    R.rotate(p, actualH, std::nullopt);
     EXPECT(assert_equal(expectedH, actualH, 1e-5));
   }
   {
     expectedH = numericalDerivative22(rotate_, R, p);
-    R.rotate(p, boost::none, actualH);
+    R.rotate(p, std::nullopt, actualH);
     EXPECT(assert_equal(expectedH, actualH, 1e-5));
   }
 }
@@ -104,12 +104,12 @@ TEST(Unit3, unrotate) {
   // Use numerical derivatives to calculate the expected Jacobian
   {
     expectedH = numericalDerivative21(unrotate_, R, p);
-    R.unrotate(p, actualH, boost::none);
+    R.unrotate(p, actualH, std::nullopt);
     EXPECT(assert_equal(expectedH, actualH, 1e-5));
   }
   {
     expectedH = numericalDerivative22(unrotate_, R, p);
-    R.unrotate(p, boost::none, actualH);
+    R.unrotate(p, std::nullopt, actualH);
     EXPECT(assert_equal(expectedH, actualH, 1e-5));
   }
 }
@@ -128,7 +128,7 @@ TEST(Unit3, dot) {
   Matrix H1, H2;
   std::function<double(const Unit3&, const Unit3&)> f =
       std::bind(&Unit3::dot, std::placeholders::_1, std::placeholders::_2,  //
-                boost::none, boost::none);
+                std::nullopt, std::nullopt);
   {
     p.dot(q, H1, H2);
     EXPECT(assert_equal(numericalDerivative21<double,Unit3>(f, p, q), H1, 1e-5));
@@ -158,13 +158,13 @@ TEST(Unit3, error) {
   // Use numerical derivatives to calculate the expected Jacobian
   {
     expected = numericalDerivative11<Vector2,Unit3>(
-        std::bind(&Unit3::error, &p, std::placeholders::_1, boost::none), q);
+        std::bind(&Unit3::error, &p, std::placeholders::_1, std::nullopt), q);
     p.error(q, actual);
     EXPECT(assert_equal(expected.transpose(), actual, 1e-5));
   }
   {
     expected = numericalDerivative11<Vector2,Unit3>(
-        std::bind(&Unit3::error, &p, std::placeholders::_1, boost::none), r);
+        std::bind(&Unit3::error, &p, std::placeholders::_1, std::nullopt), r);
     p.error(r, actual);
     EXPECT(assert_equal(expected.transpose(), actual, 1e-5));
   }
@@ -186,33 +186,33 @@ TEST(Unit3, error2) {
   {
     expected = numericalDerivative21<Vector2, Unit3, Unit3>(
         std::bind(&Unit3::errorVector, std::placeholders::_1,
-                  std::placeholders::_2, boost::none, boost::none),
+                  std::placeholders::_2, std::nullopt, std::nullopt),
         p, q);
-    p.errorVector(q, actual, boost::none);
+    p.errorVector(q, actual, std::nullopt);
     EXPECT(assert_equal(expected, actual, 1e-5));
   }
   {
     expected = numericalDerivative21<Vector2, Unit3, Unit3>(
         std::bind(&Unit3::errorVector, std::placeholders::_1,
-                  std::placeholders::_2, boost::none, boost::none),
+                  std::placeholders::_2, std::nullopt, std::nullopt),
         p, r);
-    p.errorVector(r, actual, boost::none);
+    p.errorVector(r, actual, std::nullopt);
     EXPECT(assert_equal(expected, actual, 1e-5));
   }
   {
     expected = numericalDerivative22<Vector2, Unit3, Unit3>(
         std::bind(&Unit3::errorVector, std::placeholders::_1,
-                  std::placeholders::_2, boost::none, boost::none),
+                  std::placeholders::_2, std::nullopt, std::nullopt),
         p, q);
-    p.errorVector(q, boost::none, actual);
+    p.errorVector(q, std::nullopt, actual);
     EXPECT(assert_equal(expected, actual, 1e-5));
   }
   {
     expected = numericalDerivative22<Vector2, Unit3, Unit3>(
         std::bind(&Unit3::errorVector, std::placeholders::_1,
-                  std::placeholders::_2, boost::none, boost::none),
+                  std::placeholders::_2, std::nullopt, std::nullopt),
         p, r);
-    p.errorVector(r, boost::none, actual);
+    p.errorVector(r, std::nullopt, actual);
     EXPECT(assert_equal(expected, actual, 1e-5));
   }
 }
@@ -229,13 +229,13 @@ TEST(Unit3, distance) {
   // Use numerical derivatives to calculate the expected Jacobian
   {
     expected = numericalGradient<Unit3>(
-        std::bind(&Unit3::distance, &p, std::placeholders::_1, boost::none), q);
+        std::bind(&Unit3::distance, &p, std::placeholders::_1, std::nullopt), q);
     p.distance(q, actual);
     EXPECT(assert_equal(expected.transpose(), actual, 1e-5));
   }
   {
     expected = numericalGradient<Unit3>(
-        std::bind(&Unit3::distance, &p, std::placeholders::_1, boost::none), r);
+        std::bind(&Unit3::distance, &p, std::placeholders::_1, std::nullopt), r);
     p.distance(r, actual);
     EXPECT(assert_equal(expected.transpose(), actual, 1e-5));
   }
@@ -327,7 +327,7 @@ TEST(Unit3, basis) {
 
   Matrix62 actualH;
   Matrix62 expectedH = numericalDerivative11<Vector6, Unit3>(
-      std::bind(BasisTest, std::placeholders::_1, boost::none), p);
+      std::bind(BasisTest, std::placeholders::_1, std::nullopt), p);
 
   // without H, first time
   EXPECT(assert_equal(expected, p.basis(), 1e-6));
@@ -356,7 +356,7 @@ TEST(Unit3, basis_derivatives) {
     p.basis(actualH);
 
     Matrix62 expectedH = numericalDerivative11<Vector6, Unit3>(
-        std::bind(BasisTest, std::placeholders::_1, boost::none), p);
+        std::bind(BasisTest, std::placeholders::_1, std::nullopt), p);
     EXPECT(assert_equal(expectedH, actualH, 1e-5));
   }
 }
@@ -385,7 +385,7 @@ TEST (Unit3, jacobian_retract) {
   Matrix22 H;
   Unit3 p;
   std::function<Unit3(const Vector2&)> f =
-      std::bind(&Unit3::retract, p, std::placeholders::_1, boost::none);
+      std::bind(&Unit3::retract, p, std::placeholders::_1, std::nullopt);
   {
       Vector2 v (-0.2, 0.1);
       p.retract(v, H);
@@ -448,7 +448,7 @@ TEST (Unit3, FromPoint3) {
   Unit3 expected(point);
   EXPECT(assert_equal(expected, Unit3::FromPoint3(point, actualH), 1e-5));
   Matrix expectedH = numericalDerivative11<Unit3, Point3>(
-      std::bind(Unit3::FromPoint3, std::placeholders::_1, boost::none), point);
+      std::bind(Unit3::FromPoint3, std::placeholders::_1, std::nullopt), point);
   EXPECT(assert_equal(expectedH, actualH, 1e-5));
 }
 

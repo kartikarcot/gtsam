@@ -21,7 +21,7 @@
 #include <gtsam/inference/Ordering.h>
 #include <gtsam/base/types.h>
 #include <gtsam/base/FastVector.h>
-#include <boost/optional.hpp>
+#include <optional>
 
 #include <string>
 #include <mutex>
@@ -102,7 +102,7 @@ namespace gtsam {
     /// @}
 
     /// This stores the Cached separator marginal P(S)
-    mutable boost::optional<FactorGraphType> cachedSeparatorMarginal_;
+    mutable std::optional<FactorGraphType> cachedSeparatorMarginal_;
     /// This protects Cached seperator marginal P(S) from concurrent read/writes
     /// as many the functions which access it are const (hence the mutable)
     /// leading to the false impression that these const functions are thread-safe
@@ -174,7 +174,7 @@ namespace gtsam {
      */
     void deleteCachedShortcuts();
 
-    const boost::optional<FactorGraphType>& cachedSeparatorMarginal() const {
+    const std::optional<FactorGraphType>& cachedSeparatorMarginal() const {
       std::lock_guard<std::mutex> marginalLock(cachedSeparatorMarginalMutex_);
       return cachedSeparatorMarginal_; 
     }
@@ -194,7 +194,7 @@ namespace gtsam {
     /** Non-recursive delete cached shortcuts and marginals - internal only. */
     void deleteCachedShortcutsNonRecursive() { 
       std::lock_guard<std::mutex> marginalLock(cachedSeparatorMarginalMutex_);
-      cachedSeparatorMarginal_ = boost::none; 
+      cachedSeparatorMarginal_ = std::nullopt; 
     }
 
   private:

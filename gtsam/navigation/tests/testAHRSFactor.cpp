@@ -163,7 +163,7 @@ TEST(AHRSFactor, Error) {
   pim.integrateMeasurement(measuredOmega, deltaT);
 
   // Create factor
-  AHRSFactor factor(X(1), X(2), B(1), pim, kZeroOmegaCoriolis, boost::none);
+  AHRSFactor factor(X(1), X(2), B(1), pim, kZeroOmegaCoriolis, std::nullopt);
 
   Vector3 errorActual = factor.evaluateError(x1, x2, bias);
 
@@ -459,7 +459,7 @@ TEST (AHRSFactor, predictTest) {
   // PreintegratedAhrsMeasurements::predict
   Matrix expectedH = numericalDerivative11<Vector3, Vector3>(
       std::bind(&PreintegratedAhrsMeasurements::predict,
-          &pim, std::placeholders::_1, boost::none), bias);
+          &pim, std::placeholders::_1, std::nullopt), bias);
 
   // Actual Jacobians
   Matrix H;

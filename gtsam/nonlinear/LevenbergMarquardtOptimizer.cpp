@@ -29,7 +29,7 @@
 #include <gtsam/base/timing.h>
 
 #include <boost/format.hpp>
-#include <boost/optional.hpp>
+#include <optional>
 #include <boost/range/adaptor/map.hpp>
 
 #include <cmath>

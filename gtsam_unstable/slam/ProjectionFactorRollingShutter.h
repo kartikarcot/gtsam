@@ -23,7 +23,7 @@
 #include <gtsam/nonlinear/NonlinearFactor.h>
 #include <gtsam_unstable/dllexport.h>
 
-#include <boost/optional.hpp>
+#include <optional>
 
 namespace gtsam {
 
@@ -49,7 +49,7 @@ class GTSAM_UNSTABLE_EXPORT ProjectionFactorRollingShutter
   double alpha_;     ///< interpolation parameter in [0,1] corresponding to the
                      ///< point2 measurement
   boost::shared_ptr<Cal3_S2> K_;  ///< shared pointer to calibration object
-  boost::optional<Pose3>
+  std::optional<Pose3>
       body_P_sensor_;  ///< The pose of the sensor in the body frame
 
   // verbosity handling for Cheirality Exceptions
@@ -92,7 +92,7 @@ class GTSAM_UNSTABLE_EXPORT ProjectionFactorRollingShutter
       const Point2& measured, double alpha, const SharedNoiseModel& model,
       Key poseKey_a, Key poseKey_b, Key pointKey,
       const boost::shared_ptr<Cal3_S2>& K,
-      boost::optional<Pose3> body_P_sensor = boost::none)
+      std::optional<Pose3> body_P_sensor = std::nullopt)
       : Base(model, poseKey_a, poseKey_b, pointKey),
         measured_(measured),
         alpha_(alpha),
@@ -123,7 +123,7 @@ class GTSAM_UNSTABLE_EXPORT ProjectionFactorRollingShutter
       Key poseKey_a, Key poseKey_b, Key pointKey,
       const boost::shared_ptr<Cal3_S2>& K, bool throwCheirality,
       bool verboseCheirality,
-      boost::optional<Pose3> body_P_sensor = boost::none)
+      std::optional<Pose3> body_P_sensor = std::nullopt)
       : Base(model, poseKey_a, poseKey_b, pointKey),
         measured_(measured),
         alpha_(alpha),
@@ -173,9 +173,9 @@ class GTSAM_UNSTABLE_EXPORT ProjectionFactorRollingShutter
   /// Evaluate error h(x)-z and optionally derivatives
   Vector evaluateError(
       const Pose3& pose_a, const Pose3& pose_b, const Point3& point,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none,
-      boost::optional<Matrix&> H3 = boost::none) const override;
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt,
+      std::optional<Matrix&> H3 = std::nullopt) const override;
 
   /** return the measurement */
   const Point2& measured() const { return measured_; }

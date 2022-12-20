@@ -157,7 +157,7 @@ namespace gtsam {
 
     /* ************************************************************************* */
     gtsam::Vector whitenedError(const gtsam::Values& x,
-        boost::optional<std::vector<gtsam::Matrix>&> H = boost::none) const {
+        std::optional<std::vector<gtsam::Matrix>&> H = std::nullopt) const {
 
       T orgA_T_currA = valA_.at<T>(keyA_);
       T orgB_T_currB = valB_.at<T>(keyB_);
@@ -166,8 +166,8 @@ namespace gtsam {
       T currA_T_currB_pred;
       if (H) {
         Matrix H_compose, H_between1;
-        T orgA_T_currB = orgA_T_orgB.compose(orgB_T_currB, H_compose, boost::none);
-        currA_T_currB_pred = orgA_T_currA.between(orgA_T_currB, boost::none, H_between1);
+        T orgA_T_currB = orgA_T_orgB.compose(orgB_T_currB, H_compose, std::nullopt);
+        currA_T_currB_pred = orgA_T_currA.between(orgA_T_currB, std::nullopt, H_between1);
         (*H)[0] = H_compose * H_between1;
       }
       else {

@@ -77,8 +77,8 @@ public:
    *  z - h(x1,x2)
    */
   Vector evaluateError(const PoseRTV& x1, const PoseRTV& x2,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt) const override {
     const Vector6 meas = z();
     if (H1) *H1 = numericalDerivative21<Vector6, PoseRTV, PoseRTV>(
         std::bind(This::predict_proxy, std::placeholders::_1, std::placeholders::_2, dt_, meas), x1, x2, 1e-5);
@@ -89,8 +89,8 @@ public:
 
   /** dummy version that fails for non-dynamic poses */
   virtual Vector evaluateError(const Pose3& x1, const Pose3& x2,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none) const {
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt) const {
     assert(false); // no corresponding factor here
     return Vector6::Zero();
   }

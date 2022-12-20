@@ -119,10 +119,10 @@ public:
   }
 
   /// Evaluate error h(x)-z and optionally derivatives
-  Vector evaluateError(const Point3& point, boost::optional<Matrix&> H2 =
-      boost::none) const override {
+  Vector evaluateError(const Point3& point, std::optional<Matrix&> H2 =
+      std::nullopt) const override {
     try {
-      return traits<Measurement>::Local(measured_, camera_.project2(point, boost::none, H2));
+      return traits<Measurement>::Local(measured_, camera_.project2(point, std::nullopt, H2));
     } catch (CheiralityException& e) {
       if (H2)
         *H2 = Matrix::Zero(traits<Measurement>::dimension, 3);
@@ -161,7 +161,7 @@ public:
 
     // Would be even better if we could pass blocks to project
     const Point3& point = x.at<Point3>(key());
-    b = traits<Measurement>::Local(camera_.project2(point, boost::none, A), measured_);
+    b = traits<Measurement>::Local(camera_.project2(point, std::nullopt, A), measured_);
     if (noiseModel_)
       this->noiseModel_->WhitenSystem(A, b);
 

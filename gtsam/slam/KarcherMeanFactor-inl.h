@@ -58,7 +58,7 @@ T FindKarcherMean(std::initializer_list<T>&& rotations) {
 template <class T>
 template <typename CONTAINER>
 KarcherMeanFactor<T>::KarcherMeanFactor(const CONTAINER &keys, int d,
-                                        boost::optional<double> beta)
+                                        std::optional<double> beta)
     : NonlinearFactor(keys), d_(static_cast<size_t>(d)) {
   if (d <= 0) {
     throw std::invalid_argument(

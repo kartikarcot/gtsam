@@ -43,8 +43,8 @@ bool EssentialMatrixConstraint::equals(const NonlinearFactor& expected,
 
 /* ************************************************************************* */
 Vector EssentialMatrixConstraint::evaluateError(const Pose3& p1,
-    const Pose3& p2, boost::optional<Matrix&> Hp1,
-    boost::optional<Matrix&> Hp2) const {
+    const Pose3& p2, std::optional<Matrix&> Hp1,
+    std::optional<Matrix&> Hp2) const {
 
   // compute relative Pose3 between p1 and p2
   Pose3 _1P2_ = p1.between(p2, Hp1, Hp2);
@@ -52,7 +52,7 @@ Vector EssentialMatrixConstraint::evaluateError(const Pose3& p1,
   // convert to EssentialMatrix
   Matrix D_hx_1P2;
   EssentialMatrix hx = EssentialMatrix::FromPose3(_1P2_,
-      (Hp1 || Hp2) ? boost::optional<Matrix&>(D_hx_1P2) : boost::none);
+      (Hp1 || Hp2) ? std::optional<Matrix&>(D_hx_1P2) : std::nullopt);
 
   // Calculate derivatives if needed
   if (Hp1) {

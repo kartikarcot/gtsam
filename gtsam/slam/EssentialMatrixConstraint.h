@@ -79,8 +79,8 @@ public:
 
   /** vector of errors */
   Vector evaluateError(const Pose3& p1, const Pose3& p2,
-      boost::optional<Matrix&> Hp1 = boost::none, //
-      boost::optional<Matrix&> Hp2 = boost::none) const override;
+      std::optional<Matrix&> Hp1 = std::nullopt, //
+      std::optional<Matrix&> Hp2 = std::nullopt) const override;
 
   /** return the measured */
   const EssentialMatrix& measured() const {

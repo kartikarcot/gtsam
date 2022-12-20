@@ -24,7 +24,7 @@
 #include <string>
 
 #ifndef OPTIONALJACOBIAN_NOBOOST
-#include <boost/optional.hpp>
+#include <optional>
 #endif
 
 namespace gtsam {
@@ -33,8 +33,8 @@ namespace gtsam {
  * OptionalJacobian is an Eigen::Ref like class that can take be constructed using
  * either a fixed size or dynamic Eigen matrix. In the latter case, the dynamic
  * matrix will be resized. Finally, there is a constructor that takes
- * boost::none, the default constructor acts like boost::none, and
- * boost::optional<Eigen::MatrixXd&> is also supported for backwards compatibility.
+ * std::nullopt, the default constructor acts like std::nullopt, and
+ * std::optional<Eigen::MatrixXd&> is also supported for backwards compatibility.
  * Below this class, a dynamic version is also implemented.
  */
 template<int Rows, int Cols>
@@ -66,7 +66,7 @@ private:
 
 public:
 
-  /// Default constructor acts like boost::none
+  /// Default constructor acts like std::nullopt
   OptionalJacobian() :
       map_(nullptr) {
   }
@@ -118,13 +118,13 @@ public:
 
 #ifndef OPTIONALJACOBIAN_NOBOOST
 
-  /// Constructor with boost::none just makes empty
-  OptionalJacobian(boost::none_t /*none*/) :
+  /// Constructor with std::nullopt just makes empty
+  OptionalJacobian(std::nullopt_t /*none*/) :
       map_(nullptr) {
   }
 
   /// Constructor compatible with old-style derivatives
-  OptionalJacobian(const boost::optional<Eigen::MatrixXd&> optional) :
+  OptionalJacobian(std::optional<Eigen::MatrixXd> optional) :
       map_(nullptr) {
     if (optional) {
       optional->resize(Rows, Cols);
@@ -198,7 +198,7 @@ private:
 
 public:
 
-  /// Default constructor acts like boost::none
+  /// Default constructor acts like std::nullopt
   OptionalJacobian() :
     pointer_(nullptr) {
   }
@@ -211,13 +211,13 @@ public:
 
 #ifndef OPTIONALJACOBIAN_NOBOOST
 
-  /// Constructor with boost::none just makes empty
-  OptionalJacobian(boost::none_t /*none*/) :
+  /// Constructor with std::nullopt just makes empty
+  OptionalJacobian(std::nullopt_t /*none*/) :
     pointer_(nullptr) {
   }
 
   /// Constructor compatible with old-style derivatives
-  OptionalJacobian(const boost::optional<Eigen::MatrixXd&> optional) :
+  OptionalJacobian(std::optional<Eigen::MatrixXd> optional) :
       pointer_(nullptr) {
     if (optional) pointer_ = &(*optional);
   }

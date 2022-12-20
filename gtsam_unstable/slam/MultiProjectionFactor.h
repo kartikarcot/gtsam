@@ -22,7 +22,7 @@
 
 #include <gtsam/nonlinear/NonlinearFactor.h>
 #include <gtsam/geometry/PinholeCamera.h>
-#include <boost/optional.hpp>
+#include <optional>
 
 namespace gtsam {
 
@@ -38,7 +38,7 @@ namespace gtsam {
     // Keep a copy of measurement and calibration for I/O
     Vector measured_;                    ///< 2D measurement for each of the n views
     boost::shared_ptr<CALIBRATION> K_;  ///< shared pointer to calibration object
-    boost::optional<POSE> body_P_sensor_; ///< The pose of the sensor in the body frame
+    std::optional<POSE> body_P_sensor_; ///< The pose of the sensor in the body frame
 
 
     // verbosity handling for Cheirality Exceptions
@@ -71,7 +71,7 @@ namespace gtsam {
      */
     MultiProjectionFactor(const Vector& measured, const SharedNoiseModel& model,
         KeySet poseKeys, Key pointKey, const boost::shared_ptr<CALIBRATION>& K,
-        boost::optional<POSE> body_P_sensor = boost::none) :
+        std::optional<POSE> body_P_sensor = std::nullopt) :
           Base(model), measured_(measured), K_(K), body_P_sensor_(body_P_sensor),
           throwCheirality_(false), verboseCheirality_(false) {
       keys_.assign(poseKeys.begin(), poseKeys.end());
@@ -93,7 +93,7 @@ namespace gtsam {
     MultiProjectionFactor(const Vector& measured, const SharedNoiseModel& model,
         KeySet poseKeys, Key pointKey, const boost::shared_ptr<CALIBRATION>& K,
         bool throwCheirality, bool verboseCheirality,
-        boost::optional<POSE> body_P_sensor = boost::none) :
+        std::optional<POSE> body_P_sensor = std::nullopt) :
           Base(model), measured_(measured), K_(K), body_P_sensor_(body_P_sensor),
           throwCheirality_(throwCheirality), verboseCheirality_(verboseCheirality) {}
 
@@ -129,7 +129,7 @@ namespace gtsam {
     }
 
     /// Evaluate error h(x)-z and optionally derivatives
-    Vector unwhitenedError(const Values& x, boost::optional<std::vector<Matrix>&> H = boost::none) const override {
+    Vector unwhitenedError(const Values& x, std::optional<std::vector<Matrix>&> H = std::nullopt) const override {
 
       Vector a;
       return a;
@@ -164,7 +164,7 @@ namespace gtsam {
 
 
     Vector evaluateError(const Pose3& pose, const Point3& point,
-        boost::optional<Matrix&> H1 = boost::none, boost::optional<Matrix&> H2 = boost::none) const {
+        std::optional<Matrix&> H1 = std::nullopt, std::optional<Matrix&> H2 = std::nullopt) const {
       try {
         if(body_P_sensor_) {
           if(H1) {

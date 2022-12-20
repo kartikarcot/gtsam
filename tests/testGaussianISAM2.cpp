@@ -44,8 +44,8 @@ SharedDiagonal odoNoise = noiseModel::Diagonal::Sigmas((Vector(3) << 0.1, 0.1, M
 SharedDiagonal brNoise = noiseModel::Diagonal::Sigmas((Vector(2) << M_PI/100.0, 0.1).finished());
 
 ISAM2 createSlamlikeISAM2(
-    boost::optional<Values&> init_values = boost::none,
-    boost::optional<NonlinearFactorGraph&> full_graph = boost::none,
+    std::optional<Values&> init_values = std::nullopt,
+    std::optional<NonlinearFactorGraph&> full_graph = std::nullopt,
     const ISAM2Params& params = ISAM2Params(ISAM2GaussNewtonParams(0.001), 0.0,
                                             0, false, true,
                                             ISAM2Params::CHOLESKY, true,

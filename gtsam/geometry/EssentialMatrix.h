@@ -49,12 +49,12 @@ class EssentialMatrix {
 
   /// Named constructor with derivatives
   GTSAM_EXPORT static EssentialMatrix FromRotationAndDirection(const Rot3& aRb, const Unit3& aTb,
-                                                  OptionalJacobian<5, 3> H1 = boost::none,
-                                                  OptionalJacobian<5, 2> H2 = boost::none);
+                                                  OptionalJacobian<5, 3> H1 = std::nullopt,
+                                                  OptionalJacobian<5, 2> H2 = std::nullopt);
 
   /// Named constructor converting a Pose3 with scale to EssentialMatrix (no scale)
   GTSAM_EXPORT static EssentialMatrix FromPose3(const Pose3& _1P2_,
-      OptionalJacobian<5, 6> H = boost::none);
+      OptionalJacobian<5, 6> H = std::nullopt);
 
   /// Random, using Rot3::Random and Unit3::Random
   template<typename Engine>
@@ -139,8 +139,8 @@ class EssentialMatrix {
    * @return point in pose coordinates
    */
   GTSAM_EXPORT Point3 transformTo(const Point3& p,
-      OptionalJacobian<3, 5> DE = boost::none,
-      OptionalJacobian<3, 3> Dpoint = boost::none) const;
+      OptionalJacobian<3, 5> DE = std::nullopt,
+      OptionalJacobian<3, 3> Dpoint = std::nullopt) const;
 
   /**
    * Given essential matrix E in camera frame B, convert to body frame C
@@ -148,7 +148,7 @@ class EssentialMatrix {
    * @param E essential matrix E in camera frame C
    */
   GTSAM_EXPORT EssentialMatrix rotate(const Rot3& cRb, OptionalJacobian<5, 5> HE =
-      boost::none, OptionalJacobian<5, 3> HR = boost::none) const;
+      std::nullopt, OptionalJacobian<5, 3> HR = std::nullopt) const;
 
   /**
    * Given essential matrix E in camera frame B, convert to body frame C
@@ -161,7 +161,7 @@ class EssentialMatrix {
 
   /// epipolar error, algebraic
   GTSAM_EXPORT double error(const Vector3& vA, const Vector3& vB,
-      OptionalJacobian<1, 5> H = boost::none) const;
+      OptionalJacobian<1, 5> H = std::nullopt) const;
 
   /// @}
 

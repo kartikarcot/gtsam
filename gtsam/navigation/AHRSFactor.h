@@ -101,7 +101,7 @@ class GTSAM_EXPORT PreintegratedAhrsMeasurements : public PreintegratedRotation 
 
   /// Predict bias-corrected incremental rotation
   /// TODO: The matrix Hbias is the derivative of predict? Unit-test?
-  Vector3 predict(const Vector3& bias, OptionalJacobian<3,3> H = boost::none) const;
+  Vector3 predict(const Vector3& bias, OptionalJacobian<3,3> H = std::nullopt) const;
 
   // This function is only used for test purposes
   // (compare numerical derivatives wrt analytic ones)
@@ -179,9 +179,9 @@ public:
 
   /// vector of errors
   Vector evaluateError(const Rot3& rot_i, const Rot3& rot_j,
-      const Vector3& bias, boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none, boost::optional<Matrix&> H3 =
-          boost::none) const override;
+      const Vector3& bias, std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt, std::optional<Matrix&> H3 =
+          std::nullopt) const override;
 
   /// predicted states from IMU
   /// TODO(frank): relationship with PIM predict ??
@@ -192,13 +192,13 @@ public:
   AHRSFactor(Key rot_i, Key rot_j, Key bias,
              const PreintegratedAhrsMeasurements& pim,
              const Vector3& omegaCoriolis,
-             const boost::optional<Pose3>& body_P_sensor = boost::none);
+             const std::optional<Pose3>& body_P_sensor = std::nullopt);
 
   /// @deprecated static function, but used in tests.
   static Rot3 predict(
       const Rot3& rot_i, const Vector3& bias,
       const PreintegratedAhrsMeasurements& pim, const Vector3& omegaCoriolis,
-      const boost::optional<Pose3>& body_P_sensor = boost::none);
+      const std::optional<Pose3>& body_P_sensor = std::nullopt);
 
 #ifdef GTSAM_ALLOW_DEPRECATED_SINCE_V42
   /// @deprecated name

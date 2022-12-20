@@ -51,7 +51,7 @@ public:
 
   /// vector of errors returns 2D vector
   Vector evaluateError(const Rot3& R,
-      boost::optional<Matrix&> H = boost::none) const override {
+      std::optional<Matrix&> H = std::nullopt) const override {
     // predict p_ as q = R*z_, derivative H will be filled if not none
     Point3 q = R.rotate(z_,H);
     // error is just difference, and note derivative of that wrpt q is I3
@@ -102,7 +102,7 @@ public:
   }
 
   /// vector of errors returns 2D vector
-  Vector evaluateError(const Rot3& iRc, boost::optional<Matrix&> H = boost::none) const override {
+  Vector evaluateError(const Rot3& iRc, std::optional<Matrix&> H = std::nullopt) const override {
     Unit3 i_q = iRc * c_z_;
     Vector error = i_p_.error(i_q, H);
     if (H) {

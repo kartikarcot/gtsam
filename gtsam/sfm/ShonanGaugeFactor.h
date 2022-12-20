@@ -58,7 +58,7 @@ public:
    * the Jacobian will be multiplied with 1/sigma = sqrt(gamma).
    */
   ShonanGaugeFactor(Key key, size_t p, size_t d = 3,
-                    boost::optional<double> gamma = boost::none)
+                    std::optional<double> gamma = std::nullopt)
       : NonlinearFactor(boost::assign::cref_list_of<1>(key)) {
     if (p < d) {
       throw std::invalid_argument("ShonanGaugeFactor must have p>=d.");

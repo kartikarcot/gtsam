@@ -140,7 +140,7 @@ TEST( SmartProjectionPoseFactor, noiseless ) {
   factor.triangulateAndComputeE(actualE, values);
 
   // get point
-  boost::optional<Point3> point = factor.point();
+  std::optional<Point3> point = factor.point();
   CHECK(point);
 
   // calculate numerical derivative with triangulated point
@@ -368,7 +368,7 @@ TEST( SmartProjectionPoseFactor, Factors ) {
   CHECK(smartFactor1->triangulateSafe(cameras));
   CHECK(!smartFactor1->isDegenerate());
   CHECK(!smartFactor1->isPointBehindCamera());
-  boost::optional<Point3> p = smartFactor1->point();
+  std::optional<Point3> p = smartFactor1->point();
   CHECK(p);
   EXPECT(assert_equal(landmark1, *p));
 

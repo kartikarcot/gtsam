@@ -87,8 +87,8 @@ public:
    * @return the transformed plane
    */
   OrientedPlane3 transform(const Pose3& xr,
-                           OptionalJacobian<3, 3> Hp = boost::none,
-                           OptionalJacobian<3, 6> Hr = boost::none) const;
+                           OptionalJacobian<3, 3> Hp = std::nullopt,
+                           OptionalJacobian<3, 6> Hr = std::nullopt) const;
 
   /** Computes the error between the two planes, with derivatives.
    *  This uses Unit3::errorVector, as opposed to the other .error() in this
@@ -98,8 +98,8 @@ public:
    * @param other the other plane
    */
   Vector3 errorVector(const OrientedPlane3& other,
-                      OptionalJacobian<3, 3> H1 = boost::none,
-                      OptionalJacobian<3, 3> H2 = boost::none) const;
+                      OptionalJacobian<3, 3> H1 = std::nullopt,
+                      OptionalJacobian<3, 3> H2 = std::nullopt) const;
 
   /// Dimensionality of tangent space = 3 DOF
   inline static size_t Dim() {
@@ -113,7 +113,7 @@ public:
 
   /// The retract function
   OrientedPlane3 retract(const Vector3& v,
-                        OptionalJacobian<3, 3> H = boost::none) const;
+                        OptionalJacobian<3, 3> H = std::nullopt) const;
 
   /// The local coordinates function
   Vector3 localCoordinates(const OrientedPlane3& s) const;

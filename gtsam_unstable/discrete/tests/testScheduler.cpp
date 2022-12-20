@@ -12,7 +12,7 @@
 
 #include <boost/assign/std/map.hpp>
 #include <boost/assign/std/vector.hpp>
-#include <boost/optional.hpp>
+#include <optional>
 
 using namespace boost::assign;
 using namespace std;

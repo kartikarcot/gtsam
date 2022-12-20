@@ -144,7 +144,7 @@ TEST(LocalOrientedPlane3Factor, Derivatives) {
   auto f =
       std::bind(&LocalOrientedPlane3Factor::evaluateError, factor,
                 std::placeholders::_1, std::placeholders::_2,
-                std::placeholders::_3, boost::none, boost::none, boost::none);
+                std::placeholders::_3, std::nullopt, std::nullopt, std::nullopt);
   Matrix numericalH1 = numericalDerivative31<Vector3, Pose3, Pose3,
     OrientedPlane3>(f, poseLin, anchorPoseLin, pLin);
   Matrix numericalH2 = numericalDerivative32<Vector3, Pose3, Pose3,

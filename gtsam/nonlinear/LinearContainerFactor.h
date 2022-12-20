@@ -27,10 +27,10 @@ class GTSAM_EXPORT LinearContainerFactor : public NonlinearFactor {
 protected:
 
   GaussianFactor::shared_ptr factor_;
-  boost::optional<Values> linearizationPoint_;
+  std::optional<Values> linearizationPoint_;
 
   /** direct copy constructor */
-  LinearContainerFactor(const GaussianFactor::shared_ptr& factor, const boost::optional<Values>& linearizationPoint);
+  LinearContainerFactor(const GaussianFactor::shared_ptr& factor, const std::optional<Values>& linearizationPoint);
 
   // Some handy typedefs
   typedef NonlinearFactor Base;
@@ -80,7 +80,7 @@ public:
   size_t dim() const override;
 
   /** Extract the linearization point used in recalculating error */
-  const boost::optional<Values>& linearizationPoint() const { return linearizationPoint_; }
+  const std::optional<Values>& linearizationPoint() const { return linearizationPoint_; }
 
   /**
    * Linearize to a GaussianFactor, with method depending on the presence of a linearizationPoint

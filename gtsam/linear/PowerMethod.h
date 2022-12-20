@@ -75,7 +75,7 @@ class PowerMethod {
 
   /// Construct from the aim matrix and intial ritz vector
   explicit PowerMethod(const Operator &A,
-                       const boost::optional<Vector> initial = boost::none)
+                       const std::optional<Vector> initial = std::nullopt)
       : A_(A), dim_(A.rows()), nrIterations_(0) {
     Vector x0;
     x0 = initial ? initial.get() : Vector::Random(dim_);

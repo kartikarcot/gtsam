@@ -38,7 +38,7 @@ namespace simulated3D {
 /**
  * Prior on a single pose
  */
-Point3 prior(const Point3& x, boost::optional<Matrix&> H = boost::none) {
+Point3 prior(const Point3& x, std::optional<Matrix&> H = std::nullopt) {
   if (H) *H = I_3x3;
   return x;
 }
@@ -47,8 +47,8 @@ Point3 prior(const Point3& x, boost::optional<Matrix&> H = boost::none) {
  * odometry between two poses
  */
 Point3 odo(const Point3& x1, const Point3& x2,
-    boost::optional<Matrix&> H1 = boost::none,
-    boost::optional<Matrix&> H2 = boost::none) {
+    std::optional<Matrix&> H1 = std::nullopt,
+    std::optional<Matrix&> H2 = std::nullopt) {
   if (H1) *H1 = -1 * I_3x3;
   if (H2) *H2 = I_3x3;
   return x2 - x1;
@@ -58,8 +58,8 @@ Point3 odo(const Point3& x1, const Point3& x2,
  *  measurement between landmark and pose
  */
 Point3 mea(const Point3& x, const Point3& l,
-    boost::optional<Matrix&> H1 = boost::none,
-    boost::optional<Matrix&> H2 = boost::none) {
+    std::optional<Matrix&> H1 = std::nullopt,
+    std::optional<Matrix&> H2 = std::nullopt) {
   if (H1) *H1 = -1 * I_3x3;
   if (H2) *H2 = I_3x3;
   return l - x;
@@ -89,8 +89,8 @@ struct PointPrior3D: public NoiseModelFactor1<Point3> {
    * @param H is an optional Jacobian matrix (Dimension: 3x3)
    * @return Vector error between prior value and x (Dimension: 3)
    */
-  Vector evaluateError(const Point3& x, boost::optional<Matrix&> H =
-      boost::none) const override {
+  Vector evaluateError(const Point3& x, std::optional<Matrix&> H =
+      std::nullopt) const override {
     return prior(x, H) - measured_;
   }
 };
@@ -121,7 +121,7 @@ struct Simulated3DMeasurement: public NoiseModelFactor2<Point3, Point3> {
    * @return vector error between measurement and prediction (Dimension: 3)
    */
   Vector evaluateError(const Point3& x1, const Point3& x2,
-      boost::optional<Matrix&> H1 = boost::none, boost::optional<Matrix&> H2 = boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt, std::optional<Matrix&> H2 = std::nullopt) const override {
     return mea(x1, x2, H1, H2) - measured_;
   }
 };

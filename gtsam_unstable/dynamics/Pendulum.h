@@ -46,9 +46,9 @@ public:
 
   /** q_k + h*v - q_k1 = 0, with optional derivatives */
   Vector evaluateError(const double& qk1, const double& qk, const double& v,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none,
-      boost::optional<Matrix&> H3 = boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt,
+      std::optional<Matrix&> H3 = std::nullopt) const override {
     const size_t p = 1;
     if (H1) *H1 = -Matrix::Identity(p,p);
     if (H2) *H2 = Matrix::Identity(p,p);
@@ -94,9 +94,9 @@ public:
 
   /**  v_k - h*g/L*sin(q) - v_k1 = 0, with optional derivatives */
   Vector evaluateError(const double & vk1, const double & vk, const double & q,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none,
-      boost::optional<Matrix&> H3 = boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt,
+      std::optional<Matrix&> H3 = std::nullopt) const override {
     const size_t p = 1;
     if (H1) *H1 = -Matrix::Identity(p,p);
     if (H2) *H2 = Matrix::Identity(p,p);
@@ -145,9 +145,9 @@ public:
 
   /**  1/h mr^2 (qk1-qk)+mgrh (1-a) sin((1-a)pk + a*pk1) - pk = 0, with optional derivatives */
   Vector evaluateError(const double & pk, const double & qk, const double & qk1,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none,
-      boost::optional<Matrix&> H3 = boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt,
+      std::optional<Matrix&> H3 = std::nullopt) const override {
     const size_t p = 1;
 
     double qmid = (1-alpha_)*qk + alpha_*qk1;
@@ -201,9 +201,9 @@ public:
 
   /**  1/h mr^2 (qk1-qk) - mgrh a sin((1-a)pk + a*pk1) - pk1 = 0, with optional derivatives */
   Vector evaluateError(const double & pk1, const double & qk, const double & qk1,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none,
-      boost::optional<Matrix&> H3 = boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt,
+      std::optional<Matrix&> H3 = std::nullopt) const override {
     const size_t p = 1;
 
     double qmid = (1-alpha_)*qk + alpha_*qk1;

@@ -88,8 +88,8 @@ public:
 
   /** range between translations */
   double range(const PoseRTV& other,
-               OptionalJacobian<1,9> H1=boost::none,
-               OptionalJacobian<1,9> H2=boost::none) const;
+               OptionalJacobian<1,9> H1=std::nullopt,
+               OptionalJacobian<1,9> H2=std::nullopt) const;
   /// @}
 
   /// @name IMU-specific
@@ -138,8 +138,8 @@ public:
    * Note: the transform jacobian convention is flipped
    */
   PoseRTV transformed_from(const Pose3& trans,
-      ChartJacobian Dglobal = boost::none,
-      OptionalJacobian<9, 6> Dtrans = boost::none) const;
+      ChartJacobian Dglobal = std::nullopt,
+      OptionalJacobian<9, 6> Dtrans = std::nullopt) const;
 
   /// @}
   /// @name Utility functions

@@ -145,7 +145,7 @@ public:
 
   /* ************************************************************************* */
   Vector whitenedError(const Values& x,
-      boost::optional<std::vector<Matrix>&> H = boost::none) const {
+      std::optional<std::vector<Matrix>&> H = std::nullopt) const {
 
     bool debug = true;
 

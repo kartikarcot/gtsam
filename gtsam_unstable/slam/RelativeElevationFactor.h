@@ -49,7 +49,7 @@ public:
 
   /** h(x)-z */
   Vector evaluateError(const Pose3& pose, const Point3& point,
-      boost::optional<Matrix&> H1 = boost::none, boost::optional<Matrix&> H2 = boost::none) const override;
+      std::optional<Matrix&> H1 = std::nullopt, std::optional<Matrix&> H2 = std::nullopt) const override;
 
   /** return the measured */
   inline double measured() const { return measured_; }

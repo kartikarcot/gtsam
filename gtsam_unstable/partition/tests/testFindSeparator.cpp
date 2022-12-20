@@ -33,7 +33,7 @@ TEST ( Partition, separatorPartitionByMetis )
   std::vector<size_t> keys; keys += 0, 1, 2, 3, 4;
 
   WorkSpace workspace(5);
-  boost::optional<MetisResult> actual = separatorPartitionByMetis<GenericGraph2D>(graph, keys,
+  std::optional<MetisResult> actual = separatorPartitionByMetis<GenericGraph2D>(graph, keys,
    workspace, true);
 
   CHECK(actual.is_initialized());
@@ -58,7 +58,7 @@ TEST ( Partition, separatorPartitionByMetis2 )
   std::vector<size_t> keys; keys += 1, 2, 3, 5, 6;
 
   WorkSpace workspace(8);
-  boost::optional<MetisResult> actual = separatorPartitionByMetis<GenericGraph2D>(graph, keys,
+  std::optional<MetisResult> actual = separatorPartitionByMetis<GenericGraph2D>(graph, keys,
    workspace, true);
 
   CHECK(actual.is_initialized());
@@ -81,7 +81,7 @@ TEST ( Partition, edgePartitionByMetis )
   std::vector<size_t> keys; keys += 0, 1, 2, 3;
 
   WorkSpace workspace(6);
-  boost::optional<MetisResult> actual = edgePartitionByMetis<GenericGraph3D>(graph, keys,
+  std::optional<MetisResult> actual = edgePartitionByMetis<GenericGraph3D>(graph, keys,
    workspace, true);
 
   CHECK(actual.is_initialized());
@@ -112,7 +112,7 @@ TEST ( Partition, edgePartitionByMetis2 )
   std::vector<size_t> keys; keys += 0, 1, 2, 3, 4;
 
   WorkSpace workspace(6);
-  boost::optional<MetisResult> actual = edgePartitionByMetis<GenericGraph3D>(graph, keys,
+  std::optional<MetisResult> actual = edgePartitionByMetis<GenericGraph3D>(graph, keys,
    workspace, true);
   CHECK(actual.is_initialized());
   vector<size_t> A_expected; A_expected += 0, 1; // frontal
@@ -139,7 +139,7 @@ TEST ( Partition, findSeparator )
   int minNodesPerMap = -1;
   bool reduceGraph = false;
   int numSubmaps = findSeparator<GenericGraph2D>(graph, keys, minNodesPerMap, workspace,
-    false, boost::none, reduceGraph, 0, 0);
+    false, std::nullopt, reduceGraph, 0, 0);
   LONGS_EQUAL(2, numSubmaps);
   LONGS_EQUAL(5, workspace.partitionTable.size());
   LONGS_EQUAL(1, workspace.partitionTable[0]);
@@ -165,7 +165,7 @@ TEST ( Partition, findSeparator2 )
   int minNodesPerMap = -1;
   bool reduceGraph = false;
   int numSubmaps = findSeparator<GenericGraph2D>(graph, keys, minNodesPerMap, workspace,
-    false, boost::none, reduceGraph, 0, 0);
+    false, std::nullopt, reduceGraph, 0, 0);
   LONGS_EQUAL(2, numSubmaps);
   LONGS_EQUAL(8, workspace.partitionTable.size());
   LONGS_EQUAL(-1,workspace.partitionTable[0]);

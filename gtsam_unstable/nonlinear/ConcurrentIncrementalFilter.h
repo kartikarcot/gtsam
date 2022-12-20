@@ -123,8 +123,8 @@ public:
    * @param removeFactorIndices An optional set of indices corresponding to the factors you want to remove from the graph
    */
   Result update(const NonlinearFactorGraph& newFactors = NonlinearFactorGraph(), const Values& newTheta = Values(),
-      const boost::optional<FastList<Key> >& keysToMove = boost::none,
-      const boost::optional< FactorIndices >& removeFactorIndices = boost::none);
+      const std::optional<FastList<Key> >& keysToMove = std::nullopt,
+      const std::optional< FactorIndices >& removeFactorIndices = std::nullopt);
 
   /**
    * Perform any required operations before the synchronization process starts.

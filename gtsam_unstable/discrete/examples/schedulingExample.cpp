@@ -14,7 +14,7 @@
 
 #include <boost/assign/std/vector.hpp>
 #include <boost/assign/std/map.hpp>
-#include <boost/optional.hpp>
+#include <optional>
 #include <boost/format.hpp>
 
 #include <algorithm>

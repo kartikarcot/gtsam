@@ -25,7 +25,7 @@
 #include <gtsam/base/treeTraversal-inst.h>
 #include <gtsam/base/timing.h>
 
-#include <boost/optional.hpp>
+#include <optional>
 #include <boost/assign/list_of.hpp>
 #include <fstream>
 

@@ -362,7 +362,7 @@ namespace gtsam {
 
   /* ************************************************************************* */
   template<typename ValueType>
-  boost::optional<const ValueType&> Values::exists(Key j) const {
+  std::optional<const ValueType&> Values::exists(Key j) const {
     // Find the item
     KeyValueMap::const_iterator item = values_.find(j);
 
@@ -377,7 +377,7 @@ namespace gtsam {
         throw ValuesIncorrectType(j, typeid(*value), typeid(ValueType));
       }
      } else {
-      return boost::none;
+      return std::nullopt;
     }
   }
 

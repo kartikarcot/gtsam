@@ -41,10 +41,10 @@ types:
 
 .. code-block:: cpp
 
-    // `boost::optional` as an example -- can be any `std::optional`-like container
+    // `std::optional` as an example -- can be any `std::optional`-like container
     namespace pybind11 { namespace detail {
         template <typename T>
-        struct type_caster<boost::optional<T>> : optional_caster<boost::optional<T>> {};
+        struct type_caster<std::optional<T>> : optional_caster<std::optional<T>> {};
     }}
 
 The above should be placed in a header file and included in all translation units

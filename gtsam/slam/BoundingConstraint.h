@@ -54,8 +54,8 @@ struct BoundingConstraint1: public NoiseModelFactor1<VALUE> {
    * Must have optional argument for derivative with 1xN matrix, where
    * N = X::dim()
    */
-  virtual double value(const X& x, boost::optional<Matrix&> H =
-      boost::none) const = 0;
+  virtual double value(const X& x, std::optional<Matrix&> H =
+      std::nullopt) const = 0;
 
   /** active when constraint *NOT* met */
   bool active(const Values& c) const override {
@@ -64,8 +64,8 @@ struct BoundingConstraint1: public NoiseModelFactor1<VALUE> {
     return (isGreaterThan_) ? x <= threshold_ : x >= threshold_;
   }
 
-  Vector evaluateError(const X& x, boost::optional<Matrix&> H =
-      boost::none) const override {
+  Vector evaluateError(const X& x, std::optional<Matrix&> H =
+      std::nullopt) const override {
     Matrix D;
     double error = value(x, D) - threshold_;
     if (H) {
@@ -122,8 +122,8 @@ struct BoundingConstraint2: public NoiseModelFactor2<VALUE1, VALUE2> {
    * Must have optional argument for derivatives)
    */
   virtual double value(const X1& x1, const X2& x2,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none) const = 0;
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt) const = 0;
 
   /** active when constraint *NOT* met */
   bool active(const Values& c) const override {
@@ -133,8 +133,8 @@ struct BoundingConstraint2: public NoiseModelFactor2<VALUE1, VALUE2> {
   }
 
   Vector evaluateError(const X1& x1, const X2& x2,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt) const override {
     Matrix D1, D2;
     double error = value(x1, x2, D1, D2) - threshold_;
     if (H1) {

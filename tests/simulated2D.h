@@ -89,7 +89,7 @@ namespace simulated2D {
   }
 
   /// Prior on a single pose, optionally returns derivative
-  inline Point2 prior(const Point2& x, boost::optional<Matrix&> H = boost::none) {
+  inline Point2 prior(const Point2& x, std::optional<Matrix&> H = std::nullopt) {
     if (H) *H = I_2x2;
     return x;
   }
@@ -100,8 +100,8 @@ namespace simulated2D {
   }
 
   /// odometry between two poses, optionally returns derivative
-  inline Point2 odo(const Point2& x1, const Point2& x2, boost::optional<Matrix&> H1 =
-    boost::none, boost::optional<Matrix&> H2 = boost::none) {
+  inline Point2 odo(const Point2& x1, const Point2& x2, std::optional<Matrix&> H1 =
+    std::nullopt, std::optional<Matrix&> H2 = std::nullopt) {
       if (H1) *H1 = -I_2x2;
       if (H2) *H2 = I_2x2;
       return x2 - x1;
@@ -113,8 +113,8 @@ namespace simulated2D {
   }
 
   /// measurement between landmark and pose, optionally returns derivative
-  inline Point2 mea(const Point2& x, const Point2& l, boost::optional<Matrix&> H1 =
-    boost::none, boost::optional<Matrix&> H2 = boost::none) {
+  inline Point2 mea(const Point2& x, const Point2& l, std::optional<Matrix&> H1 =
+    std::nullopt, std::optional<Matrix&> H2 = std::nullopt) {
       if (H1) *H1 = -I_2x2;
       if (H2) *H2 = I_2x2;
       return l - x;
@@ -139,7 +139,7 @@ namespace simulated2D {
     }
 
     /// Return error and optional derivative
-    Vector evaluateError(const Pose& x, boost::optional<Matrix&> H = boost::none) const override {
+    Vector evaluateError(const Pose& x, std::optional<Matrix&> H = std::nullopt) const override {
       return (prior(x, H) - measured_);
     }
 
@@ -184,8 +184,8 @@ namespace simulated2D {
 
     /// Evaluate error and optionally return derivatives
     Vector evaluateError(const Pose& x1, const Pose& x2,
-        boost::optional<Matrix&> H1 = boost::none,
-        boost::optional<Matrix&> H2 = boost::none) const override {
+        std::optional<Matrix&> H1 = std::nullopt,
+        std::optional<Matrix&> H2 = std::nullopt) const override {
       return (odo(x1, x2, H1, H2) - measured_);
     }
 
@@ -231,8 +231,8 @@ namespace simulated2D {
 
     /// Evaluate error and optionally return derivatives
     Vector evaluateError(const Pose& x1, const Landmark& x2,
-        boost::optional<Matrix&> H1 = boost::none,
-        boost::optional<Matrix&> H2 = boost::none) const override {
+        std::optional<Matrix&> H1 = std::nullopt,
+        std::optional<Matrix&> H2 = std::nullopt) const override {
       return (mea(x1, x2, H1, H2) - measured_);
     }
 

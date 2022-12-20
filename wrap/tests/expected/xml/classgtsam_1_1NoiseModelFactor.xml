@@ -226,7 +226,7 @@
       <memberdef kind="function" id="classgtsam_1_1NoiseModelFactor_1afd61874915a8076bf83f9d8311fc0e26" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
         <type>Vector</type>
         <definition>virtual Vector gtsam::NoiseModelFactor::unwhitenedError</definition>
-        <argsstring>(const Values &amp;x, boost::optional&lt; std::vector&lt; Matrix &gt; &amp; &gt; H=boost::none) const =0</argsstring>
+        <argsstring>(const Values &amp;x, std::optional&lt; std::vector&lt; Matrix &gt; &amp; &gt; H=std::nullopt) const =0</argsstring>
         <name>unwhitenedError</name>
         <reimplementedby refid="classgtsam_1_1NoiseModelFactor1_1a886bb13688a62b2680c10cdaf7999918">unwhitenedError</reimplementedby>
         <reimplementedby refid="classgtsam_1_1NoiseModelFactor2_1a9640bbbb433383f0b40b5c2d9439415e">unwhitenedError</reimplementedby>
@@ -239,9 +239,9 @@
           <declname>x</declname>
         </param>
         <param>
-          <type>boost::optional&lt; std::vector&lt; Matrix &gt; &amp; &gt;</type>
+          <type>std::optional&lt; std::vector&lt; Matrix &gt; &amp; &gt;</type>
           <declname>H</declname>
-          <defval>boost::none</defval>
+          <defval>std::nullopt</defval>
         </param>
         <briefdescription>
         </briefdescription>

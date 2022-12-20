@@ -62,7 +62,7 @@ namespace simulated2DOriented {
   }
 
   /// Prior on a single pose, optional derivative version
-  Pose2 prior(const Pose2& x, boost::optional<Matrix&> H = boost::none) {
+  Pose2 prior(const Pose2& x, std::optional<Matrix&> H = std::nullopt) {
     if (H) *H = I_3x3;
     return x;
   }
@@ -73,8 +73,8 @@ namespace simulated2DOriented {
   }
 
   /// odometry between two poses, optional derivative version
-  Pose2 odo(const Pose2& x1, const Pose2& x2, boost::optional<Matrix&> H1 =
-      boost::none, boost::optional<Matrix&> H2 = boost::none) {
+  Pose2 odo(const Pose2& x1, const Pose2& x2, std::optional<Matrix&> H1 =
+      std::nullopt, std::optional<Matrix&> H2 = std::nullopt) {
     return x1.between(x2, H1, H2);
   }
 
@@ -90,8 +90,8 @@ namespace simulated2DOriented {
     }
 
     /// Evaluate error and optionally derivative
-    Vector evaluateError(const Pose2& x, boost::optional<Matrix&> H =
-        boost::none) const {
+    Vector evaluateError(const Pose2& x, std::optional<Matrix&> H =
+        std::nullopt) const {
       return measured_.localCoordinates(prior(x, H));
     }
 
@@ -118,8 +118,8 @@ namespace simulated2DOriented {
 
     /// Evaluate error and optionally derivative
     Vector evaluateError(const VALUE& x1, const VALUE& x2,
-        boost::optional<Matrix&> H1 = boost::none,
-        boost::optional<Matrix&> H2 = boost::none) const override {
+        std::optional<Matrix&> H1 = std::nullopt,
+        std::optional<Matrix&> H2 = std::nullopt) const override {
       return measured_.localCoordinates(odo(x1, x2, H1, H2));
     }
 

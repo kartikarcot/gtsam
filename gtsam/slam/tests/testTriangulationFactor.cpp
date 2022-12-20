@@ -62,7 +62,7 @@ TEST( triangulation, TriangulationFactor ) {
   factor.evaluateError(landmark, HActual);
 
   Matrix HExpected = numericalDerivative11<Vector,Point3>(
-      std::bind(&Factor::evaluateError, &factor, std::placeholders::_1, boost::none), landmark);
+      std::bind(&Factor::evaluateError, &factor, std::placeholders::_1, std::nullopt), landmark);
 
   // Verify the Jacobians are correct
   CHECK(assert_equal(HExpected, HActual, 1e-3));
@@ -86,7 +86,7 @@ TEST( triangulation, TriangulationFactorStereo ) {
   factor.evaluateError(landmark, HActual);
 
   Matrix HExpected = numericalDerivative11<Vector,Point3>(
-      std::bind(&Factor::evaluateError, &factor, std::placeholders::_1, boost::none), landmark);
+      std::bind(&Factor::evaluateError, &factor, std::placeholders::_1, std::nullopt), landmark);
 
   // Verify the Jacobians are correct
   CHECK(assert_equal(HExpected, HActual, 1e-3));
@@ -94,7 +94,7 @@ TEST( triangulation, TriangulationFactorStereo ) {
   // compare same problem against expression factor
   Expression<StereoPoint2>::UnaryFunction<Point3>::type f =
       std::bind(&StereoCamera::project2, camera2, std::placeholders::_1,
-                boost::none, std::placeholders::_2);
+                std::nullopt, std::placeholders::_2);
   Expression<Point3> point_(pointKey);
   Expression<StereoPoint2> project2_(f, point_);
 

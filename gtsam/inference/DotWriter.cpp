@@ -40,7 +40,7 @@ void DotWriter::digraphPreamble(ostream* os) const {
 }
 
 void DotWriter::drawVariable(Key key, const KeyFormatter& keyFormatter,
-                             const boost::optional<Vector2>& position,
+                             const std::optional<Vector2>& position,
                              ostream* os) const {
   // Label the node with the label from the KeyFormatter
   *os << "  var" << key << "[label=\"" << keyFormatter(key)
@@ -54,7 +54,7 @@ void DotWriter::drawVariable(Key key, const KeyFormatter& keyFormatter,
   *os << "];\n";
 }
 
-void DotWriter::DrawFactor(size_t i, const boost::optional<Vector2>& position,
+void DotWriter::DrawFactor(size_t i, const std::optional<Vector2>& position,
                            ostream* os) {
   *os << "  factor" << i << "[label=\"\", shape=point";
   if (position) {
@@ -76,8 +76,8 @@ static void ConnectVariableFactor(Key key, const KeyFormatter& keyFormatter,
 }
 
 /// Return variable position or none
-boost::optional<Vector2> DotWriter::variablePos(Key key) const {
-  boost::optional<Vector2> result = boost::none;
+std::optional<Vector2> DotWriter::variablePos(Key key) const {
+  std::optional<Vector2> result = std::nullopt;
 
   // Check position hint
   Symbol symbol(key);
@@ -95,7 +95,7 @@ boost::optional<Vector2> DotWriter::variablePos(Key key) const {
 
 void DotWriter::processFactor(size_t i, const KeyVector& keys,
                               const KeyFormatter& keyFormatter,
-                              const boost::optional<Vector2>& position,
+                              const std::optional<Vector2>& position,
                               ostream* os) const {
   if (plotFactorPoints) {
     if (binaryEdges && keys.size() == 2) {

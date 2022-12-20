@@ -78,7 +78,7 @@ Pose3 Pose3Upright::pose() const {
 }
 
 /* ************************************************************************* */
-Pose3Upright Pose3Upright::inverse(boost::optional<Matrix&> H1) const {
+Pose3Upright Pose3Upright::inverse(std::optional<Matrix&> H1) const {
   Pose3Upright result(T_.inverse(H1), -z_);
   if (H1) {
     Matrix H1_ = -I_4x4;
@@ -91,7 +91,7 @@ Pose3Upright Pose3Upright::inverse(boost::optional<Matrix&> H1) const {
 
 /* ************************************************************************* */
 Pose3Upright Pose3Upright::compose(const Pose3Upright& p2,
-    boost::optional<Matrix&> H1, boost::optional<Matrix&> H2) const {
+    std::optional<Matrix&> H1, std::optional<Matrix&> H2) const {
   if (!H1 && !H2)
     return Pose3Upright(T_.compose(p2.T_), z_ + p2.z_);
   Pose3Upright result(T_.compose(p2.T_, H1), z_ + p2.z_);
@@ -107,7 +107,7 @@ Pose3Upright Pose3Upright::compose(const Pose3Upright& p2,
 
 /* ************************************************************************* */
 Pose3Upright Pose3Upright::between(const Pose3Upright& p2,
-    boost::optional<Matrix&> H1, boost::optional<Matrix&> H2) const {
+    std::optional<Matrix&> H1, std::optional<Matrix&> H2) const {
   if (!H1 && !H2)
     return Pose3Upright(T_.between(p2.T_), p2.z_ - z_);
   Pose3Upright result(T_.between(p2.T_, H1, H2), p2.z_ - z_);

@@ -129,9 +129,9 @@ class GTSAM_EXPORT PreintegrationBase {
    */
   std::pair<Vector3, Vector3> correctMeasurementsBySensorPose(
       const Vector3& unbiasedAcc, const Vector3& unbiasedOmega,
-      OptionalJacobian<3, 3> correctedAcc_H_unbiasedAcc = boost::none,
-      OptionalJacobian<3, 3> correctedAcc_H_unbiasedOmega = boost::none,
-      OptionalJacobian<3, 3> correctedOmega_H_unbiasedOmega = boost::none) const;
+      OptionalJacobian<3, 3> correctedAcc_H_unbiasedAcc = std::nullopt,
+      OptionalJacobian<3, 3> correctedAcc_H_unbiasedOmega = std::nullopt,
+      OptionalJacobian<3, 3> correctedOmega_H_unbiasedOmega = std::nullopt) const;
 
   /**
    *  Update preintegrated measurements and get derivatives
@@ -148,12 +148,12 @@ class GTSAM_EXPORT PreintegrationBase {
   /// Given the estimate of the bias, return a NavState tangent vector
   /// summarizing the preintegrated IMU measurements so far
   virtual Vector9 biasCorrectedDelta(const imuBias::ConstantBias& bias_i,
-      OptionalJacobian<9, 6> H = boost::none) const = 0;
+      OptionalJacobian<9, 6> H = std::nullopt) const = 0;
 
   /// Predict state at time j
   NavState predict(const NavState& state_i, const imuBias::ConstantBias& bias_i,
-                   OptionalJacobian<9, 9> H1 = boost::none,
-                   OptionalJacobian<9, 6> H2 = boost::none) const;
+                   OptionalJacobian<9, 9> H1 = std::nullopt,
+                   OptionalJacobian<9, 6> H2 = std::nullopt) const;
 
   /// Calculate error given navStates
   Vector9 computeError(const NavState& state_i, const NavState& state_j,
@@ -168,9 +168,9 @@ class GTSAM_EXPORT PreintegrationBase {
   Vector9 computeErrorAndJacobians(const Pose3& pose_i, const Vector3& vel_i,
       const Pose3& pose_j, const Vector3& vel_j,
       const imuBias::ConstantBias& bias_i, OptionalJacobian<9, 6> H1 =
-          boost::none, OptionalJacobian<9, 3> H2 = boost::none,
-      OptionalJacobian<9, 6> H3 = boost::none, OptionalJacobian<9, 3> H4 =
-          boost::none, OptionalJacobian<9, 6> H5 = boost::none) const;
+          std::nullopt, OptionalJacobian<9, 3> H2 = std::nullopt,
+      OptionalJacobian<9, 6> H3 = std::nullopt, OptionalJacobian<9, 3> H4 =
+          std::nullopt, OptionalJacobian<9, 6> H5 = std::nullopt) const;
 
  private:
   /** Serialization function */

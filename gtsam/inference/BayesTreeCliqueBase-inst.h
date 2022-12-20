@@ -216,7 +216,7 @@ namespace gtsam {
       }
 
       //Delete CachedShortcut for this clique
-      cachedSeparatorMarginal_ = boost::none;
+      cachedSeparatorMarginal_ = std::nullopt;
     }
 
   }

@@ -85,9 +85,9 @@ public:
     */
   Vector evaluateError(const Pose3& wTwi, const Pose3& wTwa,
       const OrientedPlane3& a_plane,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none,
-      boost::optional<Matrix&> H3 = boost::none) const override;
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt,
+      std::optional<Matrix&> H3 = std::nullopt) const override;
 };
 
 }  // namespace gtsam

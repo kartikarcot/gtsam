@@ -100,7 +100,7 @@ class GTSAM_UNSTABLE_EXPORT Domain : public Constraint {
    * @param keys connected domains through alldiff
    * @param keys other domains
    */
-  boost::optional<Domain> checkAllDiff(const KeyVector keys,
+  std::optional<Domain> checkAllDiff(const KeyVector keys,
                                        const Domains& domains) const;
 
   /// Partially apply known values

@@ -64,13 +64,13 @@ public:
   bool equals(const TestValue& other, double tol = 1e-9) const { return true; }
   size_t dim() const { return 0; }
   TestValue retract(const Vector&,
-                    OptionalJacobian<dimension,dimension> H1=boost::none,
-                    OptionalJacobian<dimension,dimension> H2=boost::none) const {
+                    OptionalJacobian<dimension,dimension> H1=std::nullopt,
+                    OptionalJacobian<dimension,dimension> H2=std::nullopt) const {
     return TestValue();
   }
   Vector localCoordinates(const TestValue&,
-                          OptionalJacobian<dimension,dimension> H1=boost::none,
-                          OptionalJacobian<dimension,dimension> H2=boost::none) const {
+                          OptionalJacobian<dimension,dimension> H1=std::nullopt,
+                          OptionalJacobian<dimension,dimension> H2=std::nullopt) const {
     return Vector();
   }
 };
@@ -315,7 +315,7 @@ TEST(Values, exists_)
   config0.insert(key1, 1.0);
   config0.insert(key2, 2.0);
 
-  boost::optional<const double&> v = config0.exists<double>(key1);
+  std::optional<const double&> v = config0.exists<double>(key1);
   DOUBLES_EQUAL(1.0,*v,1e-9);
 }
 

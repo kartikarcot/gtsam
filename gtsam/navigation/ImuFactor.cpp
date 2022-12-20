@@ -151,9 +151,9 @@ bool ImuFactor::equals(const NonlinearFactor& other, double tol) const {
 //------------------------------------------------------------------------------
 Vector ImuFactor::evaluateError(const Pose3& pose_i, const Vector3& vel_i,
     const Pose3& pose_j, const Vector3& vel_j,
-    const imuBias::ConstantBias& bias_i, boost::optional<Matrix&> H1,
-    boost::optional<Matrix&> H2, boost::optional<Matrix&> H3,
-    boost::optional<Matrix&> H4, boost::optional<Matrix&> H5) const {
+    const imuBias::ConstantBias& bias_i, std::optional<Matrix&> H1,
+    std::optional<Matrix&> H2, std::optional<Matrix&> H3,
+    std::optional<Matrix&> H4, std::optional<Matrix&> H5) const {
   return _PIM_.computeErrorAndJacobians(pose_i, vel_i, pose_j, vel_j, bias_i,
       H1, H2, H3, H4, H5);
 }
@@ -247,8 +247,8 @@ bool ImuFactor2::equals(const NonlinearFactor& other, double tol) const {
 Vector ImuFactor2::evaluateError(const NavState& state_i,
     const NavState& state_j,
     const imuBias::ConstantBias& bias_i, //
-    boost::optional<Matrix&> H1, boost::optional<Matrix&> H2,
-    boost::optional<Matrix&> H3) const {
+    std::optional<Matrix&> H1, std::optional<Matrix&> H2,
+    std::optional<Matrix&> H3) const {
   return _PIM_.computeError(state_i, state_j, bias_i, H1, H2, H3);
 }
 

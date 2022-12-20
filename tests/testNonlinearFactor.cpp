@@ -337,10 +337,10 @@ public:
 
   Vector
     evaluateError(const double& x1, const double& x2, const double& x3, const double& x4,
-        boost::optional<Matrix&> H1 = boost::none,
-        boost::optional<Matrix&> H2 = boost::none,
-        boost::optional<Matrix&> H3 = boost::none,
-        boost::optional<Matrix&> H4 = boost::none) const override {
+        std::optional<Matrix&> H1 = std::nullopt,
+        std::optional<Matrix&> H2 = std::nullopt,
+        std::optional<Matrix&> H3 = std::nullopt,
+        std::optional<Matrix&> H4 = std::nullopt) const override {
     if(H1) {
       *H1 = (Matrix(1, 1) << 1.0).finished();
       *H2 = (Matrix(1, 1) << 2.0).finished();
@@ -385,11 +385,11 @@ public:
 
   Vector
     evaluateError(const X1& x1, const X2& x2, const X3& x3, const X4& x4, const X5& x5,
-        boost::optional<Matrix&> H1 = boost::none,
-        boost::optional<Matrix&> H2 = boost::none,
-        boost::optional<Matrix&> H3 = boost::none,
-        boost::optional<Matrix&> H4 = boost::none,
-        boost::optional<Matrix&> H5 = boost::none) const override {
+        std::optional<Matrix&> H1 = std::nullopt,
+        std::optional<Matrix&> H2 = std::nullopt,
+        std::optional<Matrix&> H3 = std::nullopt,
+        std::optional<Matrix&> H4 = std::nullopt,
+        std::optional<Matrix&> H5 = std::nullopt) const override {
     if(H1) {
       *H1 = (Matrix(1, 1) << 1.0).finished();
       *H2 = (Matrix(1, 1) << 2.0).finished();
@@ -434,12 +434,12 @@ public:
 
   Vector
     evaluateError(const X1& x1, const X2& x2, const X3& x3, const X4& x4, const X5& x5, const X6& x6,
-        boost::optional<Matrix&> H1 = boost::none,
-        boost::optional<Matrix&> H2 = boost::none,
-        boost::optional<Matrix&> H3 = boost::none,
-        boost::optional<Matrix&> H4 = boost::none,
-        boost::optional<Matrix&> H5 = boost::none,
-        boost::optional<Matrix&> H6 = boost::none) const override {
+        std::optional<Matrix&> H1 = std::nullopt,
+        std::optional<Matrix&> H2 = std::nullopt,
+        std::optional<Matrix&> H3 = std::nullopt,
+        std::optional<Matrix&> H4 = std::nullopt,
+        std::optional<Matrix&> H5 = std::nullopt,
+        std::optional<Matrix&> H6 = std::nullopt) const override {
     if(H1) {
       *H1 = (Matrix(1, 1) << 1.0).finished();
       *H2 = (Matrix(1, 1) << 2.0).finished();

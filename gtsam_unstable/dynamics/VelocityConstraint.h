@@ -83,8 +83,8 @@ public:
    * Calculates the error for trapezoidal model given
    */
   gtsam::Vector evaluateError(const PoseRTV& x1, const PoseRTV& x2,
-      boost::optional<gtsam::Matrix&> H1=boost::none,
-      boost::optional<gtsam::Matrix&> H2=boost::none) const override {
+      std::optional<gtsam::Matrix&> H1=std::nullopt,
+      std::optional<gtsam::Matrix&> H2=std::nullopt) const override {
     if (H1) *H1 = gtsam::numericalDerivative21<gtsam::Vector,PoseRTV,PoseRTV>(
         std::bind(VelocityConstraint::evaluateError_, std::placeholders::_1,
             std::placeholders::_2, dt_, integration_mode_), x1, x2, 1e-5);

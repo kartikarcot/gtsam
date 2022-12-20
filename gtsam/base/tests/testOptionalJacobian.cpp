@@ -32,7 +32,7 @@ using namespace gtsam;
 TEST( OptionalJacobian, Constructors ) {
   Matrix23 fixed;
   Matrix dynamic;
-  boost::optional<Matrix&> optional(dynamic);
+  std::optional<Matrix&> optional(dynamic);
 
   OptionalJacobian<2, 3> H;
   EXPECT(!H);
@@ -41,7 +41,7 @@ TEST( OptionalJacobian, Constructors ) {
   TEST_CONSTRUCTOR(2, 3, &fixed, true);
   TEST_CONSTRUCTOR(2, 3, dynamic, true);
   TEST_CONSTRUCTOR(2, 3, &dynamic, true);
-  TEST_CONSTRUCTOR(2, 3, boost::none, false);
+  TEST_CONSTRUCTOR(2, 3, std::nullopt, false);
   TEST_CONSTRUCTOR(2, 3, optional, true);
 
   // Test dynamic
@@ -49,14 +49,14 @@ TEST( OptionalJacobian, Constructors ) {
   EXPECT(!H7);
 
   TEST_CONSTRUCTOR(-1, -1, dynamic, true);
-  TEST_CONSTRUCTOR(-1, -1, boost::none, false);
+  TEST_CONSTRUCTOR(-1, -1, std::nullopt, false);
   TEST_CONSTRUCTOR(-1, -1, optional, true);
 }
 
 //******************************************************************************
 Matrix kTestMatrix = (Matrix23() << 11,12,13,21,22,23).finished();
 
-void test(OptionalJacobian<2, 3> H = boost::none) {
+void test(OptionalJacobian<2, 3> H = std::nullopt) {
   if (H)
     *H = kTestMatrix;
 }
@@ -116,7 +116,7 @@ TEST( OptionalJacobian, Fixed) {
 }
 
 //******************************************************************************
-void test2(OptionalJacobian<-1,-1> H = boost::none) {
+void test2(OptionalJacobian<-1,-1> H = std::nullopt) {
   if (H)
     *H = kTestMatrix; // resizes
 }
@@ -145,12 +145,12 @@ TEST( OptionalJacobian, Dynamic) {
 }
 
 //******************************************************************************
-void test3(double add, OptionalJacobian<2,1> H = boost::none) {
+void test3(double add, OptionalJacobian<2,1> H = std::nullopt) {
   if (H) *H << add + 10, add + 20;
 }
 
 // This function calls the above function three times, one for each column
-void test4(OptionalJacobian<2, 3> H = boost::none) {
+void test4(OptionalJacobian<2, 3> H = std::nullopt) {
   if (H) {
     test3(1, H.cols<1>(0));
     test3(2, H.cols<1>(1));

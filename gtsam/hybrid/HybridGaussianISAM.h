@@ -53,8 +53,8 @@ class GTSAM_EXPORT HybridGaussianISAM : public ISAM<HybridBayesTree> {
   void updateInternal(
       const HybridGaussianFactorGraph& newFactors,
       HybridBayesTree::Cliques* orphans,
-      const boost::optional<size_t>& maxNrLeaves = boost::none,
-      const boost::optional<Ordering>& ordering = boost::none,
+      const std::optional<size_t>& maxNrLeaves = std::nullopt,
+      const std::optional<Ordering>& ordering = std::nullopt,
       const HybridBayesTree::Eliminate& function =
           HybridBayesTree::EliminationTraitsType::DefaultEliminate);
 
@@ -68,8 +68,8 @@ class GTSAM_EXPORT HybridGaussianISAM : public ISAM<HybridBayesTree> {
    * @param function Elimination function.
    */
   void update(const HybridGaussianFactorGraph& newFactors,
-              const boost::optional<size_t>& maxNrLeaves = boost::none,
-              const boost::optional<Ordering>& ordering = boost::none,
+              const std::optional<size_t>& maxNrLeaves = std::nullopt,
+              const std::optional<Ordering>& ordering = std::nullopt,
               const HybridBayesTree::Eliminate& function =
                   HybridBayesTree::EliminationTraitsType::DefaultEliminate);
 

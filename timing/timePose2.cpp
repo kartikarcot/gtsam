@@ -37,7 +37,7 @@ Pose2 Pose2betweenDefault(const Pose2& r1, const Pose2& r2) {
 
 /* ************************************************************************* */
 Pose2 Pose2betweenOptimized(const Pose2& r1, const Pose2& r2,
-  boost::optional<Matrix&> H1 = boost::none, boost::optional<Matrix&> H2 = boost::none) {
+  std::optional<Matrix&> H1 = std::nullopt, std::optional<Matrix&> H2 = std::nullopt) {
   // get cosines and sines from rotation matrices
   const Rot2& R1 = r1.r(), R2 = r2.r();
   double c1=R1.c(), s1=R1.s(), c2=R2.c(), s2=R2.s();
@@ -70,7 +70,7 @@ Pose2 Pose2betweenOptimized(const Pose2& r1, const Pose2& r2,
 
 /* ************************************************************************* */
 Pose2 Pose2betweenOptimized(const Pose2& r1, const Pose2& r2,
-  boost::optional<Matrix3&> H1, boost::optional<Matrix3&> H2)
+  std::optional<Matrix3&> H1, std::optional<Matrix3&> H2)
 {
   // get cosines and sines from rotation matrices
   const Rot2& R1 = r1.r(), R2 = r2.r();
@@ -104,7 +104,7 @@ Pose2 Pose2betweenOptimized(const Pose2& r1, const Pose2& r2,
 
 /* ************************************************************************* */
 Vector Pose2BetweenFactorEvaluateErrorDefault(const Pose2& measured, const Pose2& p1, const Pose2& p2,
-  boost::optional<Matrix&> H1, boost::optional<Matrix&> H2)
+  std::optional<Matrix&> H1, std::optional<Matrix&> H2)
 {
   Pose2 hx = p1.between(p2, H1, H2); // h(x)
   // manifold equivalent of h(x)-z -> log(z,h(x))
@@ -113,7 +113,7 @@ Vector Pose2BetweenFactorEvaluateErrorDefault(const Pose2& measured, const Pose2
 
 /* ************************************************************************* */
 Vector Pose2BetweenFactorEvaluateErrorOptimizedBetween(const Pose2& measured, const Pose2& p1, const Pose2& p2,
-  boost::optional<Matrix&> H1, boost::optional<Matrix&> H2)
+  std::optional<Matrix&> H1, std::optional<Matrix&> H2)
 {
   Pose2 hx = Pose2betweenOptimized(p1, p2, H1, H2); // h(x)
   // manifold equivalent of h(x)-z -> log(z,h(x))
@@ -122,7 +122,7 @@ Vector Pose2BetweenFactorEvaluateErrorOptimizedBetween(const Pose2& measured, co
 
 /* ************************************************************************* */
 Vector Pose2BetweenFactorEvaluateErrorOptimizedBetweenFixed(const Pose2& measured, const Pose2& p1, const Pose2& p2,
-  boost::optional<Matrix3&> H1, boost::optional<Matrix3&> H2)
+  std::optional<Matrix3&> H1, std::optional<Matrix3&> H2)
 {
   // TODO: Implement
   Pose2 hx = Pose2betweenOptimized(p1, p2, H1, H2); // h(x)

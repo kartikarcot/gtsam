@@ -164,7 +164,7 @@ namespace gtsam {
     protected:
 
       /** Matrix square root of information matrix (R) */
-      boost::optional<Matrix> sqrt_information_;
+      std::optional<Matrix> sqrt_information_;
 
     private:
 
@@ -184,7 +184,7 @@ namespace gtsam {
 
       /** constructor takes square root information matrix */
       Gaussian(size_t dim = 1,
-               const boost::optional<Matrix>& sqrt_information = boost::none)
+               const std::optional<Matrix>& sqrt_information = std::nullopt)
           : Base(dim), sqrt_information_(sqrt_information) {}
 
       ~Gaussian() override {}
@@ -732,7 +732,7 @@ namespace gtsam {
     };
 
     // Helper function
-    GTSAM_EXPORT boost::optional<Vector> checkIfDiagonal(const Matrix M);
+    GTSAM_EXPORT std::optional<Vector> checkIfDiagonal(const Matrix M);
 
   } // namespace noiseModel
 

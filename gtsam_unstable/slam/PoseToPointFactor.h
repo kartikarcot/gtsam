@@ -78,8 +78,8 @@ class PoseToPointFactor : public NoiseModelFactor2<POSE, POINT> {
    */
   Vector evaluateError(
       const POSE& w_T_b, const POINT& w_P,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt) const override {
     return w_T_b.transformTo(w_P, H1, H2) - measured_;
   }
 

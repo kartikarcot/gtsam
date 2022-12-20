@@ -396,9 +396,9 @@ void ISAM2::removeVariables(const KeySet& unusedKeys) {
 ISAM2Result ISAM2::update(
     const NonlinearFactorGraph& newFactors, const Values& newTheta,
     const FactorIndices& removeFactorIndices,
-    const boost::optional<FastMap<Key, int> >& constrainedKeys,
-    const boost::optional<FastList<Key> >& noRelinKeys,
-    const boost::optional<FastList<Key> >& extraReelimKeys,
+    const std::optional<FastMap<Key, int> >& constrainedKeys,
+    const std::optional<FastList<Key> >& noRelinKeys,
+    const std::optional<FastList<Key> >& extraReelimKeys,
     bool force_relinearize) {
   ISAM2UpdateParams params;
   params.constrainedKeys = constrainedKeys;
@@ -478,8 +478,8 @@ ISAM2Result ISAM2::update(const NonlinearFactorGraph& newFactors,
 /* ************************************************************************* */
 void ISAM2::marginalizeLeaves(
     const FastList<Key>& leafKeysList,
-    boost::optional<FactorIndices&> marginalFactorsIndices,
-    boost::optional<FactorIndices&> deletedFactorsIndices) {
+    std::optional<FactorIndices&> marginalFactorsIndices,
+    std::optional<FactorIndices&> deletedFactorsIndices) {
   // Convert to ordered set
   KeySet leafKeys(leafKeysList.begin(), leafKeysList.end());
 

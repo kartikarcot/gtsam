@@ -180,8 +180,8 @@ TEST( ProjectionFactorPPP, Jacobian ) {
       std::function<Vector(const Pose3&, const Pose3&, const Point3&)>(
           std::bind(&TestProjectionFactor::evaluateError, &factor,
                     std::placeholders::_1, std::placeholders::_2,
-                    std::placeholders::_3, boost::none, boost::none,
-                    boost::none)),
+                    std::placeholders::_3, std::nullopt, std::nullopt,
+                    std::nullopt)),
       pose, Pose3(), point);
 
   CHECK(assert_equal(H2Expected, H2Actual, 1e-5));
@@ -218,8 +218,8 @@ TEST( ProjectionFactorPPP, JacobianWithTransform ) {
       std::function<Vector(const Pose3&, const Pose3&, const Point3&)>(
           std::bind(&TestProjectionFactor::evaluateError, &factor,
                     std::placeholders::_1, std::placeholders::_2,
-                    std::placeholders::_3, boost::none, boost::none,
-                    boost::none)),
+                    std::placeholders::_3, std::nullopt, std::nullopt,
+                    std::nullopt)),
       pose, body_P_sensor, point);
 
   CHECK(assert_equal(H2Expected, H2Actual, 1e-5));

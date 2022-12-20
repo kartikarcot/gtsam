@@ -54,14 +54,14 @@ struct LieGroup {
   }
 
   Class compose(const Class& g, ChartJacobian H1,
-      ChartJacobian H2 = boost::none) const {
+      ChartJacobian H2 = std::nullopt) const {
     if (H1) *H1 = g.inverse().AdjointMap();
     if (H2) *H2 = Eigen::Matrix<double, N, N>::Identity();
     return derived() * g;
   }
 
   Class between(const Class& g, ChartJacobian H1,
-      ChartJacobian H2 = boost::none) const {
+      ChartJacobian H2 = std::nullopt) const {
     Class result = derived().inverse() * g;
     if (H1) *H1 = - result.inverse().AdjointMap();
     if (H2) *H2 = Eigen::Matrix<double, N, N>::Identity();
@@ -87,7 +87,7 @@ struct LieGroup {
 
   /// expmap with optional derivatives
   Class expmap(const TangentVector& v, //
-      ChartJacobian H1, ChartJacobian H2 = boost::none) const {
+      ChartJacobian H1, ChartJacobian H2 = std::nullopt) const {
     Jacobian D_g_v;
     Class g = Class::Expmap(v,H2 ? &D_g_v : 0);
     Class h = compose(g); // derivatives inlined below
@@ -98,7 +98,7 @@ struct LieGroup {
 
   /// logmap with optional derivatives
   TangentVector logmap(const Class& g, //
-      ChartJacobian H1, ChartJacobian H2 = boost::none) const {
+      ChartJacobian H1, ChartJacobian H2 = std::nullopt) const {
     Class h = between(g); // derivatives inlined below
     Jacobian D_v_h;
     TangentVector v = Class::Logmap(h, (H1 || H2) ? &D_v_h : 0);
@@ -139,7 +139,7 @@ struct LieGroup {
 
   /// retract with optional derivatives
   Class retract(const TangentVector& v, //
-      ChartJacobian H1, ChartJacobian H2 = boost::none) const {
+      ChartJacobian H1, ChartJacobian H2 = std::nullopt) const {
     Jacobian D_g_v;
     Class g = Class::ChartAtOrigin::Retract(v, H2 ? &D_g_v : 0);
     Class h = compose(g); // derivatives inlined below
@@ -150,7 +150,7 @@ struct LieGroup {
 
   /// localCoordinates with optional derivatives
   TangentVector localCoordinates(const Class& g, //
-      ChartJacobian H1, ChartJacobian H2 = boost::none) const {
+      ChartJacobian H1, ChartJacobian H2 = std::nullopt) const {
     Class h = between(g); // derivatives inlined below
     Jacobian D_v_h;
     TangentVector v = Class::ChartAtOrigin::Local(h, (H1 || H2) ? &D_v_h : 0);
@@ -188,38 +188,38 @@ struct LieGroupTraits: GetDimensionImpl<Class, Class::dimension> {
   typedef OptionalJacobian<dimension, dimension> ChartJacobian;
 
   static TangentVector Local(const Class& origin, const Class& other,
-      ChartJacobian Horigin = boost::none, ChartJacobian Hother = boost::none) {
+      ChartJacobian Horigin = std::nullopt, ChartJacobian Hother = std::nullopt) {
     return origin.localCoordinates(other, Horigin, Hother);
   }
 
   static Class Retract(const Class& origin, const TangentVector& v,
-      ChartJacobian Horigin = boost::none, ChartJacobian Hv = boost::none) {
+      ChartJacobian Horigin = std::nullopt, ChartJacobian Hv = std::nullopt) {
     return origin.retract(v, Horigin, Hv);
   }
   /// @}
 
   /// @name Lie Group
   /// @{
-  static TangentVector Logmap(const Class& m, ChartJacobian Hm = boost::none) {
+  static TangentVector Logmap(const Class& m, ChartJacobian Hm = std::nullopt) {
     return Class::Logmap(m, Hm);
   }
 
-  static Class Expmap(const TangentVector& v, ChartJacobian Hv = boost::none) {
+  static Class Expmap(const TangentVector& v, ChartJacobian Hv = std::nullopt) {
     return Class::Expmap(v, Hv);
   }
 
   static Class Compose(const Class& m1, const Class& m2, //
-      ChartJacobian H1 = boost::none, ChartJacobian H2 = boost::none) {
+      ChartJacobian H1 = std::nullopt, ChartJacobian H2 = std::nullopt) {
     return m1.compose(m2, H1, H2);
   }
 
   static Class Between(const Class& m1, const Class& m2, //
-      ChartJacobian H1 = boost::none, ChartJacobian H2 = boost::none) {
+      ChartJacobian H1 = std::nullopt, ChartJacobian H2 = std::nullopt) {
     return m1.between(m2, H1, H2);
   }
 
   static Class Inverse(const Class& m, //
-      ChartJacobian H = boost::none) {
+      ChartJacobian H = std::nullopt) {
     return m.inverse(H);
   }
   /// @}
@@ -325,8 +325,8 @@ T expm(const Vector& x, int K=7) {
  */
 template <typename T>
 T interpolate(const T& X, const T& Y, double t,
-              typename MakeOptionalJacobian<T, T>::type Hx = boost::none,
-              typename MakeOptionalJacobian<T, T>::type Hy = boost::none) {
+              typename MakeOptionalJacobian<T, T>::type Hx = std::nullopt,
+              typename MakeOptionalJacobian<T, T>::type Hy = std::nullopt) {
   if (Hx || Hy) {
     typename MakeJacobian<T, T>::type between_H_x, log_H, exp_H, compose_H_x;
     const T between =

@@ -35,7 +35,7 @@ class MagPoseFactor: public NoiseModelFactor1<POSE> {
   const Point measured_; ///< The measured magnetometer data in the body frame.
   const Point nM_; ///< Local magnetic field (mag output units) in the nav frame.
   const Point bias_; ///< The bias vector (mag output units) in the body frame.
-  boost::optional<POSE> body_P_sensor_; ///< The pose of the sensor in the body frame.
+  std::optional<POSE> body_P_sensor_; ///< The pose of the sensor in the body frame.
 
   static const int MeasDim = Point::RowsAtCompileTime;
   static const int PoseDim = traits<POSE>::dimension;
@@ -70,7 +70,7 @@ class MagPoseFactor: public NoiseModelFactor1<POSE> {
                 const Point& direction,
                 const Point& bias,
                 const SharedNoiseModel& model,
-                const boost::optional<POSE>& body_P_sensor)
+                const std::optional<POSE>& body_P_sensor)
       : Base(model, pose_key),
         measured_(body_P_sensor ? body_P_sensor->rotation() * measured : measured),
         nM_(scale * direction.normalized()),
@@ -108,11 +108,11 @@ class MagPoseFactor: public NoiseModelFactor1<POSE> {
    * Return the factor's error h(x) - z, and the optional Jacobian. Note that
    * the measurement error is expressed in the body frame.
    */
-  Vector evaluateError(const POSE& nPb, boost::optional<Matrix&> H = boost::none) const override {
+  Vector evaluateError(const POSE& nPb, std::optional<Matrix&> H = std::nullopt) const override {
     // Predict the measured magnetic field h(x) in the *body* frame.
     // If body_P_sensor was given, bias_ will have been rotated into the body frame.
     Matrix H_rot = Matrix::Zero(MeasDim, RotDim);
-    const Point hx = nPb.rotation().unrotate(nM_, H_rot, boost::none) + bias_;
+    const Point hx = nPb.rotation().unrotate(nM_, H_rot, std::nullopt) + bias_;
 
     if (H) {
       // Fill in the relevant part of the Jacobian (just rotation columns).

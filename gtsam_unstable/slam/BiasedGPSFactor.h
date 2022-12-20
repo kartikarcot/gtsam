@@ -73,8 +73,8 @@ namespace gtsam {
 
     /** vector of errors */
     Vector evaluateError(const Pose3& pose, const Point3& bias,
-        boost::optional<Matrix&> H1 = boost::none, boost::optional<Matrix&> H2 =
-            boost::none) const override {
+        std::optional<Matrix&> H1 = std::nullopt, std::optional<Matrix&> H2 =
+            std::nullopt) const override {
 
       if (H1 || H2){
         H1->resize(3,6); // jacobian wrt pose

@@ -228,10 +228,10 @@ public:
   /// vector of errors
   Vector evaluateError(const Pose3& pose_i, const Vector3& vel_i,
       const Pose3& pose_j, const Vector3& vel_j,
-      const imuBias::ConstantBias& bias_i, boost::optional<Matrix&> H1 =
-          boost::none, boost::optional<Matrix&> H2 = boost::none,
-      boost::optional<Matrix&> H3 = boost::none, boost::optional<Matrix&> H4 =
-          boost::none, boost::optional<Matrix&> H5 = boost::none) const override;
+      const imuBias::ConstantBias& bias_i, std::optional<Matrix&> H1 =
+          std::nullopt, std::optional<Matrix&> H2 = std::nullopt,
+      std::optional<Matrix&> H3 = std::nullopt, std::optional<Matrix&> H4 =
+          std::nullopt, std::optional<Matrix&> H5 = std::nullopt) const override;
 
 #ifdef GTSAM_TANGENT_PREINTEGRATION
   /// Merge two pre-integrated measurement classes
@@ -306,9 +306,9 @@ public:
   /// vector of errors
   Vector evaluateError(const NavState& state_i, const NavState& state_j,
                        const imuBias::ConstantBias& bias_i,  //
-                       boost::optional<Matrix&> H1 = boost::none,
-                       boost::optional<Matrix&> H2 = boost::none,
-                       boost::optional<Matrix&> H3 = boost::none) const override;
+                       std::optional<Matrix&> H1 = std::nullopt,
+                       std::optional<Matrix&> H2 = std::nullopt,
+                       std::optional<Matrix&> H3 = std::nullopt) const override;
 
 private:
 

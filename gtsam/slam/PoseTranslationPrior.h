@@ -59,7 +59,7 @@ public:
         gtsam::NonlinearFactor::shared_ptr(new This(*this))); }
 
   /** h(x)-z */
-  Vector evaluateError(const Pose& pose, boost::optional<Matrix&> H = boost::none) const override {
+  Vector evaluateError(const Pose& pose, std::optional<Matrix&> H = std::nullopt) const override {
     const Translation& newTrans = pose.translation();
     const Rotation& R = pose.rotation();
     const int tDim = traits<Translation>::GetDimension(newTrans);

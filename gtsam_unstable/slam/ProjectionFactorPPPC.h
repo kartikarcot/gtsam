@@ -23,7 +23,7 @@
 #include <gtsam/nonlinear/NonlinearFactor.h>
 #include <gtsam_unstable/dllexport.h>
 
-#include <boost/optional.hpp>
+#include <optional>
 
 namespace gtsam {
 
@@ -108,10 +108,10 @@ class GTSAM_UNSTABLE_EXPORT ProjectionFactorPPPC
 
     /// Evaluate error h(x)-z and optionally derivatives
     Vector evaluateError(const Pose3& pose, const Pose3& transform, const Point3& point, const CALIBRATION& K,
-        boost::optional<Matrix&> H1 = boost::none,
-        boost::optional<Matrix&> H2 = boost::none,
-        boost::optional<Matrix&> H3 = boost::none,
-        boost::optional<Matrix&> H4 = boost::none) const override {
+        std::optional<Matrix&> H1 = std::nullopt,
+        std::optional<Matrix&> H2 = std::nullopt,
+        std::optional<Matrix&> H3 = std::nullopt,
+        std::optional<Matrix&> H4 = std::nullopt) const override {
       try {
           if(H1 || H2 || H3 || H4) {
             Matrix H0, H02;

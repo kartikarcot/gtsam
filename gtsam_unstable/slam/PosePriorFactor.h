@@ -34,7 +34,7 @@ namespace gtsam {
     typedef NoiseModelFactor1<POSE> Base;
 
     POSE prior_; /** The measurement */
-    boost::optional<POSE> body_P_sensor_; ///< The pose of the sensor in the body frame
+    std::optional<POSE> body_P_sensor_; ///< The pose of the sensor in the body frame
 
     /** concept check by type */
     GTSAM_CONCEPT_TESTABLE_TYPE(POSE)
@@ -51,7 +51,7 @@ namespace gtsam {
 
     /** Constructor */
     PosePriorFactor(Key key, const POSE& prior, const SharedNoiseModel& model,
-        boost::optional<POSE> body_P_sensor = boost::none) :
+        std::optional<POSE> body_P_sensor = std::nullopt) :
       Base(model, key), prior_(prior), body_P_sensor_(body_P_sensor) {
     }
 
@@ -83,7 +83,7 @@ namespace gtsam {
     /** implement functions needed to derive from Factor */
 
     /** vector of errors */
-    Vector evaluateError(const POSE& p, boost::optional<Matrix&> H = boost::none) const override {
+    Vector evaluateError(const POSE& p, std::optional<Matrix&> H = std::nullopt) const override {
       if(body_P_sensor_) {
         // manifold equivalent of h(x)-z -> log(z,h(x))
         return prior_.localCoordinates(p.compose(*body_P_sensor_, H));

@@ -42,9 +42,9 @@ public:
 
   /** \f$ log((g_k\exp(h\xi_k))^{-1}g_{k+1}) = 0 \f$, with optional derivatives */
   Vector evaluateError(const Pose3& gk1, const Pose3& gk, const Vector6& xik,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none,
-      boost::optional<Matrix&> H3 = boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt,
+      std::optional<Matrix&> H3 = std::nullopt) const override {
 
     Matrix6 D_exphxi_xi;
     Pose3 exphxi = Pose3::Expmap(h_ * xik, H3 ? &D_exphxi_xi : 0);
@@ -108,9 +108,9 @@ public:
    *       pk_1 = CT_TLN(-h*xi_k_1)*Inertia*xi_k_1
    * */
   Vector evaluateError(const Vector6& xik, const Vector6& xik_1, const Pose3& gk,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none,
-      boost::optional<Matrix&> H3 = boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt,
+      std::optional<Matrix&> H3 = std::nullopt) const override {
 
     Vector muk = Inertia_*xik;
     Vector muk_1 = Inertia_*xik_1;
@@ -124,7 +124,7 @@ public:
     Vector pk_1 = muk_1 - 0.5*Pose3::adjointTranspose(-h_*xik_1, muk_1, D_adjThxik1_muk1);
 
     Matrix D_gravityBody_gk;
-    Point3 gravityBody = gk.rotation().unrotate(Point3(0.0, 0.0, -9.81*m_), D_gravityBody_gk, boost::none);
+    Point3 gravityBody = gk.rotation().unrotate(Point3(0.0, 0.0, -9.81*m_), D_gravityBody_gk, std::nullopt);
     Vector f_ext = (Vector(6) << 0.0, 0.0, 0.0, gravityBody.x(), gravityBody.y(), gravityBody.z()).finished();
 
     Vector hx = pk - pk_1 - h_*Fu_ - h_*f_ext;
@@ -161,9 +161,9 @@ public:
   }
 
   Vector evaluateError(const Vector6& xik, const Vector6& xik_1, const Pose3& gk,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none,
-      boost::optional<Matrix&> H3 = boost::none) const {
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt,
+      std::optional<Matrix&> H3 = std::nullopt) const {
     if (H1) {
       (*H1) = numericalDerivative31(
           std::function<Vector(const Vector6&, const Vector6&, const Pose3&)>(

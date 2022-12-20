@@ -60,7 +60,7 @@ class AcceleratedPowerMethod : public PowerMethod<Operator> {
    * vector as ritzVector
    */
   explicit AcceleratedPowerMethod(
-      const Operator &A, const boost::optional<Vector> initial = boost::none,
+      const Operator &A, const std::optional<Vector> initial = std::nullopt,
       double initialBeta = 0.0)
       : PowerMethod<Operator>(A, initial) {
     // initialize Ritz eigen vector and previous vector

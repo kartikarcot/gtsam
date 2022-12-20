@@ -79,7 +79,7 @@ public:
 
   /// vector of errors
   Vector evaluateError(const Pose3& p,
-      boost::optional<Matrix&> H = boost::none) const override;
+      std::optional<Matrix&> H = std::nullopt) const override;
 
   inline const Point3 & measurementIn() const {
     return nT_;
@@ -151,7 +151,7 @@ public:
 
   /// vector of errors
   Vector evaluateError(const NavState& p,
-      boost::optional<Matrix&> H = boost::none) const override;
+      std::optional<Matrix&> H = std::nullopt) const override;
 
   inline const Point3 & measurementIn() const {
     return nT_;

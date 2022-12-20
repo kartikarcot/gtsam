@@ -42,13 +42,13 @@ TEST(EssentialMatrix, FromRotationAndDirection) {
 
   Matrix expectedH1 = numericalDerivative11<EssentialMatrix, Rot3>(
       std::bind(EssentialMatrix::FromRotationAndDirection,
-                std::placeholders::_1, trueDirection, boost::none, boost::none),
+                std::placeholders::_1, trueDirection, std::nullopt, std::nullopt),
       trueRotation);
   EXPECT(assert_equal(expectedH1, actualH1, 1e-7));
 
   Matrix expectedH2 = numericalDerivative11<EssentialMatrix, Unit3>(
       std::bind(EssentialMatrix::FromRotationAndDirection, trueRotation,
-                std::placeholders::_1, boost::none, boost::none),
+                std::placeholders::_1, std::nullopt, std::nullopt),
       trueDirection);
   EXPECT(assert_equal(expectedH2, actualH2, 1e-7));
 }
@@ -175,7 +175,7 @@ TEST (EssentialMatrix, FromPose3_a) {
   Pose3 pose(trueRotation, trueTranslation); // Pose between two cameras
   EXPECT(assert_equal(trueE, EssentialMatrix::FromPose3(pose, actualH), 1e-8));
   Matrix expectedH = numericalDerivative11<EssentialMatrix, Pose3>(
-      std::bind(EssentialMatrix::FromPose3, std::placeholders::_1, boost::none), pose);
+      std::bind(EssentialMatrix::FromPose3, std::placeholders::_1, std::nullopt), pose);
   EXPECT(assert_equal(expectedH, actualH, 1e-7));
 }
 
@@ -188,7 +188,7 @@ TEST (EssentialMatrix, FromPose3_b) {
   Pose3 pose(c1Rc2, c1Tc2); // Pose between two cameras
   EXPECT(assert_equal(E, EssentialMatrix::FromPose3(pose, actualH), 1e-8));
   Matrix expectedH = numericalDerivative11<EssentialMatrix, Pose3>(
-      std::bind(EssentialMatrix::FromPose3, std::placeholders::_1, boost::none), pose);
+      std::bind(EssentialMatrix::FromPose3, std::placeholders::_1, std::nullopt), pose);
   EXPECT(assert_equal(expectedH, actualH, 1e-5));
 }
 

@@ -155,8 +155,8 @@ public:
    * Notes: this is not terribly efficient, and H should have correct size.
    * The order of the Jacobians is same as keys in either keys() or dims()
    */
-  T value(const Values& values, boost::optional<std::vector<Matrix>&> H =
-      boost::none) const;
+  T value(const Values& values, std::optional<std::vector<Matrix>&> H =
+      std::nullopt) const;
 
   /**
    *  @return a "deep" copy of this Expression

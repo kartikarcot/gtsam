@@ -44,24 +44,24 @@ using Point3Pairs = std::vector<Point3Pair>;
 
 /// distance between two points
 GTSAM_EXPORT double distance3(const Point3& p1, const Point3& q,
-	                          OptionalJacobian<1, 3> H1 = boost::none,
-                              OptionalJacobian<1, 3> H2 = boost::none);
+	                          OptionalJacobian<1, 3> H1 = std::nullopt,
+                              OptionalJacobian<1, 3> H2 = std::nullopt);
 
 /// Distance of the point from the origin, with Jacobian
-GTSAM_EXPORT double norm3(const Point3& p, OptionalJacobian<1, 3> H = boost::none);
+GTSAM_EXPORT double norm3(const Point3& p, OptionalJacobian<1, 3> H = std::nullopt);
 
 /// normalize, with optional Jacobian
-GTSAM_EXPORT Point3 normalize(const Point3& p, OptionalJacobian<3, 3> H = boost::none);
+GTSAM_EXPORT Point3 normalize(const Point3& p, OptionalJacobian<3, 3> H = std::nullopt);
 
 /// cross product @return this x q
 GTSAM_EXPORT Point3 cross(const Point3& p, const Point3& q,
-                          OptionalJacobian<3, 3> H_p = boost::none,
-                          OptionalJacobian<3, 3> H_q = boost::none);
+                          OptionalJacobian<3, 3> H_p = std::nullopt,
+                          OptionalJacobian<3, 3> H_q = std::nullopt);
 
 /// dot product
 GTSAM_EXPORT double dot(const Point3& p, const Point3& q,
-                        OptionalJacobian<1, 3> H_p = boost::none,
-                        OptionalJacobian<1, 3> H_q = boost::none);
+                        OptionalJacobian<1, 3> H_p = std::nullopt,
+                        OptionalJacobian<1, 3> H_q = std::nullopt);
 
 /// mean
 template <class CONTAINER>
@@ -82,8 +82,8 @@ template <>
 struct Range<Point3, Point3> {
   typedef double result_type;
   double operator()(const Point3& p, const Point3& q,
-                    OptionalJacobian<1, 3> H1 = boost::none,
-                    OptionalJacobian<1, 3> H2 = boost::none) {
+                    OptionalJacobian<1, 3> H1 = std::nullopt,
+                    OptionalJacobian<1, 3> H2 = std::nullopt) {
     return distance3(p, q, H1, H2);
   }
 };

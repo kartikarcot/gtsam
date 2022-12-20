@@ -21,7 +21,7 @@
 #include <gtsam/nonlinear/NonlinearFactor.h>
 #include <gtsam/geometry/PinholeCamera.h>
 #include <gtsam/geometry/Cal3_S2.h>
-#include <boost/optional.hpp>
+#include <optional>
 
 namespace gtsam {
 
@@ -122,20 +122,20 @@ namespace gtsam {
 
     /// Evaluate error h(x)-z and optionally derivatives
     Vector evaluateError(const Pose3& pose, const Pose3& transform, const Point3& point,
-        boost::optional<Matrix&> H1 = boost::none,
-        boost::optional<Matrix&> H2 = boost::none,
-        boost::optional<Matrix&> H3 = boost::none) const override {
+        std::optional<Matrix&> H1 = std::nullopt,
+        std::optional<Matrix&> H2 = std::nullopt,
+        std::optional<Matrix&> H3 = std::nullopt) const override {
       try {
           if(H1 || H2 || H3) {
             Matrix H0, H02;
             PinholeCamera<CALIBRATION> camera(pose.compose(transform, H0, H02), *K_);
-            Point2 reprojectionError(camera.project(point, H1, H3, boost::none) - measured_);
+            Point2 reprojectionError(camera.project(point, H1, H3, std::nullopt) - measured_);
             *H2 = *H1 * H02;
             *H1 = *H1 * H0;
             return reprojectionError;
           } else {
             PinholeCamera<CALIBRATION> camera(pose.compose(transform), *K_);
-            return camera.project(point, H1, H3, boost::none) - measured_;
+            return camera.project(point, H1, H3, std::nullopt) - measured_;
           }
       } catch( CheiralityException& e) {
         if (H1) *H1 = Matrix::Zero(2,6);

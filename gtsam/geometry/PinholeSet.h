@@ -19,7 +19,7 @@
 
 #include <gtsam/geometry/CameraSet.h>
 #include <gtsam/geometry/triangulation.h>
-#include <boost/optional.hpp>
+#include <optional>
 
 namespace gtsam {
 

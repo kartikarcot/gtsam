@@ -42,7 +42,7 @@ namespace gtsam {
  *    public:
  *     MultiplyFunctor(double m) : m_(m) {}
  *     Matrix operator()(const Matrix &X,
- *              OptionalJacobian<-1, -1> H = boost::none) const {
+ *              OptionalJacobian<-1, -1> H = std::nullopt) const {
  *       if (H)
  *         *H = m_ * Matrix::Identity(X.rows()*X.cols(), X.rows()*X.cols());
  *       return m_ * X;
@@ -62,7 +62,7 @@ class FunctorizedFactor : public NoiseModelFactor1<T> {
 
   R measured_;  ///< value that is compared with functor return value
   SharedNoiseModel noiseModel_;                          ///< noise model
-  std::function<R(T, boost::optional<Matrix &>)> func_;  ///< functor instance
+  std::function<R(T, std::optional<Matrix &>)> func_;  ///< functor instance
 
  public:
   /** default constructor - only use for serialization */
@@ -76,7 +76,7 @@ class FunctorizedFactor : public NoiseModelFactor1<T> {
    * @param func: The instance of the functor object
    */
   FunctorizedFactor(Key key, const R &z, const SharedNoiseModel &model,
-                    const std::function<R(T, boost::optional<Matrix &>)> func)
+                    const std::function<R(T, std::optional<Matrix &>)> func)
       : Base(model, key), measured_(z), noiseModel_(model), func_(func) {}
 
   ~FunctorizedFactor() override {}
@@ -87,8 +87,8 @@ class FunctorizedFactor : public NoiseModelFactor1<T> {
         NonlinearFactor::shared_ptr(new FunctorizedFactor<R, T>(*this)));
   }
 
-  Vector evaluateError(const T &params, boost::optional<Matrix &> H =
-                                            boost::none) const override {
+  Vector evaluateError(const T &params, std::optional<Matrix &> H =
+                                            std::nullopt) const override {
     R x = func_(params, H);
     Vector error = traits<R>::Local(measured_, x);
     return error;
@@ -161,8 +161,8 @@ class FunctorizedFactor2 : public NoiseModelFactor2<T1, T2> {
 
   R measured_;  ///< value that is compared with functor return value
   SharedNoiseModel noiseModel_;  ///< noise model
-  using FunctionType = std::function<R(T1, T2, boost::optional<Matrix &>,
-                                       boost::optional<Matrix &>)>;
+  using FunctionType = std::function<R(T1, T2, std::optional<Matrix &>,
+                                       std::optional<Matrix &>)>;
   FunctionType func_;  ///< functor instance
 
  public:
@@ -193,8 +193,8 @@ class FunctorizedFactor2 : public NoiseModelFactor2<T1, T2> {
 
   Vector evaluateError(
       const T1 &params1, const T2 &params2,
-      boost::optional<Matrix &> H1 = boost::none,
-      boost::optional<Matrix &> H2 = boost::none) const override {
+      std::optional<Matrix &> H1 = std::nullopt,
+      std::optional<Matrix &> H2 = std::nullopt) const override {
     R x = func_(params1, params2, H1, H2);
     Vector error = traits<R>::Local(measured_, x);
     return error;

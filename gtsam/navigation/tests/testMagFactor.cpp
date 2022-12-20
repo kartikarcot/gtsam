@@ -56,7 +56,7 @@ Unit3 dir(nM);
 SharedNoiseModel model = noiseModel::Isotropic::Sigma(3, 0.25);
 }  // namespace
 
-using boost::none;
+using std::nullopt;
 
 // *************************************************************************
 TEST( MagFactor, unrotate ) {

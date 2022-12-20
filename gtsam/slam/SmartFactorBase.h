@@ -29,7 +29,7 @@
 #include <gtsam/linear/RegularHessianFactor.h>
 #include <gtsam/geometry/CameraSet.h>
 
-#include <boost/optional.hpp>
+#include <optional>
 #include <boost/serialization/optional.hpp>
 #include <boost/make_shared.hpp>
 #include <vector>
@@ -78,7 +78,7 @@ protected:
    */
   ZVector measured_;
 
-  boost::optional<Pose3>
+  std::optional<Pose3>
       body_P_sensor_;  ///< Pose of the camera in the body frame
 
   // Cache for Fblocks, to avoid a malloc ever time we re-linearize
@@ -98,7 +98,7 @@ protected:
 
   /// Construct with given noise model and optional arguments.
   SmartFactorBase(const SharedNoiseModel& sharedNoiseModel,
-                  boost::optional<Pose3> body_P_sensor = boost::none,
+                  std::optional<Pose3> body_P_sensor = std::nullopt,
                   size_t expectedNumberCameras = 10)
       : body_P_sensor_(body_P_sensor), Fs(expectedNumberCameras) {
 
@@ -203,8 +203,8 @@ protected:
   template <class POINT>
   Vector unwhitenedError(
       const Cameras& cameras, const POINT& point,
-      boost::optional<typename Cameras::FBlocks&> Fs = boost::none,  //
-      boost::optional<Matrix&> E = boost::none) const {
+      std::optional<typename Cameras::FBlocks&> Fs = std::nullopt,  //
+      std::optional<Matrix&> E = std::nullopt) const {
     // Reproject, with optional derivatives.
     Vector error = cameras.reprojectionError(point, measured_, Fs, E);
 
@@ -240,8 +240,8 @@ protected:
    */
   virtual void correctForMissingMeasurements(
       const Cameras& cameras, Vector& ue,
-      boost::optional<typename Cameras::FBlocks&> Fs = boost::none,
-      boost::optional<Matrix&> E = boost::none) const {}
+      std::optional<typename Cameras::FBlocks&> Fs = std::nullopt,
+      std::optional<Matrix&> E = std::nullopt) const {}
 
   /**
    * Calculate vector of re-projection errors [h(x)-z] = [cameras.project(p) -

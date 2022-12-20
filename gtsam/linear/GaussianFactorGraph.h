@@ -406,7 +406,7 @@ namespace gtsam {
 #ifdef GTSAM_ALLOW_DEPRECATED_SINCE_V42
    /** @deprecated */
    VectorValues GTSAM_DEPRECATED
-   optimize(boost::none_t, const Eliminate& function =
+   optimize(std::nullopt_t, const Eliminate& function =
                                EliminationTraitsType::DefaultEliminate) const {
      return optimize(function);
    }

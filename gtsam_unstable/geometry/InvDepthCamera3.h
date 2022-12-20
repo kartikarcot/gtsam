@@ -12,7 +12,7 @@
 #pragma once
 
 #include <cmath>
-#include <boost/optional.hpp>
+#include <optional>
 #include <boost/serialization/nvp.hpp>
 #include <gtsam/base/Vector.h>
 #include <gtsam/base/Matrix.h>
@@ -83,9 +83,9 @@ public:
    */
   inline gtsam::Point2 project(const Vector5& pw,
       double rho,
-      boost::optional<gtsam::Matrix&> H1 = boost::none,
-      boost::optional<gtsam::Matrix&> H2 = boost::none,
-      boost::optional<gtsam::Matrix&> H3 = boost::none) const {
+      std::optional<gtsam::Matrix&> H1 = std::nullopt,
+      std::optional<gtsam::Matrix&> H2 = std::nullopt,
+      std::optional<gtsam::Matrix&> H3 = std::nullopt) const {
 
     gtsam::Point3 ray_base(pw.segment(0,3));
     double theta = pw(3), phi = pw(4);
@@ -100,7 +100,7 @@ public:
     }
     else {
       gtsam::Matrix J2;
-      gtsam::Point2 uv= camera.project(landmark,H1, J2, boost::none);
+      gtsam::Point2 uv= camera.project(landmark,H1, J2, std::nullopt);
       if (H1) {
         *H1 = (*H1) * I_6x6;
       }

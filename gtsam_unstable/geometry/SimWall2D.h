@@ -51,7 +51,7 @@ namespace gtsam {
      * returns true if they intersect, with the intersection
      * point in the optional second argument
      */
-    bool intersects(const SimWall2D& wall, boost::optional<Point2&> pt=boost::none) const;
+    bool intersects(const SimWall2D& wall, std::optional<Point2&> pt=std::nullopt) const;
 
     /**
      * norm is a 2D point representing the norm of the wall

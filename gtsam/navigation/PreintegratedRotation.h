@@ -32,13 +32,13 @@ struct GTSAM_EXPORT PreintegratedRotationParams {
   /// Continuous-time "Covariance" of gyroscope measurements
   /// The units for stddev are σ = rad/s/√Hz
   Matrix3 gyroscopeCovariance;
-  boost::optional<Vector3> omegaCoriolis;  ///< Coriolis constant
-  boost::optional<Pose3> body_P_sensor;    ///< The pose of the sensor in the body frame
+  std::optional<Vector3> omegaCoriolis;  ///< Coriolis constant
+  std::optional<Pose3> body_P_sensor;    ///< The pose of the sensor in the body frame
 
   PreintegratedRotationParams() : gyroscopeCovariance(I_3x3) {}
 
   PreintegratedRotationParams(const Matrix3& gyroscope_covariance,
-                              boost::optional<Vector3> omega_coriolis)
+                              std::optional<Vector3> omega_coriolis)
     : gyroscopeCovariance(gyroscope_covariance) {
       if (omega_coriolis)
         omegaCoriolis.reset(omega_coriolis.get());
@@ -54,8 +54,8 @@ struct GTSAM_EXPORT PreintegratedRotationParams {
   void setBodyPSensor(const Pose3& pose)            { body_P_sensor.reset(pose);  }
 
   const Matrix3& getGyroscopeCovariance()     const { return gyroscopeCovariance; }
-  boost::optional<Vector3> getOmegaCoriolis() const { return omegaCoriolis; }
-  boost::optional<Pose3>   getBodyPSensor()   const { return body_P_sensor; }
+  std::optional<Vector3> getOmegaCoriolis() const { return omegaCoriolis; }
+  std::optional<Pose3>   getBodyPSensor()   const { return body_P_sensor; }
 
  private:
   /** Serialization function */
@@ -66,7 +66,7 @@ struct GTSAM_EXPORT PreintegratedRotationParams {
     ar & BOOST_SERIALIZATION_NVP(gyroscopeCovariance);
     ar & BOOST_SERIALIZATION_NVP(body_P_sensor);
 
-    // Provide support for Eigen::Matrix in boost::optional
+    // Provide support for Eigen::Matrix in std::optional
     bool omegaCoriolisFlag = omegaCoriolis.is_initialized();
     ar & boost::serialization::make_nvp("omegaCoriolisFlag", omegaCoriolisFlag);
     if (omegaCoriolisFlag) {
@@ -164,12 +164,12 @@ class GTSAM_EXPORT PreintegratedRotation {
   /// Calculate an incremental rotation given the gyro measurement and a time interval,
   /// and update both deltaTij_ and deltaRij_.
   void integrateMeasurement(const Vector3& measuredOmega, const Vector3& biasHat, double deltaT,
-                            OptionalJacobian<3, 3> D_incrR_integratedOmega = boost::none,
-                            OptionalJacobian<3, 3> F = boost::none);
+                            OptionalJacobian<3, 3> D_incrR_integratedOmega = std::nullopt,
+                            OptionalJacobian<3, 3> F = std::nullopt);
 
   /// Return a bias corrected version of the integrated rotation, with optional Jacobian
   Rot3 biascorrectedDeltaRij(const Vector3& biasOmegaIncr,
-                             OptionalJacobian<3, 3> H = boost::none) const;
+                             OptionalJacobian<3, 3> H = std::nullopt) const;
 
   /// Integrate coriolis correction in body frame rot_i
   Vector3 integrateCoriolis(const Rot3& rot_i) const;

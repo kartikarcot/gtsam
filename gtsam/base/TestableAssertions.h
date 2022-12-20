@@ -20,7 +20,7 @@
 #include <gtsam/base/Testable.h>
 #include <gtsam/global_includes.h>
 
-#include <boost/optional.hpp>
+#include <optional>
 #include <map>
 #include <iostream>
 #include <sstream>
@@ -42,19 +42,19 @@ inline bool assert_equal(const Key& expected, const Key& actual, double tol = 0.
 /**
  * Comparisons for boost.optional objects that checks whether objects exist
  * before comparing their values. First version allows for both to be
- * boost::none, but the second, with expected given rather than optional
+ * std::nullopt, but the second, with expected given rather than optional
  *
  * Concept requirement: V is testable
  */
 template<class V>
-bool assert_equal(const boost::optional<V>& expected,
-                  const boost::optional<V>& actual, double tol = 1e-9) {
+bool assert_equal(const std::optional<V>& expected,
+                  const std::optional<V>& actual, double tol = 1e-9) {
   if (!expected && actual) {
-    std::cout << "expected is boost::none, while actual is not" << std::endl;
+    std::cout << "expected is std::nullopt, while actual is not" << std::endl;
     return false;
   }
   if (expected && !actual) {
-    std::cout << "actual is boost::none, while expected is not" << std::endl;
+    std::cout << "actual is std::nullopt, while expected is not" << std::endl;
     return false;
   }
   if (!expected && !actual)
@@ -63,18 +63,18 @@ bool assert_equal(const boost::optional<V>& expected,
 }
 
 template<class V>
-bool assert_equal(const V& expected, const boost::optional<V>& actual, double tol = 1e-9) {
+bool assert_equal(const V& expected, const std::optional<V>& actual, double tol = 1e-9) {
   if (!actual) {
-    std::cout << "actual is boost::none" << std::endl;
+    std::cout << "actual is std::nullopt" << std::endl;
     return false;
   }
   return assert_equal(expected, *actual, tol);
 }
 
 template<class V>
-bool assert_equal(const V& expected, const boost::optional<const V&>& actual, double tol = 1e-9) {
+bool assert_equal(const V& expected, const std::optional<const V&>& actual, double tol = 1e-9) {
   if (!actual) {
-    std::cout << "actual is boost::none" << std::endl;
+    std::cout << "actual is std::nullopt" << std::endl;
     return false;
   }
   return assert_equal(expected, *actual, tol);

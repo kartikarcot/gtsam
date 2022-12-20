@@ -38,14 +38,14 @@ TEST(BetweenFactor, Rot3) {
   Matrix numericalH1 = numericalDerivative21<Vector3, Rot3, Rot3>(
       std::function<Vector(const Rot3&, const Rot3&)>(std::bind(
           &BetweenFactor<Rot3>::evaluateError, factor, std::placeholders::_1,
-          std::placeholders::_2, boost::none, boost::none)),
+          std::placeholders::_2, std::nullopt, std::nullopt)),
       R1, R2, 1e-5);
   EXPECT(assert_equal(numericalH1,actualH1, 1E-5));
 
   Matrix numericalH2 = numericalDerivative22<Vector3,Rot3,Rot3>(
       std::function<Vector(const Rot3&, const Rot3&)>(std::bind(
-          &BetweenFactor<Rot3>::evaluateError, factor, std::placeholders::_1, std::placeholders::_2, boost::none,
-          boost::none)), R1, R2, 1e-5);
+          &BetweenFactor<Rot3>::evaluateError, factor, std::placeholders::_1, std::placeholders::_2, std::nullopt,
+          std::nullopt)), R1, R2, 1e-5);
   EXPECT(assert_equal(numericalH2,actualH2, 1E-5));
 }
 

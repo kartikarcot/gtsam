@@ -64,7 +64,7 @@ bool AllDiff::ensureArcConsistency(Key j, Domains* domains) const {
   // a value in domains->at(j) that does not occur in any other connected domain.
   // If found, we make this a singleton...
   // TODO: make a new constraint where this really is true
-  boost::optional<Domain> maybeChanged = Dj.checkAllDiff(keys_, *domains);
+  std::optional<Domain> maybeChanged = Dj.checkAllDiff(keys_, *domains);
   if (maybeChanged) {
     Dj = *maybeChanged;
     return true;

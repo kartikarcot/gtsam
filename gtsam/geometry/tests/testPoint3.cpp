@@ -123,7 +123,7 @@ TEST(Point3, cross) {
   Matrix aH1, aH2;
   std::function<Point3(const Point3&, const Point3&)> f =
       std::bind(&gtsam::cross, std::placeholders::_1, std::placeholders::_2,
-                boost::none, boost::none);
+                std::nullopt, std::nullopt);
   const Point3 omega(0, 1, 0), theta(4, 6, 8);
   cross(omega, theta, aH1, aH2);
   EXPECT(assert_equal(numericalDerivative21(f, omega, theta), aH1));
@@ -143,7 +143,7 @@ TEST( Point3, cross2) {
   Matrix H1, H2;
   std::function<Point3(const Point3&, const Point3&)> f =
       std::bind(&gtsam::cross, std::placeholders::_1, std::placeholders::_2,  //
-                boost::none, boost::none);
+                std::nullopt, std::nullopt);
   {
     gtsam::cross(p, q, H1, H2);
     EXPECT(assert_equal(numericalDerivative21<Point3,Point3>(f, p, q), H1, 1e-9));
@@ -163,7 +163,7 @@ TEST (Point3, normalize) {
   Point3 expected(point / sqrt(14.0));
   EXPECT(assert_equal(expected, normalize(point, actualH), 1e-8));
   Matrix expectedH = numericalDerivative11<Point3, Point3>(
-      std::bind(gtsam::normalize, std::placeholders::_1, boost::none), point);
+      std::bind(gtsam::normalize, std::placeholders::_1, std::nullopt), point);
   EXPECT(assert_equal(expectedH, actualH, 1e-8));
 }
 

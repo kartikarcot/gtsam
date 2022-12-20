@@ -31,7 +31,7 @@
 #include <gtsam_unstable/dllexport.h>
 
 #include <boost/make_shared.hpp>
-#include <boost/optional.hpp>
+#include <optional>
 #include <vector>
 
 namespace gtsam {
@@ -87,7 +87,7 @@ public:
    */
   SmartStereoProjectionFactor(const SharedNoiseModel& sharedNoiseModel,
       const SmartStereoProjectionParams& params = SmartStereoProjectionParams(),
-      const boost::optional<Pose3> body_P_sensor = boost::none) :
+      const std::optional<Pose3> body_P_sensor = std::nullopt) :
       Base(sharedNoiseModel, body_P_sensor), //
       params_(params), //
       result_(TriangulationResult::Degenerate()) {
@@ -340,7 +340,7 @@ public:
   bool triangulateAndComputeE(Matrix& E, const Cameras& cameras) const {
     bool nonDegenerate = triangulateForLinearize(cameras);
     if (nonDegenerate)
-      cameras.project2(*result_, boost::none, E);
+      cameras.project2(*result_, std::nullopt, E);
     return nonDegenerate;
   }
 
@@ -415,7 +415,7 @@ public:
    * to transform it to \f$ (h(x)-z)^2/\sigma^2 \f$, and then multiply by 0.5.
    */
   double totalReprojectionError(const Cameras& cameras,
-      boost::optional<Point3> externalPoint = boost::none) const {
+      std::optional<Point3> externalPoint = std::nullopt) const {
 
     if (externalPoint)
       result_ = TriangulationResult(*externalPoint);
@@ -453,8 +453,8 @@ public:
    */
   void correctForMissingMeasurements(
       const Cameras& cameras, Vector& ue,
-      boost::optional<typename Cameras::FBlocks&> Fs = boost::none,
-      boost::optional<Matrix&> E = boost::none) const override {
+      std::optional<typename Cameras::FBlocks&> Fs = std::nullopt,
+      std::optional<Matrix&> E = std::nullopt) const override {
     // when using stereo cameras, some of the measurements might be missing:
     for (size_t i = 0; i < cameras.size(); i++) {
       const StereoPoint2& z = measured_.at(i);

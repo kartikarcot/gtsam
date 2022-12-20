@@ -21,15 +21,15 @@
 #include <vector>
 
 #if defined(PYBIND11_TEST_BOOST)
-#    include <boost/optional.hpp>
+#    include <optional>
 
 namespace pybind11 {
 namespace detail {
 template <typename T>
-struct type_caster<boost::optional<T>> : optional_caster<boost::optional<T>> {};
+struct type_caster<std::optional<T>> : optional_caster<std::optional<T>> {};
 
 template <>
-struct type_caster<boost::none_t> : void_caster<boost::none_t> {};
+struct type_caster<std::nullopt_t> : void_caster<std::nullopt_t> {};
 } // namespace detail
 } // namespace pybind11
 #endif
@@ -112,9 +112,9 @@ private:
     OptionalEnumValue value;
 };
 
-// This type mimics aspects of boost::optional from old versions of Boost,
+// This type mimics aspects of std::optional from old versions of Boost,
 // which exposed a dangling reference bug in Pybind11. Recent versions of
-// boost::optional, as well as libstdc++'s std::optional, don't seem to be
+// std::optional, as well as libstdc++'s std::optional, don't seem to be
 // affected by the same issue. This is meant to be a minimal implementation
 // required to reproduce the issue, not fully standard-compliant.
 // See issue #3330 for more details.
@@ -362,27 +362,27 @@ TEST_SUBMODULE(stl, m) {
     // test_boost_optional
     m.attr("has_boost_optional") = true;
 
-    using boost_opt_int = boost::optional<int>;
-    using boost_opt_no_assign = boost::optional<NoAssign>;
+    using boost_opt_int = std::optional<int>;
+    using boost_opt_no_assign = std::optional<NoAssign>;
     m.def("double_or_zero_boost", [](const boost_opt_int &x) -> int { return x.value_or(0) * 2; });
     m.def("half_or_none_boost",
           [](int x) -> boost_opt_int { return x != 0 ? boost_opt_int(x / 2) : boost_opt_int(); });
     m.def(
         "test_nullopt_boost",
         [](boost_opt_int x) { return x.value_or(42); },
-        py::arg_v("x", boost::none, "None"));
+        py::arg_v("x", std::nullopt, "None"));
     m.def(
         "test_no_assign_boost",
         [](const boost_opt_no_assign &x) { return x ? x->value : 42; },
-        py::arg_v("x", boost::none, "None"));
+        py::arg_v("x", std::nullopt, "None"));
 
-    using opt_boost_holder = OptionalHolder<boost::optional, MoveOutDetector>;
+    using opt_boost_holder = OptionalHolder<std::optional, MoveOutDetector>;
     py::class_<opt_boost_holder>(m, "OptionalBoostHolder", "Class with optional member")
         .def(py::init<>())
         .def_readonly("member", &opt_boost_holder::member)
         .def("member_initialized", &opt_boost_holder::member_initialized);
 
-    using opt_boost_props = OptionalProperties<boost::optional>;
+    using opt_boost_props = OptionalProperties<std::optional>;
     pybind11::class_<opt_boost_props>(m, "OptionalBoostProperties")
         .def(pybind11::init<>())
         .def_property_readonly("access_by_ref", &opt_boost_props::access_by_ref)
@@ -479,7 +479,7 @@ TEST_SUBMODULE(stl, m) {
     m.def("tpl_constr_optional_exp", [](std::experimental::optional<TplCtorClass> &) {});
 #endif
 #if defined(PYBIND11_TEST_BOOST)
-    m.def("tpl_constr_optional_boost", [](boost::optional<TplCtorClass> &) {});
+    m.def("tpl_constr_optional_boost", [](std::optional<TplCtorClass> &) {});
 #endif
 
     // test_vec_of_reference_wrapper

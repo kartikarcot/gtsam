@@ -50,7 +50,7 @@ TEST( Rot3AttitudeFactor, Constructor ) {
   // Calculate numerical derivatives
   Matrix expectedH = numericalDerivative11<Vector, Rot3>(
       std::bind(&Rot3AttitudeFactor::evaluateError, &factor,
-                std::placeholders::_1, boost::none),
+                std::placeholders::_1, std::nullopt),
       nRb);
 
   // Use the factor to calculate the derivative
@@ -101,7 +101,7 @@ TEST( Pose3AttitudeFactor, Constructor ) {
   // Calculate numerical derivatives
   Matrix expectedH = numericalDerivative11<Vector,Pose3>(
       std::bind(&Pose3AttitudeFactor::evaluateError, &factor, std::placeholders::_1,
-          boost::none), T);
+          std::nullopt), T);
 
   // Use the factor to calculate the derivative
   Matrix actualH;

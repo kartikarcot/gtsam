@@ -18,7 +18,7 @@
  */
 
 #include <gtsam/base/Vector.h>
-#include <boost/optional.hpp>
+#include <optional>
 #include <stdexcept>
 #include <cstdarg>
 #include <limits>

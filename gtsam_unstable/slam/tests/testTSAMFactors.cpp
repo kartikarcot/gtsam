@@ -47,11 +47,11 @@ TEST( DeltaFactor, all ) {
   // Use numerical derivatives to calculate the Jacobians
   Matrix H1Expected, H2Expected;
   H1Expected = numericalDerivative11<Vector2, Pose2>(
-      std::bind(&DeltaFactor::evaluateError, &factor, std::placeholders::_1, point, boost::none,
-          boost::none), pose);
+      std::bind(&DeltaFactor::evaluateError, &factor, std::placeholders::_1, point, std::nullopt,
+          std::nullopt), pose);
   H2Expected = numericalDerivative11<Vector2, Point2>(
-      std::bind(&DeltaFactor::evaluateError, &factor, pose, std::placeholders::_1, boost::none,
-          boost::none), point);
+      std::bind(&DeltaFactor::evaluateError, &factor, pose, std::placeholders::_1, std::nullopt,
+          std::nullopt), point);
 
   // Verify the Jacobians are correct
   EXPECT(assert_equal(H1Expected, H1Actual, 1e-9));
@@ -82,16 +82,16 @@ TEST( DeltaFactorBase, all ) {
   Matrix H1Expected, H2Expected, H3Expected, H4Expected;
   H1Expected = numericalDerivative11<Vector2, Pose2>(
       std::bind(&DeltaFactorBase::evaluateError, &factor, std::placeholders::_1, pose, base2,
-          point, boost::none, boost::none, boost::none, boost::none), base1);
+          point, std::nullopt, std::nullopt, std::nullopt, std::nullopt), base1);
   H2Expected = numericalDerivative11<Vector2, Pose2>(
       std::bind(&DeltaFactorBase::evaluateError, &factor, base1, std::placeholders::_1, base2,
-          point, boost::none, boost::none, boost::none, boost::none), pose);
+          point, std::nullopt, std::nullopt, std::nullopt, std::nullopt), pose);
   H3Expected = numericalDerivative11<Vector2, Pose2>(
       std::bind(&DeltaFactorBase::evaluateError, &factor, base1, pose, std::placeholders::_1,
-          point, boost::none, boost::none, boost::none, boost::none), base2);
+          point, std::nullopt, std::nullopt, std::nullopt, std::nullopt), base2);
   H4Expected = numericalDerivative11<Vector2, Point2>(
       std::bind(&DeltaFactorBase::evaluateError, &factor, base1, pose, base2,
-          std::placeholders::_1, boost::none, boost::none, boost::none, boost::none), point);
+          std::placeholders::_1, std::nullopt, std::nullopt, std::nullopt, std::nullopt), point);
 
   // Verify the Jacobians are correct
   EXPECT(assert_equal(H1Expected, H1Actual, 1e-9));
@@ -123,16 +123,16 @@ TEST( OdometryFactorBase, all ) {
   Matrix H1Expected, H2Expected, H3Expected, H4Expected;
   H1Expected = numericalDerivative11<Vector3, Pose2>(
       std::bind(&OdometryFactorBase::evaluateError, &factor, std::placeholders::_1, pose1, base2,
-          pose2, boost::none, boost::none, boost::none, boost::none), base1);
+          pose2, std::nullopt, std::nullopt, std::nullopt, std::nullopt), base1);
   H2Expected = numericalDerivative11<Vector3, Pose2>(
       std::bind(&OdometryFactorBase::evaluateError, &factor, base1, std::placeholders::_1, base2,
-          pose2, boost::none, boost::none, boost::none, boost::none), pose1);
+          pose2, std::nullopt, std::nullopt, std::nullopt, std::nullopt), pose1);
   H3Expected = numericalDerivative11<Vector3, Pose2>(
       std::bind(&OdometryFactorBase::evaluateError, &factor, base1, pose1, std::placeholders::_1,
-          pose2, boost::none, boost::none, boost::none, boost::none), base2);
+          pose2, std::nullopt, std::nullopt, std::nullopt, std::nullopt), base2);
   H4Expected = numericalDerivative11<Vector3, Pose2>(
       std::bind(&OdometryFactorBase::evaluateError, &factor, base1, pose1,
-          base2, std::placeholders::_1, boost::none, boost::none, boost::none, boost::none),
+          base2, std::placeholders::_1, std::nullopt, std::nullopt, std::nullopt, std::nullopt),
       pose2);
 
   // Verify the Jacobians are correct

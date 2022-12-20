@@ -17,6 +17,7 @@
 
 #pragma once
 
+#include <functional>
 #include <gtsam/inference/Factor.h>
 #include <gtsam/inference/Key.h>
 #include <gtsam/base/FastMap.h>
@@ -126,7 +127,7 @@ class GTSAM_EXPORT VariableIndex {
    * solving problems incrementally.
    */
   template<class FG>
-  void augment(const FG& factors, boost::optional<const FactorIndices&> newFactorIndices = boost::none);
+  void augment(const FG& factors, std::optional<const std::reference_wrapper<FactorIndices>> newFactorIndices = std::nullopt);
 
   /**
    * Augment the variable index after an existing factor now affects to more

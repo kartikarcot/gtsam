@@ -26,7 +26,7 @@
 #include <boost/format.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/optional.hpp>
+#include <optional>
 #include <boost/tuple/tuple.hpp>
 #include <boost/type_traits/has_dereference.hpp>
 #include <boost/unordered_set.hpp>
@@ -539,7 +539,7 @@ namespace gtsam {
   typename DecisionTree<L, Y>::NodePtr DecisionTree<L, Y>::compose(
       Iterator begin, Iterator end, const L& label) const {
     // find highest label among branches
-    boost::optional<L> highestLabel;
+    std::optional<L> highestLabel;
     size_t nrChoices = 0;
     for (Iterator it = begin; it != end; it++) {
       if (it->root_->isLeaf())

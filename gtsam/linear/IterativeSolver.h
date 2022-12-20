@@ -23,7 +23,7 @@
 
 #include <boost/tuple/tuple.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/optional.hpp>
+#include <optional>
 
 #include <iosfwd>
 #include <string>
@@ -93,8 +93,8 @@ public:
 
   /* interface to the nonlinear optimizer, without metadata, damping and initial estimate */
   GTSAM_EXPORT VectorValues optimize(const GaussianFactorGraph &gfg,
-      boost::optional<const KeyInfo&> = boost::none,
-      boost::optional<const std::map<Key, Vector>&> lambda = boost::none);
+      std::optional<const KeyInfo&> = std::nullopt,
+      std::optional<const std::map<Key, Vector>&> lambda = std::nullopt);
 
   /* interface to the nonlinear optimizer, without initial estimate */
   GTSAM_EXPORT VectorValues optimize(const GaussianFactorGraph &gfg, const KeyInfo &keyInfo,

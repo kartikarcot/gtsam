@@ -60,24 +60,24 @@ TEST( Reconstruction, evaluateError) {
       std::function<Vector(const Pose3&, const Pose3&, const Vector6&)>(
           std::bind(&Reconstruction::evaluateError, constraint,
                     std::placeholders::_1, std::placeholders::_2,
-                    std::placeholders::_3, boost::none, boost::none,
-                    boost::none)),
+                    std::placeholders::_3, std::nullopt, std::nullopt,
+                    std::nullopt)),
       g2, g1, V1_g1, 1e-5);
 
   Matrix numericalH2 = numericalDerivative32(
       std::function<Vector(const Pose3&, const Pose3&, const Vector6&)>(
           std::bind(&Reconstruction::evaluateError, constraint,
                     std::placeholders::_1, std::placeholders::_2,
-                    std::placeholders::_3, boost::none, boost::none,
-                    boost::none)),
+                    std::placeholders::_3, std::nullopt, std::nullopt,
+                    std::nullopt)),
       g2, g1, V1_g1, 1e-5);
 
   Matrix numericalH3 = numericalDerivative33(
       std::function<Vector(const Pose3&, const Pose3&, const Vector6&)>(
           std::bind(&Reconstruction::evaluateError, constraint,
                     std::placeholders::_1, std::placeholders::_2,
-                    std::placeholders::_3, boost::none, boost::none,
-                    boost::none)),
+                    std::placeholders::_3, std::nullopt, std::nullopt,
+                    std::nullopt)),
       g2, g1, V1_g1, 1e-5);
 
   EXPECT(assert_equal(numericalH1,H1,1e-5));
@@ -120,21 +120,21 @@ TEST( DiscreteEulerPoincareHelicopter, evaluateError) {
 
   Matrix numericalH1 = numericalDerivative31(
       std::function<Vector(const Vector6&, const Vector6&, const Pose3&)>(
-          std::bind(&DiscreteEulerPoincareHelicopter::evaluateError, constraint, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, boost::none, boost::none, boost::none)
+          std::bind(&DiscreteEulerPoincareHelicopter::evaluateError, constraint, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::nullopt, std::nullopt, std::nullopt)
           ),
           expectedv2, V1_g1, g2, 1e-5
       );
 
   Matrix numericalH2 = numericalDerivative32(
       std::function<Vector(const Vector6&, const Vector6&, const Pose3&)>(
-          std::bind(&DiscreteEulerPoincareHelicopter::evaluateError, constraint, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, boost::none, boost::none, boost::none)
+          std::bind(&DiscreteEulerPoincareHelicopter::evaluateError, constraint, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::nullopt, std::nullopt, std::nullopt)
           ),
           expectedv2, V1_g1, g2, 1e-5
       );
 
   Matrix numericalH3 = numericalDerivative33(
       std::function<Vector(const Vector6&, const Vector6&, const Pose3&)>(
-          std::bind(&DiscreteEulerPoincareHelicopter::evaluateError, constraint, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, boost::none, boost::none, boost::none)
+          std::bind(&DiscreteEulerPoincareHelicopter::evaluateError, constraint, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::nullopt, std::nullopt, std::nullopt)
           ),
           expectedv2, V1_g1, g2, 1e-5
       );

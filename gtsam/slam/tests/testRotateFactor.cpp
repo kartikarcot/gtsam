@@ -72,13 +72,13 @@ TEST (RotateFactor, test) {
   // Use numerical derivatives to calculate the expected Jacobian
   {
     expected = numericalDerivative11<Vector3,Rot3>(
-        std::bind(&RotateFactor::evaluateError, &f, std::placeholders::_1, boost::none), iRc);
+        std::bind(&RotateFactor::evaluateError, &f, std::placeholders::_1, std::nullopt), iRc);
     f.evaluateError(iRc, actual);
     EXPECT(assert_equal(expected, actual, 1e-9));
   }
   {
     expected = numericalDerivative11<Vector3,Rot3>(
-        std::bind(&RotateFactor::evaluateError, &f, std::placeholders::_1, boost::none), R);
+        std::bind(&RotateFactor::evaluateError, &f, std::placeholders::_1, std::nullopt), R);
     f.evaluateError(R, actual);
     EXPECT(assert_equal(expected, actual, 1e-9));
   }
@@ -144,14 +144,14 @@ TEST (RotateDirectionsFactor, test) {
   {
     expected = numericalDerivative11<Vector,Rot3>(
         std::bind(&RotateDirectionsFactor::evaluateError, &f, std::placeholders::_1,
-            boost::none), iRc);
+            std::nullopt), iRc);
     f.evaluateError(iRc, actual);
     EXPECT(assert_equal(expected, actual, 1e-9));
   }
   {
     expected = numericalDerivative11<Vector,Rot3>(
         std::bind(&RotateDirectionsFactor::evaluateError, &f, std::placeholders::_1,
-            boost::none), R);
+            std::nullopt), R);
     f.evaluateError(R, actual);
     EXPECT(assert_equal(expected, actual, 1e-9));
   }

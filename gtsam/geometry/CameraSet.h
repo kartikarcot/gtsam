@@ -108,8 +108,8 @@ public:
    */
   template<class POINT>
   ZVector project2(const POINT& point, //
-      boost::optional<FBlocks&> Fs = boost::none, //
-      boost::optional<Matrix&> E = boost::none) const {
+      std::optional<FBlocks&> Fs = std::nullopt, //
+      std::optional<Matrix&> E = std::nullopt) const {
 
     static const int N = FixedDimension<POINT>::value;
 
@@ -137,8 +137,8 @@ public:
   /// Calculate vector [project2(point)-z] of re-projection errors
   template<class POINT>
   Vector reprojectionError(const POINT& point, const ZVector& measured,
-      boost::optional<FBlocks&> Fs = boost::none, //
-      boost::optional<Matrix&> E = boost::none) const {
+      std::optional<FBlocks&> Fs = std::nullopt, //
+      std::optional<Matrix&> E = std::nullopt) const {
     return ErrorVector(project2(point, Fs, E), measured);
   }
 

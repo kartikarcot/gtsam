@@ -37,9 +37,9 @@ public:
 
   /** x1 + v*dt - x2 = 0, with optional derivatives */
   Vector evaluateError(const double& x1, const double& x2, const double& v,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none,
-      boost::optional<Matrix&> H3 = boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt,
+      std::optional<Matrix&> H3 = std::nullopt) const override {
     const size_t p = 1;
     if (H1) *H1 = Matrix::Identity(p,p);
     if (H2) *H2 = -Matrix::Identity(p,p);

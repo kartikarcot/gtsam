@@ -88,8 +88,8 @@ public:
 
   /** vector of errors */
   Vector evaluateError(const VALUE& p1, const VALUE& p2,
-      boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt) const override {
 
     Vector v1( traits<VALUE>::Logmap(p1) );
     Vector v2( traits<VALUE>::Logmap(p2) );

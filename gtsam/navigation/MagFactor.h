@@ -61,8 +61,8 @@ public:
   }
 
   static Point3 unrotate(const Rot2& R, const Point3& p,
-      boost::optional<Matrix&> HR = boost::none) {
-    Point3 q = Rot3::Yaw(R.theta()).unrotate(p, HR, boost::none);
+      std::optional<Matrix&> HR = std::nullopt) {
+    Point3 q = Rot3::Yaw(R.theta()).unrotate(p, HR, std::nullopt);
     if (HR) {
       // assign to temporary first to avoid error in Win-Debug mode
       Matrix H = HR->col(2);
@@ -75,7 +75,7 @@ public:
    * @brief vector of errors
    */
   Vector evaluateError(const Rot2& nRb,
-      boost::optional<Matrix&> H = boost::none) const override {
+      std::optional<Matrix&> H = std::nullopt) const override {
     // measured bM = nRb� * nM + b
     Point3 hx = unrotate(nRb, nM_, H) + bias_;
     return (hx - measured_);
@@ -113,9 +113,9 @@ public:
    * @brief vector of errors
    */
   Vector evaluateError(const Rot3& nRb,
-      boost::optional<Matrix&> H = boost::none) const override {
+      std::optional<Matrix&> H = std::nullopt) const override {
     // measured bM = nRb� * nM + b
-    Point3 hx = nRb.unrotate(nM_, H, boost::none) + bias_;
+    Point3 hx = nRb.unrotate(nM_, H, std::nullopt) + bias_;
     return (hx - measured_);
   }
 };
@@ -151,10 +151,10 @@ public:
    * @param bias (unknown) 3D bias
    */
   Vector evaluateError(const Point3& nM, const Point3& bias,
-      boost::optional<Matrix&> H1 = boost::none, boost::optional<Matrix&> H2 =
-          boost::none) const override {
+      std::optional<Matrix&> H1 = std::nullopt, std::optional<Matrix&> H2 =
+          std::nullopt) const override {
     // measured bM = nRb� * nM + b, where b is unknown bias
-    Point3 hx = bRn_.rotate(nM, boost::none, H1) + bias;
+    Point3 hx = bRn_.rotate(nM, std::nullopt, H1) + bias;
     if (H2)
       *H2 = I_3x3;
     return (hx - measured_);
@@ -192,11 +192,11 @@ public:
    * @param bias (unknown) 3D bias
    */
   Vector evaluateError(const double& scale, const Unit3& direction,
-      const Point3& bias, boost::optional<Matrix&> H1 = boost::none,
-      boost::optional<Matrix&> H2 = boost::none, boost::optional<Matrix&> H3 =
-          boost::none) const override {
+      const Point3& bias, std::optional<Matrix&> H1 = std::nullopt,
+      std::optional<Matrix&> H2 = std::nullopt, std::optional<Matrix&> H3 =
+          std::nullopt) const override {
     // measured bM = nRb� * nM + b, where b is unknown bias
-    Unit3 rotated = bRn_.rotate(direction, boost::none, H2);
+    Unit3 rotated = bRn_.rotate(direction, std::nullopt, H2);
     Point3 hx = scale * rotated.point3() + bias;
     if (H1)
       *H1 = rotated.point3();

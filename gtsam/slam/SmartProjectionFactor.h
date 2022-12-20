@@ -26,7 +26,7 @@
 #include <gtsam/inference/Symbol.h>
 #include <gtsam/slam/dataset.h>
 
-#include <boost/optional.hpp>
+#include <optional>
 #include <boost/make_shared.hpp>
 #include <vector>
 
@@ -338,7 +338,7 @@ protected:
   bool triangulateAndComputeE(Matrix& E, const Cameras& cameras) const {
     bool nonDegenerate = triangulateForLinearize(cameras);
     if (nonDegenerate)
-      cameras.project2(*result_, boost::none, E);
+      cameras.project2(*result_, std::nullopt, E);
     return nonDegenerate;
   }
 
@@ -409,7 +409,7 @@ protected:
    * to transform it to \f$ (h(x)-z)^2/\sigma^2 \f$, and then multiply by 0.5.
    */
   double totalReprojectionError(const Cameras& cameras,
-      boost::optional<Point3> externalPoint = boost::none) const {
+      std::optional<Point3> externalPoint = std::nullopt) const {
 
     if (externalPoint)
       result_ = TriangulationResult(*externalPoint);

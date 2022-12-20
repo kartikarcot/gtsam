@@ -47,7 +47,7 @@ void updateAb(MATRIX& Ab, int j, const Vector& a, const Vector& rd) {
 
 /* ************************************************************************* */
 // check *above the diagonal* for non-zero entries
-boost::optional<Vector> checkIfDiagonal(const Matrix M) {
+std::optional<Vector> checkIfDiagonal(const Matrix M) {
   size_t m = M.rows(), n = M.cols();
   // check all non-diagonal entries
   bool full = false;
@@ -60,7 +60,7 @@ boost::optional<Vector> checkIfDiagonal(const Matrix M) {
           break;
         }
   if (full) {
-    return boost::none;
+    return std::nullopt;
   } else {
     Vector diagonal(n);
     for (j = 0; j < n; j++)
@@ -87,7 +87,7 @@ Gaussian::shared_ptr Gaussian::SqrtInformation(const Matrix& R, bool smart) {
   if (m != n)
     throw invalid_argument("Gaussian::SqrtInformation: R not square");
   if (smart) {
-    boost::optional<Vector> diagonal = checkIfDiagonal(R);
+    std::optional<Vector> diagonal = checkIfDiagonal(R);
     if (diagonal)
       return Diagonal::Sigmas(diagonal->array().inverse(), true);
   }
@@ -100,7 +100,7 @@ Gaussian::shared_ptr Gaussian::Information(const Matrix& information, bool smart
   size_t m = information.rows(), n = information.cols();
   if (m != n)
     throw invalid_argument("Gaussian::Information: R not square");
-  boost::optional<Vector> diagonal = boost::none;
+  std::optional<Vector> diagonal = std::nullopt;
   if (smart)
     diagonal = checkIfDiagonal(information);
   if (diagonal)
@@ -118,7 +118,7 @@ Gaussian::shared_ptr Gaussian::Covariance(const Matrix& covariance,
   size_t m = covariance.rows(), n = covariance.cols();
   if (m != n)
     throw invalid_argument("Gaussian::Covariance: covariance not square");
-  boost::optional<Vector> variances = boost::none;
+  std::optional<Vector> variances = std::nullopt;
   if (smart)
     variances = checkIfDiagonal(covariance);
   if (variances)
@@ -425,8 +425,8 @@ Constrained::shared_ptr Constrained::unit() const {
 // Check whether column a triggers a constraint and corresponding variable is deterministic
 // Return constraint_row with maximum element in case variable plays in multiple constraints
 template <typename VECTOR>
-boost::optional<size_t> check_if_constraint(VECTOR a, const Vector& invsigmas, size_t m) {
-  boost::optional<size_t> constraint_row;
+std::optional<size_t> check_if_constraint(VECTOR a, const Vector& invsigmas, size_t m) {
+  std::optional<size_t> constraint_row;
   // not zero, so roundoff errors will not be counted
   // TODO(frank): that's a fairly crude way of dealing with roundoff errors :-(
   double max_element = 1e-9;
@@ -467,7 +467,7 @@ SharedDiagonal Constrained::QR(Matrix& Ab) const {
     Eigen::Block<Matrix> a = Ab.block(0, j, m, 1);
 
     // Check whether we need to handle as a constraint
-    boost::optional<size_t> constraint_row = check_if_constraint(a, invsigmas, m);
+    std::optional<size_t> constraint_row = check_if_constraint(a, invsigmas, m);
 
     if (constraint_row) {
       // Handle this as a constraint, as the i^th row has zero sigma with non-zero entry A(i,j)

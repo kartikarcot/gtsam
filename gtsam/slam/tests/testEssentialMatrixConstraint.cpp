@@ -54,11 +54,11 @@ TEST( EssentialMatrixConstraint, test ) {
   // Calculate numerical derivatives
   Matrix expectedH1 = numericalDerivative11<Vector5, Pose3>(
       std::bind(&EssentialMatrixConstraint::evaluateError, &factor,
-                std::placeholders::_1, pose2, boost::none, boost::none),
+                std::placeholders::_1, pose2, std::nullopt, std::nullopt),
       pose1);
   Matrix expectedH2 = numericalDerivative11<Vector5, Pose3>(
       std::bind(&EssentialMatrixConstraint::evaluateError, &factor, pose1,
-                std::placeholders::_1, boost::none, boost::none),
+                std::placeholders::_1, std::nullopt, std::nullopt),
       pose2);
 
   // Use the factor to calculate the derivative

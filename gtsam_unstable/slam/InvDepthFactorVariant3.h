@@ -106,8 +106,8 @@ public:
 
   /// Evaluate error h(x)-z and optionally derivatives
   Vector evaluateError(const Pose3& pose, const Vector3& landmark,
-      boost::optional<Matrix&> H1=boost::none,
-      boost::optional<Matrix&> H2=boost::none) const override {
+      std::optional<Matrix&> H1=std::nullopt,
+      std::optional<Matrix&> H2=std::nullopt) const override {
 
     if(H1) {
       (*H1) = numericalDerivative11<Vector, Pose3>(
@@ -232,9 +232,9 @@ public:
 
   /// Evaluate error h(x)-z and optionally derivatives
   Vector evaluateError(const Pose3& pose1, const Pose3& pose2, const Vector3& landmark,
-      boost::optional<Matrix&> H1=boost::none,
-      boost::optional<Matrix&> H2=boost::none,
-      boost::optional<Matrix&> H3=boost::none) const override {
+      std::optional<Matrix&> H1=std::nullopt,
+      std::optional<Matrix&> H2=std::nullopt,
+      std::optional<Matrix&> H3=std::nullopt) const override {
 
     if(H1)
       (*H1) = numericalDerivative11<Vector, Pose3>(

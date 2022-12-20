@@ -29,8 +29,8 @@ namespace gtsam {
 template<class T, class P>
 P transform_point(
     const T& trans, const P& global,
-    boost::optional<Matrix&> Dtrans,
-    boost::optional<Matrix&> Dglobal) {
+    std::optional<Matrix&> Dtrans,
+    std::optional<Matrix&> Dglobal) {
   return trans.transformFrom(global, Dtrans, Dglobal);
 }
 
@@ -93,11 +93,11 @@ public:
     return boost::static_pointer_cast<NonlinearFactor>(
         NonlinearFactor::shared_ptr(new This(*this))); }
 
-  /** Combined cost and derivative function using boost::optional */
+  /** Combined cost and derivative function using std::optional */
   Vector evaluateError(const Point& global, const Transform& trans, const Point& local,
-        boost::optional<Matrix&> Dforeign = boost::none,
-        boost::optional<Matrix&> Dtrans = boost::none,
-        boost::optional<Matrix&> Dlocal = boost::none) const override {
+        std::optional<Matrix&> Dforeign = std::nullopt,
+        std::optional<Matrix&> Dtrans = std::nullopt,
+        std::optional<Matrix&> Dlocal = std::nullopt) const override {
     Point newlocal = transform_point<Transform,Point>(trans, global, Dtrans, Dforeign);
     if (Dlocal)
       *Dlocal = -1* Matrix::Identity(traits<Point>::dimension, traits<Point>::dimension);

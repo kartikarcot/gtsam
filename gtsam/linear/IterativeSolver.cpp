@@ -84,8 +84,8 @@ string IterativeOptimizationParameters::verbosityTranslator(
 
 /*****************************************************************************/
 VectorValues IterativeSolver::optimize(const GaussianFactorGraph &gfg,
-    boost::optional<const KeyInfo&> keyInfo,
-    boost::optional<const std::map<Key, Vector>&> lambda) {
+    std::optional<const KeyInfo&> keyInfo,
+    std::optional<const std::map<Key, Vector>&> lambda) {
   return optimize(gfg, keyInfo ? *keyInfo : KeyInfo(gfg),
       lambda ? *lambda : std::map<Key, Vector>());
 }

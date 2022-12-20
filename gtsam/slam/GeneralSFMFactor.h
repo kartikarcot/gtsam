@@ -123,7 +123,7 @@ public:
 
   /** h(x)-z */
   Vector evaluateError(const CAMERA& camera, const LANDMARK& point,
-      boost::optional<Matrix&> H1=boost::none, boost::optional<Matrix&> H2=boost::none) const override {
+      std::optional<Matrix&> H1=std::nullopt, std::optional<Matrix&> H2=std::nullopt) const override {
     try {
       return camera.project2(point,H1,H2) - measured_;
     }
@@ -257,9 +257,9 @@ public:
 
   /** h(x)-z */
   Vector evaluateError(const Pose3& pose3, const Point3& point, const CALIBRATION &calib,
-      boost::optional<Matrix&> H1=boost::none,
-      boost::optional<Matrix&> H2=boost::none,
-      boost::optional<Matrix&> H3=boost::none) const override
+      std::optional<Matrix&> H1=std::nullopt,
+      std::optional<Matrix&> H2=std::nullopt,
+      std::optional<Matrix&> H3=std::nullopt) const override
   {
     try {
       Camera camera(pose3,calib);
