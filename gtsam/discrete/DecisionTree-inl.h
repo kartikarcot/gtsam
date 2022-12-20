@@ -547,7 +547,7 @@ namespace gtsam {
       boost::shared_ptr<const Choice> c =
           boost::dynamic_pointer_cast<const Choice>(it->root_);
       if (!highestLabel || c->label() > *highestLabel) {
-        highestLabel.reset(c->label());
+        highestLabel = c->label();
         nrChoices = c->nrChoices();
       }
     }
