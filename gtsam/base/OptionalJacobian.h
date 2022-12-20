@@ -25,6 +25,7 @@
 
 #ifndef OPTIONALJACOBIAN_NOBOOST
 #include <optional>
+#include <functional>
 #endif
 
 namespace gtsam {
@@ -124,11 +125,11 @@ public:
   }
 
   /// Constructor compatible with old-style derivatives
-  OptionalJacobian(std::optional<Eigen::MatrixXd> optional) :
+  OptionalJacobian(const std::optional<std::reference_wrapper<Eigen::MatrixXd>> optional) :
       map_(nullptr) {
     if (optional) {
-      optional->resize(Rows, Cols);
-      usurp(optional->data());
+      optional->get().resize(Rows, Cols);
+      usurp(optional->get().data());
     }
   }
 
