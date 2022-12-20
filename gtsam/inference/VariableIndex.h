@@ -17,18 +17,18 @@
 
 #pragma once
 
-#include <functional>
-#include <gtsam/inference/Factor.h>
-#include <gtsam/inference/Key.h>
 #include <gtsam/base/FastMap.h>
 #include <gtsam/base/FastVector.h>
 #include <gtsam/dllexport.h>
+#include <gtsam/inference/Factor.h>
+#include <gtsam/inference/Key.h>
 
-#include <boost/optional/optional.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 #include <cassert>
+#include <functional>
 #include <stdexcept>
+#include <optional>
 
 namespace gtsam {
 

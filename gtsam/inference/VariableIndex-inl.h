@@ -23,26 +23,29 @@
 namespace gtsam {
 
 /* ************************************************************************* */
-template<class FG>
-void VariableIndex::augment(const FG& factors,
-    std::optional<const FactorIndices&> newFactorIndices) {
+template <class FG>
+void VariableIndex::augment(
+    const FG &factors,
+    const std::optional<std::reference_wrapper<const FactorIndices>>
+        newFactorIndices) {
   gttic(VariableIndex_augment);
 
   // Augment index for each factor
   for (size_t i = 0; i < factors.size(); ++i) {
     if (factors[i]) {
       const size_t globalI =
-          newFactorIndices ? (*newFactorIndices)[i] : nFactors_;
-      for(const Key key: *factors[i]) {
+          newFactorIndices ? ((*newFactorIndices).get())[i] : nFactors_;
+      for (const Key key : *factors[i]) {
         index_[key].push_back(globalI);
         ++nEntries_;
       }
     }
 
-    // Increment factor count even if factors are null, to keep indices consistent
+    // Increment factor count even if factors are null, to keep indices
+    // consistent
     if (newFactorIndices) {
-      if ((*newFactorIndices)[i] >= nFactors_)
-        nFactors_ = (*newFactorIndices)[i] + 1;
+      if (((*newFactorIndices).get())[i] >= nFactors_)
+        nFactors_ = (*(newFactorIndices).get())[i] + 1;
     } else {
       ++nFactors_;
     }
