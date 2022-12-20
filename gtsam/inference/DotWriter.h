@@ -25,6 +25,7 @@
 #include <iosfwd>
 #include <map>
 #include <set>
+#include <optional>
 
 namespace gtsam {
 

@@ -83,12 +83,12 @@ std::optional<Vector2> DotWriter::variablePos(Key key) const {
   Symbol symbol(key);
   auto hint = positionHints.find(symbol.chr());
   if (hint != positionHints.end())
-    result.reset(Vector2(symbol.index(), hint->second));
+    result = Vector2(symbol.index(), hint->second);
 
   // Override with explicit position, if given.
   auto pos = variablePositions.find(key);
   if (pos != variablePositions.end())
-    result.reset(pos->second);
+    result = pos->second;
 
   return result;
 }
