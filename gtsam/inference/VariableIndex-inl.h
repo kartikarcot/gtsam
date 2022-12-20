@@ -26,7 +26,7 @@ namespace gtsam {
 template <class FG>
 void VariableIndex::augment(
     const FG &factors,
-    const std::optional<std::reference_wrapper<const FactorIndices>>
+    std::optional<const std::reference_wrapper<FactorIndices>>
         newFactorIndices) {
   gttic(VariableIndex_augment);
 
@@ -45,7 +45,7 @@ void VariableIndex::augment(
     // consistent
     if (newFactorIndices) {
       if (((*newFactorIndices).get())[i] >= nFactors_)
-        nFactors_ = (*(newFactorIndices).get())[i] + 1;
+        nFactors_ = ((*newFactorIndices).get())[i] + 1;
     } else {
       ++nFactors_;
     }

@@ -127,7 +127,8 @@ class GTSAM_EXPORT VariableIndex {
    * solving problems incrementally.
    */
   template<class FG>
-  void augment(const FG& factors, std::optional<const std::reference_wrapper<FactorIndices>> newFactorIndices = std::nullopt);
+  void augment(const FG& factors, 
+		  std::optional<const std::reference_wrapper<FactorIndices>> newFactorIndices = std::nullopt);
 
   /**
    * Augment the variable index after an existing factor now affects to more
