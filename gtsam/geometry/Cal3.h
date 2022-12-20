@@ -22,6 +22,7 @@
 #pragma once
 
 #include <gtsam/geometry/Point2.h>
+#include <boost/shared_ptr.hpp>
 
 namespace gtsam {
 
