@@ -91,8 +91,8 @@ namespace gtsam {
     /** implement functions needed to derive from Factor */
 
     /** vector of errors */
-    Vector evaluateError(const T& x, std::optional<Matrix&> H = std::nullopt) const override {
-      if (H) (*H) = Matrix::Identity(traits<T>::GetDimension(x),traits<T>::GetDimension(x));
+    Vector evaluateError(const T& x, std::optional<std::reference_wrapper<Matrix>> H = std::nullopt) const override {
+      if (H) (*H).get() = Matrix::Identity(traits<T>::GetDimension(x),traits<T>::GetDimension(x));
       // manifold equivalent of z-x -> Local(x,z)
       return -traits<T>::Local(x, prior_);
     }

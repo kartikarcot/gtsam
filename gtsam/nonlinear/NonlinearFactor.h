@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <functional>
 #include <gtsam/nonlinear/Values.h>
 #include <gtsam/linear/NoiseModel.h>
 #include <gtsam/linear/JacobianFactor.h>
@@ -219,7 +220,7 @@ public:
    * both the function evaluation and its derivative(s) in H.
    */
   virtual Vector unwhitenedError(const Values& x,
-      std::optional<std::vector<Matrix>&> H = std::nullopt) const = 0;
+      std::optional<std::reference_wrapper<std::vector<Matrix>>> H = std::nullopt) const = 0;
 
   /**
    * Vector of errors, whitened
@@ -323,11 +324,11 @@ public:
    */
   Vector unwhitenedError(
       const Values &x,
-      std::optional<std::vector<Matrix> &> H = std::nullopt) const override {
+      std::optional<std::reference_wrapper<std::vector<Matrix>>> H = std::nullopt) const override {
     if (this->active(x)) {
       const X &x1 = x.at<X>(keys_[0]);
       if (H) {
-        return evaluateError(x1, (*H)[0]);
+        return evaluateError(x1, (*H).get()[0]);
       } else {
         return evaluateError(x1);
       }
@@ -347,7 +348,7 @@ public:
    */
   virtual Vector
   evaluateError(const X &x,
-                std::optional<Matrix &> H = std::nullopt) const = 0;
+                std::optional<std::reference_wrapper<Matrix>> H = std::nullopt) const = 0;
 
   /// @}
 
@@ -403,12 +404,12 @@ public:
 
   /** Calls the 2-key specific version of evaluateError, which is pure virtual
    * so must be implemented in the derived class. */
-  Vector unwhitenedError(const Values& x, std::optional<std::vector<Matrix>&> H = std::nullopt) const override {
+  Vector unwhitenedError(const Values& x, std::optional<std::reference_wrapper<std::vector<Matrix>>> H = std::nullopt) const override {
     if(this->active(x)) {
       const X1& x1 = x.at<X1>(keys_[0]);
       const X2& x2 = x.at<X2>(keys_[1]);
       if(H) {
-        return evaluateError(x1, x2, (*H)[0], (*H)[1]);
+        return evaluateError(x1, x2, (*H).get()[0], (*H).get()[1]);
       } else {
         return evaluateError(x1, x2);
       }
@@ -423,8 +424,8 @@ public:
    *  both the function evaluation and its derivative(s) in X1 (and/or X2).
    */
   virtual Vector
-  evaluateError(const X1&, const X2&, std::optional<Matrix&> H1 =
-      std::nullopt, std::optional<Matrix&> H2 = std::nullopt) const = 0;
+  evaluateError(const X1&, const X2&, std::optional<std::reference_wrapper<Matrix>> H1 =
+      std::nullopt, std::optional<std::reference_wrapper<Matrix>> H2 = std::nullopt) const = 0;
 
 private:
 
@@ -481,10 +482,10 @@ public:
 
   /** Calls the 3-key specific version of evaluateError, which is pure virtual
    * so must be implemented in the derived class. */
-  Vector unwhitenedError(const Values& x, std::optional<std::vector<Matrix>&> H = std::nullopt) const override {
+  Vector unwhitenedError(const Values& x, std::optional<std::reference_wrapper<std::vector<Matrix>>> H = std::nullopt) const override {
     if(this->active(x)) {
       if(H)
-        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), (*H)[0], (*H)[1], (*H)[2]);
+        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), (*H).get()[0], (*H).get()[1], (*H).get()[2]);
       else
         return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]));
     } else {
@@ -499,9 +500,9 @@ public:
    */
   virtual Vector
   evaluateError(const X1&, const X2&, const X3&,
-      std::optional<Matrix&> H1 = std::nullopt,
-      std::optional<Matrix&> H2 = std::nullopt,
-      std::optional<Matrix&> H3 = std::nullopt) const = 0;
+      std::optional<std::reference_wrapper<Matrix>> H1 = std::nullopt,
+      std::optional<std::reference_wrapper<Matrix>> H2 = std::nullopt,
+      std::optional<std::reference_wrapper<Matrix>> H3 = std::nullopt) const = 0;
 
 private:
 
@@ -561,10 +562,10 @@ public:
 
   /** Calls the 4-key specific version of evaluateError, which is pure virtual
    * so must be implemented in the derived class. */
-  Vector unwhitenedError(const Values& x, std::optional<std::vector<Matrix>&> H = std::nullopt) const override {
+  Vector unwhitenedError(const Values& x, std::optional<std::reference_wrapper<std::vector<Matrix>>> H = std::nullopt) const override {
     if(this->active(x)) {
       if(H)
-        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), (*H)[0], (*H)[1], (*H)[2], (*H)[3]);
+        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), (*H).get()[0], (*H).get()[1], (*H).get()[2], (*H).get()[3]);
       else
         return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]));
     } else {
@@ -579,10 +580,10 @@ public:
    */
   virtual Vector
   evaluateError(const X1&, const X2&, const X3&, const X4&,
-      std::optional<Matrix&> H1 = std::nullopt,
-      std::optional<Matrix&> H2 = std::nullopt,
-      std::optional<Matrix&> H3 = std::nullopt,
-      std::optional<Matrix&> H4 = std::nullopt) const = 0;
+      std::optional<std::reference_wrapper<Matrix>> H1 = std::nullopt,
+      std::optional<std::reference_wrapper<Matrix>> H2 = std::nullopt,
+      std::optional<std::reference_wrapper<Matrix>> H3 = std::nullopt,
+      std::optional<std::reference_wrapper<Matrix>> H4 = std::nullopt) const = 0;
 
 private:
 
@@ -645,10 +646,10 @@ public:
 
   /** Calls the 5-key specific version of evaluateError, which is pure virtual
    * so must be implemented in the derived class. */
-  Vector unwhitenedError(const Values& x, std::optional<std::vector<Matrix>&> H = std::nullopt) const override {
+  Vector unwhitenedError(const Values& x, std::optional<std::reference_wrapper<std::vector<Matrix>>> H = std::nullopt) const override {
     if(this->active(x)) {
       if(H)
-        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), x.at<X5>(keys_[4]), (*H)[0], (*H)[1], (*H)[2], (*H)[3], (*H)[4]);
+        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), x.at<X5>(keys_[4]), (*H).get()[0], (*H).get()[1], (*H).get()[2], (*H).get()[3], (*H).get()[4]);
       else
         return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), x.at<X5>(keys_[4]));
     } else {
@@ -663,11 +664,11 @@ public:
    */
   virtual Vector
   evaluateError(const X1&, const X2&, const X3&, const X4&, const X5&,
-      std::optional<Matrix&> H1 = std::nullopt,
-      std::optional<Matrix&> H2 = std::nullopt,
-      std::optional<Matrix&> H3 = std::nullopt,
-      std::optional<Matrix&> H4 = std::nullopt,
-      std::optional<Matrix&> H5 = std::nullopt) const = 0;
+      std::optional<std::reference_wrapper<Matrix>> H1 = std::nullopt,
+      std::optional<std::reference_wrapper<Matrix>> H2 = std::nullopt,
+      std::optional<std::reference_wrapper<Matrix>> H3 = std::nullopt,
+      std::optional<std::reference_wrapper<Matrix>> H4 = std::nullopt,
+      std::optional<std::reference_wrapper<Matrix>> H5 = std::nullopt) const = 0;
 
 private:
 
@@ -733,10 +734,10 @@ public:
 
   /** Calls the 6-key specific version of evaluateError, which is pure virtual
    * so must be implemented in the derived class. */
-  Vector unwhitenedError(const Values& x, std::optional<std::vector<Matrix>&> H = std::nullopt) const override {
+  Vector unwhitenedError(const Values& x, std::optional<std::reference_wrapper<std::vector<Matrix>>> H = std::nullopt) const override {
     if(this->active(x)) {
       if(H)
-        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), x.at<X5>(keys_[4]), x.at<X6>(keys_[5]), (*H)[0], (*H)[1], (*H)[2], (*H)[3], (*H)[4], (*H)[5]);
+        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), x.at<X5>(keys_[4]), x.at<X6>(keys_[5]), (*H).get()[0], (*H).get()[1], (*H).get()[2], (*H).get()[3], (*H).get()[4], (*H).get()[5]);
       else
         return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), x.at<X5>(keys_[4]), x.at<X6>(keys_[5]));
     } else {
@@ -751,12 +752,12 @@ public:
    */
   virtual Vector
   evaluateError(const X1&, const X2&, const X3&, const X4&, const X5&, const X6&,
-      std::optional<Matrix&> H1 = std::nullopt,
-      std::optional<Matrix&> H2 = std::nullopt,
-      std::optional<Matrix&> H3 = std::nullopt,
-      std::optional<Matrix&> H4 = std::nullopt,
-      std::optional<Matrix&> H5 = std::nullopt,
-      std::optional<Matrix&> H6 = std::nullopt) const = 0;
+      std::optional<std::reference_wrapper<Matrix>> H1 = std::nullopt,
+      std::optional<std::reference_wrapper<Matrix>> H2 = std::nullopt,
+      std::optional<std::reference_wrapper<Matrix>> H3 = std::nullopt,
+      std::optional<std::reference_wrapper<Matrix>> H4 = std::nullopt,
+      std::optional<std::reference_wrapper<Matrix>> H5 = std::nullopt,
+      std::optional<std::reference_wrapper<Matrix>> H6 = std::nullopt) const = 0;
 
 private:
 

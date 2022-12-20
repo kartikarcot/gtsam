@@ -119,7 +119,7 @@ public:
   }
 
   /// Evaluate error h(x)-z and optionally derivatives
-  Vector evaluateError(const Point3& point, std::optional<Matrix&> H2 =
+  Vector evaluateError(const Point3& point, std::optional<std::reference_wrapper<Matrix>> H2 =
       std::nullopt) const override {
     try {
       return traits<Measurement>::Local(measured_, camera_.project2(point, std::nullopt, H2));
