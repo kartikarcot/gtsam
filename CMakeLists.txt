@@ -50,8 +50,13 @@ endif()
 
 include(cmake/HandleGeneralOptions.cmake)   # CMake build options
 
+option(GTSAM_USE_BOOST "Require and use boost" ON)
 # Libraries:
-include(cmake/HandleBoost.cmake)            # Boost
+if (GTSAM_USE_BOOST)
+  include(cmake/HandleBoost.cmake)            # Boost
+  add_definitions(-DUSE_BOOST)
+endif()
+  
 include(cmake/HandleCCache.cmake)           # ccache
 include(cmake/HandleCPack.cmake)            # CPack
 include(cmake/HandleEigen.cmake)            # Eigen3
