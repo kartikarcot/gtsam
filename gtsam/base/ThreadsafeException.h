@@ -21,11 +21,11 @@
 
 #include <gtsam/config.h> // for GTSAM_USE_TBB
 
-#include <boost/optional/optional.hpp>
 #include <gtsam/dllexport.h>
 #include <string>
 #include <typeinfo>
 #include <exception>
+#include <optional>
 
 #ifdef GTSAM_USE_TBB
 #include <tbb/tbb_allocator.h>

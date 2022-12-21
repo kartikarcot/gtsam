@@ -177,7 +177,7 @@ namespace gtsam {
                            this->conditional()->endParents());
         auto separatorMarginal =
             p_Cp.marginalMultifrontalBayesNet(Ordering(indicesS), function);
-        cachedSeparatorMarginal_.reset(*separatorMarginal);
+        cachedSeparatorMarginal_ = *separatorMarginal;
       }
     }
 
