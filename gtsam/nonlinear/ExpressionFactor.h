@@ -24,6 +24,7 @@
 #include <gtsam/base/Testable.h>
 #include <gtsam/nonlinear/Expression.h>
 #include <gtsam/nonlinear/NonlinearFactor.h>
+#include <functional>
 #include <numeric>
 
 namespace gtsam {
@@ -97,9 +98,9 @@ protected:
    * both the function evaluation and its derivative(s) in H.
    */
   Vector unwhitenedError(const Values& x,
-    std::optional<std::vector<Matrix>&> H = std::nullopt) const override {
+    std::optional<std::reference_wrapper<std::vector<Matrix>>> H = std::nullopt) const override {
     if (H) {
-      const T value = expression_.valueAndDerivatives(x, keys_, dims_, *H);
+      const T value = expression_.valueAndDerivatives(x, keys_, dims_, H->get());
       // NOTE(hayk): Doing the reverse, AKA Local(measured_, value) is not correct here
       // because it would use the tangent space of the measurement instead of the value.
       return -traits<T>::Local(value, measured_);
@@ -312,15 +313,15 @@ public:
 
   /// Backwards compatible evaluateError, to make existing tests compile
   Vector evaluateError(const A1 &a1, const A2 &a2,
-                       std::optional<Matrix &> H1 = std::nullopt,
-                       std::optional<Matrix &> H2 = std::nullopt) const {
+                       std::optional<std::reference_wrapper<Matrix>> H1 = std::nullopt,
+                       std::optional<std::reference_wrapper<Matrix>> H2 = std::nullopt) const {
     Values values;
     values.insert(this->keys_[0], a1);
     values.insert(this->keys_[1], a2);
     std::vector<Matrix> H(2);
     Vector error = ExpressionFactor<T>::unwhitenedError(values, H);
-    if (H1) (*H1) = H[0];
-    if (H2) (*H2) = H[1];
+    if (H1) H1->get() = H[0];
+    if (H2) H2->get() = H[1];
     return error;
   }
 

@@ -74,15 +74,15 @@ class BearingRangeFactor
   }
 
   Vector evaluateError(const A1& a1, const A2& a2,
-      std::optional<Matrix&> H1 = std::nullopt,
-      std::optional<Matrix&> H2 = std::nullopt) const
+      std::optional<std::reference_wrapper<Matrix>> H1 = std::nullopt,
+      std::optional<std::reference_wrapper<Matrix>> H2 = std::nullopt) const
   {
     std::vector<Matrix> Hs(2);
     const auto &keys = Factor::keys();
     const Vector error = this->unwhitenedError(
         {{keys[0], genericValue(a1)}, {keys[1], genericValue(a2)}}, Hs);
-    if (H1) *H1 = Hs[0];
-    if (H2) *H2 = Hs[1];
+    if (H1) H1->get() = Hs[0];
+    if (H2) H2->get() = Hs[1];
     return error;
   }
 

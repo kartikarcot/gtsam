@@ -23,6 +23,7 @@
 #include <gtsam/nonlinear/internal/CallRecord.h>
 #include <gtsam/nonlinear/Values.h>
 
+#include <optional>
 #include <typeinfo>       // operator typeid
 #include <ostream>
 #include <map>
@@ -367,7 +368,7 @@ public:
   T value(const Values& values) const override {
     using std::nullopt;
     return function_(expression1_->value(values), expression2_->value(values),
-        none, none);
+        std::nullopt, std::nullopt);
   }
 
   /// Return keys that play in this expression
@@ -475,7 +476,7 @@ public:
   T value(const Values& values) const override {
     using std::nullopt;
     return function_(expression1_->value(values), expression2_->value(values),
-        expression3_->value(values), none, none, none);
+        expression3_->value(values), std::nullopt, std::nullopt, std::nullopt);
   }
 
   /// Return keys that play in this expression

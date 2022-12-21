@@ -25,6 +25,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/range/adaptor/map.hpp>
 #include <boost/range/algorithm.hpp>
+#include <functional>
 
 namespace gtsam {
 
@@ -138,14 +139,14 @@ void Expression<T>::print(const std::string& s) const {
 
 template<typename T>
 T Expression<T>::value(const Values& values,
-    std::optional<std::vector<Matrix>&> H) const {
+    std::optional<std::reference_wrapper<std::vector<Matrix>>> H) const {
 
   if (H) {
     // Call private version that returns derivatives in H
     KeyVector keys;
     FastVector<int> dims;
     boost::tie(keys, dims) = keysAndDims();
-    return valueAndDerivatives(values, keys, dims, *H);
+    return valueAndDerivatives(values, keys, dims, H->get());
   } else
     // no derivatives needed, just return value
     return root_->value(values);
