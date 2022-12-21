@@ -41,7 +41,7 @@ struct GTSAM_EXPORT PreintegratedRotationParams {
                               std::optional<Vector3> omega_coriolis)
     : gyroscopeCovariance(gyroscope_covariance) {
       if (omega_coriolis)
-        omegaCoriolis.reset(omega_coriolis.get());
+        omegaCoriolis = omega_coriolis;
   }
 
   virtual ~PreintegratedRotationParams() {}
@@ -50,8 +50,8 @@ struct GTSAM_EXPORT PreintegratedRotationParams {
   virtual bool equals(const PreintegratedRotationParams& other, double tol=1e-9) const;
 
   void setGyroscopeCovariance(const Matrix3& cov)   { gyroscopeCovariance = cov;  }
-  void setOmegaCoriolis(const Vector3& omega)       { omegaCoriolis.reset(omega); }
-  void setBodyPSensor(const Pose3& pose)            { body_P_sensor.reset(pose);  }
+  void setOmegaCoriolis(const Vector3& omega)       { omegaCoriolis = omega; }
+  void setBodyPSensor(const Pose3& pose)            { body_P_sensor = pose;  }
 
   const Matrix3& getGyroscopeCovariance()     const { return gyroscopeCovariance; }
   std::optional<Vector3> getOmegaCoriolis() const { return omegaCoriolis; }
@@ -67,7 +67,7 @@ struct GTSAM_EXPORT PreintegratedRotationParams {
     ar & BOOST_SERIALIZATION_NVP(body_P_sensor);
 
     // Provide support for Eigen::Matrix in std::optional
-    bool omegaCoriolisFlag = omegaCoriolis.is_initialized();
+    bool omegaCoriolisFlag = omegaCoriolis.has_value();
     ar & boost::serialization::make_nvp("omegaCoriolisFlag", omegaCoriolisFlag);
     if (omegaCoriolisFlag) {
       ar & BOOST_SERIALIZATION_NVP(*omegaCoriolis);

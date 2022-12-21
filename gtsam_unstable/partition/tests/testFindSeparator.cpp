@@ -36,7 +36,7 @@ TEST ( Partition, separatorPartitionByMetis )
   std::optional<MetisResult> actual = separatorPartitionByMetis<GenericGraph2D>(graph, keys,
    workspace, true);
 
-  CHECK(actual.is_initialized());
+  CHECK(actual.has_value());
   vector<size_t> A_expected; A_expected += 0, 3; // frontal
   vector<size_t> B_expected; B_expected += 2, 4; // frontal
   vector<size_t> C_expected; C_expected += 1;    // separator
@@ -61,7 +61,7 @@ TEST ( Partition, separatorPartitionByMetis2 )
   std::optional<MetisResult> actual = separatorPartitionByMetis<GenericGraph2D>(graph, keys,
    workspace, true);
 
-  CHECK(actual.is_initialized());
+  CHECK(actual.has_value());
   vector<size_t> A_expected; A_expected += 1, 5; // frontal
   vector<size_t> B_expected; B_expected += 3, 6; // frontal
   vector<size_t> C_expected; C_expected += 2;    // separator
@@ -84,7 +84,7 @@ TEST ( Partition, edgePartitionByMetis )
   std::optional<MetisResult> actual = edgePartitionByMetis<GenericGraph3D>(graph, keys,
    workspace, true);
 
-  CHECK(actual.is_initialized());
+  CHECK(actual.has_value());
   vector<size_t> A_expected; A_expected += 0, 1; // frontal
   vector<size_t> B_expected; B_expected += 2, 3; // frontal
   vector<size_t> C_expected;    // separator
@@ -114,7 +114,7 @@ TEST ( Partition, edgePartitionByMetis2 )
   WorkSpace workspace(6);
   std::optional<MetisResult> actual = edgePartitionByMetis<GenericGraph3D>(graph, keys,
    workspace, true);
-  CHECK(actual.is_initialized());
+  CHECK(actual.has_value());
   vector<size_t> A_expected; A_expected += 0, 1; // frontal
   vector<size_t> B_expected; B_expected += 2, 3, 4; // frontal
   vector<size_t> C_expected;    // separator

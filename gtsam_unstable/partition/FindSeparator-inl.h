@@ -451,7 +451,7 @@ namespace gtsam { namespace partition {
     std::vector<size_t> keyToPartition;
     std::vector<size_t> cameraKeys, landmarkKeys;
     if (reduceGraph) {
-      if (!int2symbol.is_initialized())
+      if (!int2symbol.has_value())
         throw std::invalid_argument("findSeparator: int2symbol must be valid!");
 
       // find out all the landmark keys, which are to be eliminated
@@ -474,7 +474,7 @@ namespace gtsam { namespace partition {
     }  else // call Metis to partition the graph to A, B, C
       result = separatorPartitionByMetis(graph, keys, workspace, verbose);
 
-    if (!result.is_initialized()) {
+    if (!result.has_value()) {
       std::cout << "metis failed!" << std::endl;
       return std::nullopt;
     }
