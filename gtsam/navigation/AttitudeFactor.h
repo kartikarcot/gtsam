@@ -122,7 +122,7 @@ public:
 
   /** vector of errors */
   Vector evaluateError(const Rot3& nRb, //
-      std::optional<Matrix&> H = std::nullopt) const override {
+      std::optional<std::reference_wrapper<Matrix>> H = std::nullopt) const override {
     return attitudeError(nRb, H);
   }
 
@@ -196,12 +196,12 @@ public:
 
   /** vector of errors */
   Vector evaluateError(const Pose3& nTb, //
-      std::optional<Matrix&> H = std::nullopt) const override {
+      std::optional<std::reference_wrapper<Matrix>> H = std::nullopt) const override {
     Vector e = attitudeError(nTb.rotation(), H);
     if (H) {
-      Matrix H23 = *H;
-      *H = Matrix::Zero(2,6);
-      H->block<2,3>(0,0) = H23;
+      Matrix H23 = H->get();
+      H->get() = Matrix::Zero(2,6);
+      H->get().block<2,3>(0,0) = H23;
     }
     return e;
   }

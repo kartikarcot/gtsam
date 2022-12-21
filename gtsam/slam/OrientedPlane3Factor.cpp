@@ -23,8 +23,8 @@ void OrientedPlane3Factor::print(const string& s,
 
 //***************************************************************************
 Vector OrientedPlane3Factor::evaluateError(const Pose3& pose,
-    const OrientedPlane3& plane, std::optional<Matrix&> H1,
-    std::optional<Matrix&> H2) const {
+    const OrientedPlane3& plane, std::optional<std::reference_wrapper<Matrix>> H1,
+    std::optional<std::reference_wrapper<Matrix>> H2) const {
   Matrix36 predicted_H_pose;
   Matrix33 predicted_H_plane, error_H_predicted;
 
@@ -36,10 +36,10 @@ Vector OrientedPlane3Factor::evaluateError(const Pose3& pose,
 
   // Apply the chain rule to calculate the derivatives.
   if (H1) {
-    *H1 = error_H_predicted * predicted_H_pose;
+    H1->get() = error_H_predicted * predicted_H_pose;
   }
   if (H2) {
-    *H2 = error_H_predicted * predicted_H_plane;
+    H2->get() = error_H_predicted * predicted_H_plane;
   }
 
   return err;
@@ -64,14 +64,14 @@ bool OrientedPlane3DirectionPrior::equals(const NonlinearFactor& expected,
 
 //***************************************************************************
 Vector OrientedPlane3DirectionPrior::evaluateError(
-    const OrientedPlane3& plane, std::optional<Matrix&> H) const {
+    const OrientedPlane3& plane, std::optional<std::reference_wrapper<Matrix>> H) const {
   Unit3 n_hat_p = measured_p_.normal();
   Unit3 n_hat_q = plane.normal();
   Matrix2 H_p;
   Vector e = n_hat_p.error(n_hat_q, H ? &H_p : nullptr);
   if (H) {
-    H->resize(2, 3);
-    *H << H_p, Z_2x1;
+    H->get().resize(2, 3);
+    H->get() << H_p, Z_2x1;
   }
   return e;
 }
