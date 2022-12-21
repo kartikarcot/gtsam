@@ -75,7 +75,8 @@ public:
     * Calls the errorFunction closure, which is a std::function object
     * One can check if a derivative is needed in the errorFunction by checking the length of Jacobian array
     */
-  Vector unwhitenedError(const Values &x, std::optional<std::reference_wrapper<std::vector<Matrix>>> H = std::nullopt) const override;
+  Vector unwhitenedError(const Values &x,
+    std::optional<std::reference_wrapper<std::vector<Matrix>>> H = std::nullopt) const override;
 
   /** print */
   void print(const std::string &s,
