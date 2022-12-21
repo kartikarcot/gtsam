@@ -43,12 +43,12 @@ bool BarometricFactor::equals(const NonlinearFactor& expected,
 
 //***************************************************************************
 Vector BarometricFactor::evaluateError(const Pose3& p, const double& bias,
-                                       std::optional<Matrix&> H,
-                                       std::optional<Matrix&> H2) const {
+                                       std::optional<std::reference_wrapper<Matrix>> H,
+                                       std::optional<std::reference_wrapper<Matrix>> H2) const {
     Matrix tH;
     Vector ret = (Vector(1) << (p.translation(tH).z() + bias - nT_)).finished();
-    if (H) (*H) = tH.block<1, 6>(2, 0);
-    if (H2) (*H2) = (Matrix(1, 1) << 1.0).finished();
+    if (H) (*H).get() = tH.block<1, 6>(2, 0);
+    if (H2) (*H2).get() = (Matrix(1, 1) << 1.0).finished();
     return ret;
 }
 

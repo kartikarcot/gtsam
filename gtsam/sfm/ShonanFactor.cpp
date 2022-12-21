@@ -75,8 +75,8 @@ bool ShonanFactor<d>::equals(const NonlinearFactor &expected,
 //******************************************************************************
 template <size_t d>
 void ShonanFactor<d>::fillJacobians(const Matrix &M1, const Matrix &M2,
-                                    std::optional<Matrix &> H1,
-                                    std::optional<Matrix &> H2) const {
+                                    std::optional<std::reference_wrapper<Matrix>> H1,
+                                    std::optional<std::reference_wrapper<Matrix>> H2) const {
   gttic(ShonanFactor_Jacobians);
   const size_t dim = p_ * d; // Stiefel manifold dimension
 
@@ -84,11 +84,11 @@ void ShonanFactor<d>::fillJacobians(const Matrix &M1, const Matrix &M2,
     // If asked, calculate Jacobian H1 as as (M' \otimes M1) * G
     // M' = dxd, M1 = pxp, G = (p*p)xDim(p), result should be dim x Dim(p)
     // (M' \otimes M1) is dim*dim, but last pp-dim columns are zero
-    *H1 = Matrix::Zero(dim, G_->cols());
+    H1->get() = Matrix::Zero(dim, G_->cols());
     for (size_t j = 0; j < d; j++) {
       auto MG_j = M1 * G_->middleRows(j * p_, p_); // p_ * Dim(p)
       for (size_t i = 0; i < d; i++) {
-        H1->middleRows(i * p_, p_) -= M_(j, i) * MG_j;
+        H1->get().middleRows(i * p_, p_) -= M_(j, i) * MG_j;
       }
     }
   }
@@ -96,9 +96,9 @@ void ShonanFactor<d>::fillJacobians(const Matrix &M1, const Matrix &M2,
     // If asked, calculate Jacobian H2 as as (I_d \otimes M2) * G
     // I_d = dxd, M2 = pxp, G = (p*p)xDim(p), result should be dim x Dim(p)
     // (I_d \otimes M2) is dim*dim, but again last pp-dim columns are zero
-    H2->resize(dim, G_->cols());
+    H2->get().resize(dim, G_->cols());
     for (size_t i = 0; i < d; i++) {
-      H2->middleRows(i * p_, p_) = M2 * G_->middleRows(i * p_, p_);
+      H2->get().middleRows(i * p_, p_) = M2 * G_->middleRows(i * p_, p_);
     }
   }
 }
@@ -106,8 +106,8 @@ void ShonanFactor<d>::fillJacobians(const Matrix &M1, const Matrix &M2,
 //******************************************************************************
 template <size_t d>
 Vector ShonanFactor<d>::evaluateError(const SOn &Q1, const SOn &Q2,
-                                      std::optional<Matrix &> H1,
-                                      std::optional<Matrix &> H2) const {
+                                      std::optional<std::reference_wrapper<Matrix>> H1,
+                                      std::optional<std::reference_wrapper<Matrix>> H2) const {
   gttic(ShonanFactor_evaluateError);
 
   const Matrix &M1 = Q1.matrix();

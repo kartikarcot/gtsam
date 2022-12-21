@@ -178,10 +178,10 @@ public:
   /** implement functions needed to derive from Factor */
 
   /// vector of errors
-  Vector evaluateError(const Rot3& rot_i, const Rot3& rot_j,
-      const Vector3& bias, std::optional<Matrix&> H1 = std::nullopt,
-      std::optional<Matrix&> H2 = std::nullopt, std::optional<Matrix&> H3 =
-          std::nullopt) const override;
+  Vector evaluateError(const Rot3& rot_i, const Rot3& rot_j, const Vector3& bias,
+                       std::optional<std::reference_wrapper<Matrix>> H1 = std::nullopt,
+                       std::optional<std::reference_wrapper<Matrix>> H2 = std::nullopt,
+                       std::optional<std::reference_wrapper<Matrix>> H3 = std::nullopt) const override;
 
   /// predicted states from IMU
   /// TODO(frank): relationship with PIM predict ??

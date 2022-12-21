@@ -73,15 +73,15 @@ public:
   /// projects down from SO(p) to the Stiefel manifold of px3 matrices.
   Vector
   evaluateError(const SOn &Q1, const SOn &Q2,
-                std::optional<Matrix &> H1 = std::nullopt,
-                std::optional<Matrix &> H2 = std::nullopt) const override;
+                std::optional<std::reference_wrapper<Matrix>> H1 = std::nullopt,
+                std::optional<std::reference_wrapper<Matrix>> H2 = std::nullopt) const override;
   /// @}
 
 private:
   /// Calculate Jacobians if asked, Only implemented for d=2 and 3 in .cpp
   void fillJacobians(const Matrix &M1, const Matrix &M2,
-                     std::optional<Matrix &> H1,
-                     std::optional<Matrix &> H2) const;
+                     std::optional<std::reference_wrapper<Matrix>> H1,
+                     std::optional<std::reference_wrapper<Matrix>> H2) const;
 };
 
 // Explicit instantiation for d=2 and d=3 in .cpp file:

@@ -436,7 +436,7 @@ std::optional<size_t> check_if_constraint(VECTOR a, const Vector& invsigmas, siz
     double abs_ai = std::abs(a(i,0));
     if (abs_ai > max_element) {
       max_element = abs_ai;
-      constraint_row.reset(i);
+      constraint_row = i;
     }
   }
   return constraint_row;

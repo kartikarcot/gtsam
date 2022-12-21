@@ -219,13 +219,12 @@ bool CombinedImuFactor::equals(const NonlinearFactor& other, double tol) const {
 }
 
 //------------------------------------------------------------------------------
-Vector CombinedImuFactor::evaluateError(const Pose3& pose_i,
-    const Vector3& vel_i, const Pose3& pose_j, const Vector3& vel_j,
-    const imuBias::ConstantBias& bias_i, const imuBias::ConstantBias& bias_j,
-    std::optional<Matrix&> H1, std::optional<Matrix&> H2,
-    std::optional<Matrix&> H3, std::optional<Matrix&> H4,
-    std::optional<Matrix&> H5, std::optional<Matrix&> H6) const {
-
+Vector CombinedImuFactor::evaluateError(const Pose3& pose_i, const Vector3& vel_i, const Pose3& pose_j, const Vector3& vel_j,
+                     const imuBias::ConstantBias& bias_i, const imuBias::ConstantBias& bias_j,
+                     std::optional<std::reference_wrapper<Matrix>> H1, std::optional<std::reference_wrapper<Matrix>> H2,
+                     std::optional<std::reference_wrapper<Matrix>> H3, std::optional<std::reference_wrapper<Matrix>> H4,
+                     std::optional<std::reference_wrapper<Matrix>> H5,
+                     std::optional<std::reference_wrapper<Matrix>> H6) const {
   // error wrt bias evolution model (random walk)
   Matrix6 Hbias_i, Hbias_j;
   Vector6 fbias = traits<imuBias::ConstantBias>::Between(bias_j, bias_i,
@@ -241,40 +240,40 @@ Vector CombinedImuFactor::evaluateError(const Pose3& pose_i,
 
   // if we need the jacobians
   if (H1) {
-    H1->resize(15, 6);
-    H1->block<9, 6>(0, 0) = D_r_pose_i;
+    H1->get().resize(15, 6);
+    H1->get().block<9, 6>(0, 0) = D_r_pose_i;
     // adding: [dBiasAcc/dPi ; dBiasOmega/dPi]
-    H1->block<6, 6>(9, 0).setZero();
+    H1->get().block<6, 6>(9, 0).setZero();
   }
   if (H2) {
-    H2->resize(15, 3);
-    H2->block<9, 3>(0, 0) = D_r_vel_i;
+    H2->get().resize(15, 3);
+    H2->get().block<9, 3>(0, 0) = D_r_vel_i;
     // adding: [dBiasAcc/dVi ; dBiasOmega/dVi]
-    H2->block<6, 3>(9, 0).setZero();
+    H2->get().block<6, 3>(9, 0).setZero();
   }
   if (H3) {
-    H3->resize(15, 6);
-    H3->block<9, 6>(0, 0) = D_r_pose_j;
+    H3->get().resize(15, 6);
+    H3->get().block<9, 6>(0, 0) = D_r_pose_j;
     // adding: [dBiasAcc/dPj ; dBiasOmega/dPj]
-    H3->block<6, 6>(9, 0).setZero();
+    H3->get().block<6, 6>(9, 0).setZero();
   }
   if (H4) {
-    H4->resize(15, 3);
-    H4->block<9, 3>(0, 0) = D_r_vel_j;
+    H4->get().resize(15, 3);
+    H4->get().block<9, 3>(0, 0) = D_r_vel_j;
     // adding: [dBiasAcc/dVi ; dBiasOmega/dVi]
-    H4->block<6, 3>(9, 0).setZero();
+    H4->get().block<6, 3>(9, 0).setZero();
   }
   if (H5) {
-    H5->resize(15, 6);
-    H5->block<9, 6>(0, 0) = D_r_bias_i;
+    H5->get().resize(15, 6);
+    H5->get().block<9, 6>(0, 0) = D_r_bias_i;
     // adding: [dBiasAcc/dBias_i ; dBiasOmega/dBias_i]
-    H5->block<6, 6>(9, 0) = Hbias_i;
+    H5->get().block<6, 6>(9, 0) = Hbias_i;
   }
   if (H6) {
-    H6->resize(15, 6);
-    H6->block<9, 6>(0, 0).setZero();
+    H6->get().resize(15, 6);
+    H6->get().block<9, 6>(0, 0).setZero();
     // adding: [dBiasAcc/dBias_j ; dBiasOmega/dBias_j]
-    H6->block<6, 6>(9, 0) = Hbias_j;
+    H6->get().block<6, 6>(9, 0) = Hbias_j;
   }
 
   // overall error

@@ -65,7 +65,7 @@ class FrobeniusPrior : public NoiseModelFactor1<Rot> {
 
   /// Error is just Frobenius norm between Rot element and vectorized matrix M.
   Vector evaluateError(const Rot& R,
-                       std::optional<Matrix&> H = std::nullopt) const override {
+                       std::optional<std::reference_wrapper<Matrix>> H = std::nullopt) const override {
     return R.vec(H) - vecM_;  // Jacobian is computed only when needed.
   }
 };
@@ -86,10 +86,10 @@ class FrobeniusFactor : public NoiseModelFactor2<Rot, Rot> {
 
   /// Error is just Frobenius norm between rotation matrices.
   Vector evaluateError(const Rot& R1, const Rot& R2,
-                       std::optional<Matrix&> H1 = std::nullopt,
-                       std::optional<Matrix&> H2 = std::nullopt) const override {
+                       std::optional<std::reference_wrapper<Matrix>> H1 = std::nullopt,
+                       std::optional<std::reference_wrapper<Matrix>> H2 = std::nullopt) const override {
     Vector error = R2.vec(H2) - R1.vec(H1);
-    if (H1) *H1 = -*H1;
+    if (H1) H1->get() = -(H1->get());
     return error;
   }
 };
@@ -149,13 +149,12 @@ class FrobeniusBetweenFactor : public NoiseModelFactor2<Rot, Rot> {
   /// @{
 
   /// Error is Frobenius norm between R1*R12 and R2.
-  Vector evaluateError(const Rot& R1, const Rot& R2,
-                       std::optional<Matrix&> H1 = std::nullopt,
-                       std::optional<Matrix&> H2 = std::nullopt) const override {
+  Vector evaluateError(const Rot& R1, const Rot& R2, std::optional<std::reference_wrapper<Matrix>> H1 = std::nullopt,
+                       std::optional<std::reference_wrapper<Matrix>> H2 = std::nullopt) const override {
     const Rot R2hat = R1.compose(R12_);
     Eigen::Matrix<double, Dim, Rot::dimension> vec_H_R2hat;
     Vector error = R2.vec(H2) - R2hat.vec(H1 ? &vec_H_R2hat : nullptr);
-    if (H1) *H1 = -vec_H_R2hat * R2hat_H_R1_;
+    if (H1) H1->get() = -vec_H_R2hat * R2hat_H_R1_;
     return error;
   }
   /// @}

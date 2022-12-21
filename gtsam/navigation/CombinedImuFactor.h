@@ -321,15 +321,16 @@ public:
   /** implement functions needed to derive from Factor */
 
   /// vector of errors
-  Vector evaluateError(const Pose3& pose_i, const Vector3& vel_i,
-      const Pose3& pose_j, const Vector3& vel_j,
-      const imuBias::ConstantBias& bias_i, const imuBias::ConstantBias& bias_j,
-      std::optional<Matrix&> H1 = std::nullopt, std::optional<Matrix&> H2 =
-          std::nullopt, std::optional<Matrix&> H3 = std::nullopt,
-      std::optional<Matrix&> H4 = std::nullopt, std::optional<Matrix&> H5 =
-          std::nullopt, std::optional<Matrix&> H6 = std::nullopt) const override;
+  Vector evaluateError(const Pose3& pose_i, const Vector3& vel_i, const Pose3& pose_j, const Vector3& vel_j,
+                       const imuBias::ConstantBias& bias_i, const imuBias::ConstantBias& bias_j,
+                       std::optional<std::reference_wrapper<Matrix>> H1 = std::nullopt,
+                       std::optional<std::reference_wrapper<Matrix>> H2 = std::nullopt,
+                       std::optional<std::reference_wrapper<Matrix>> H3 = std::nullopt,
+                       std::optional<std::reference_wrapper<Matrix>> H4 = std::nullopt,
+                       std::optional<std::reference_wrapper<Matrix>> H5 = std::nullopt,
+                       std::optional<std::reference_wrapper<Matrix>> H6 = std::nullopt) const override;
 
- private:
+private:
   /** Serialization function */
   friend class boost::serialization::access;
   template <class ARCHIVE>

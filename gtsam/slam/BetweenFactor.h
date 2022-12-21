@@ -105,15 +105,15 @@ namespace gtsam {
     /// @{
 
     /// evaluate error, returns vector of errors size of tangent space
-    Vector evaluateError(const T& p1, const T& p2, std::optional<Matrix&> H1 =
-      std::nullopt, std::optional<Matrix&> H2 = std::nullopt) const override {
+    Vector evaluateError(const T& p1, const T& p2, std::optional<std::reference_wrapper<Matrix>> H1 =
+      std::nullopt, std::optional<std::reference_wrapper<Matrix>> H2 = std::nullopt) const override {
       T hx = traits<T>::Between(p1, p2, H1, H2); // h(x)
       // manifold equivalent of h(x)-z -> log(z,h(x))
 #ifdef GTSAM_SLOW_BUT_CORRECT_BETWEENFACTOR
       typename traits<T>::ChartJacobian::Jacobian Hlocal;
       Vector rval = traits<T>::Local(measured_, hx, std::nullopt, (H1 || H2) ? &Hlocal : 0);
-      if (H1) *H1 = Hlocal * (*H1);
-      if (H2) *H2 = Hlocal * (*H2);
+      if (H1) *H1 = Hlocal * (*H1).get();
+      if (H2) *H2 = Hlocal * (*H2).get();
       return rval;
 #else
       return traits<T>::Local(measured_, hx);
