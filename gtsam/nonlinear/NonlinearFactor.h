@@ -213,17 +213,8 @@ public:
     return noiseModel_;
   }
 
+#ifdef GTSAM_USE_BOOST
    /**
-   * Error function *without* the NoiseModel, \f$ z-h(x) \f$.
-   * Override this method to finish implementing an N-way factor.
-   * If the optional arguments is specified, it should compute
-   * both the function evaluation and its derivative(s) in H.
-   * The optional arguments here uses a pointer
-   */
-  virtual Vector unwhitenedError(const Values &x, std::vector<Matrix> *H = nullptr) const;
-
-#ifdef USE_BOOST
-  /**
    * Error function *without* the NoiseModel, \f$ z-h(x) \f$.
    * If the optional arguments is specified, it should compute
    * both the function evaluation and its derivative(s) in H.
@@ -231,10 +222,16 @@ public:
    */
   virtual Vector unwhitenedError(
       const Values &x,
-      boost::optional<std::vector<Matrix> &> H = boost::none) const {
-	  std::vector<Matrix> *H_ptr = H ? &(*H) : nullptr;
-    return unwhitenedError(x, H_ptr);
-  }
+      boost::optional<std::vector<Matrix> &> H = boost::none) const = 0; 
+#else
+  /**
+   * Error function *without* the NoiseModel, \f$ z-h(x) \f$.
+   * Override this method to finish implementing an N-way factor.
+   * If the optional arguments is specified, it should compute
+   * both the function evaluation and its derivative(s) in H.
+   * The optional arguments here uses a pointer
+   */
+  virtual Vector unwhitenedError(const Values &x, std::vector<Matrix> *H = nullptr) const = 0;
 #endif
 
   /**
@@ -338,30 +335,41 @@ public:
    * virtual so must be implemented in the derived class. This function uses
    * pointers to pass the optional matrices.
    */
-  Vector unwhitenedError(const Values &x, std::vector<Matrix>* H = nullptr) const override {
+  Vector unwhitenedError_(const Values &x, std::vector<Matrix>* H = nullptr) const {
     if (this->active(x)) {
       const X &x1 = x.at<X>(keys_[0]);
       if (H) {
         return evaluateError(x1, (*H)[0]);
       } else {
-        return evaluateError(x1, nullptr);
+        return evaluateError(x1);
       }
     } else {
       return Vector::Zero(this->dim());
     }
   }
 
-#ifdef USE_BOOST
+#ifdef GTSAM_USE_BOOST
   /**
    * Calls the 1-key specific version of evaluateError below, which is pure
    * virtual so must be implemented in the derived class. This function uses
    * boost::optional to pass the optional matrices.
    */
-  Vector unwhitenedError(
+  virtual Vector unwhitenedError(
       const Values &x,
-      boost::optional<std::vector<Matrix> &> H = nullptr) const override {
+      boost::optional<std::vector<Matrix> &> H = boost::none) const override {
     std::vector<Matrix> *H_ptr = H ? &(*H) : nullptr;
-    return unwhitenedError(x, H_ptr);
+    return unwhitenedError_(x, H_ptr);
+  }
+#else
+  /**
+   * Calls the 1-key specific version of evaluateError below, which is pure
+   * virtual so must be implemented in the derived class. This function uses
+   * pointers to pass the optional matrices.
+   */
+  virtual Vector unwhitenedError(
+	  const Values &x,
+	  std::vector<Matrix> *H = nullptr) const override {
+	return unwhitenedError_(x, H);
   }
 #endif
 
@@ -369,15 +377,8 @@ public:
   /// @name Virtual methods
   /// @{
 
-  /**
-   *  Override this method to finish implementing a unary factor.
-   *  If the optional Matrix reference argument is specified, it should compute
-   *  both the function evaluation and its derivative in X. This function uses pointers
-   *  to pass the optional matrices.
-   */
-  virtual Vector evaluateError(const X &x, Matrix *H = nullptr) const ;
 
-#ifdef USE_BOOST
+#ifdef GTSAM_USE_BOOST
   /**
    *  Override this method to finish implementing a unary factor.
    *  If the optional Matrix reference argument is specified, it should compute
@@ -385,10 +386,15 @@ public:
    * boost::optional to pass the optional matrices.
    */
   virtual Vector
-  evaluateError(const X &x, boost::optional<Matrix &> H = boost::none) const {
-    Matrix *H_ptr = H ? &(*H) : nullptr;
-    return evaluateError(x, H_ptr);
-  }
+  evaluateError(const X &x, boost::optional<Matrix &> H = boost::none) const = 0;
+#else
+  /**
+   *  Override this method to finish implementing a unary factor.
+   *  If the optional Matrix reference argument is specified, it should compute
+   *  both the function evaluation and its derivative in X. This function uses pointers
+   *  to pass the optional matrices.
+   */
+  virtual Vector evaluateError(const X &x, Matrix *H = nullptr) const = 0;
 #endif
 
   /// @}
@@ -445,37 +451,35 @@ public:
 
   /** Calls the 2-key specific version of evaluateError, which is pure virtual
    * so must be implemented in the derived class. */
-  Vector unwhitenedError(const Values& x, std::vector<Matrix>* H = nullptr) const override {
+  Vector unwhitenedError_(const Values& x, std::vector<Matrix>* H = nullptr) const {
     if(this->active(x)) {
       const X1& x1 = x.at<X1>(keys_[0]);
       const X2& x2 = x.at<X2>(keys_[1]);
       if(H) {
         return evaluateError(x1, x2, (*H)[0], (*H)[1]);
       } else {
-        return evaluateError(x1, x2, nullptr);
+        return evaluateError(x1, x2);
       }
     } else {
       return Vector::Zero(this->dim());
     }
   }
 
-#ifdef USE_BOOST
+#ifdef GTSAM_USE_BOOST
   /** Calls the 2-key specific version of evaluateError */
-  Vector unwhitenedError(const Values& x, boost::optional<std::vector<Matrix>&> H = boost::none) const override {
+  virtual Vector unwhitenedError(const Values& x, boost::optional<std::vector<Matrix>&> H = boost::none) const override {
     std::vector<Matrix> *H_ptr = H ? &(*H) : nullptr;
-	return unwhitenedError(x, H_ptr);
+	return unwhitenedError_(x, H_ptr);
+  }
+#else
+  /** Calls the 2-key specific version of evaluateError */
+  virtual Vector unwhitenedError(const Values& x, std::vector<Matrix>* H = nullptr) const override {
+	return unwhitenedError_(x, H);
   }
 #endif
 
-  /**
-   *  Override this method to finish implementing a binary factor.
-   *  If any of the optional Matrix pointer arguments are specified, it should compute
-   *  both the function evaluation and its derivative(s) in X1 (and/or X2).
-   */
-  virtual Vector evaluateError(const X1 &, const X2 &, Matrix *H1 = nullptr,
-                               Matrix *H2 = nullptr) const ;
 
-#ifdef USE_BOOST
+#ifdef GTSAM_USE_BOOST
   /**
    *  If any of the optional Matrix reference arguments are specified, it should
    * compute both the function evaluation and its derivative(s) in X1 (and/or
@@ -483,11 +487,16 @@ public:
    */
   virtual Vector
   evaluateError(const X1& x1, const X2& x2, boost::optional<Matrix&> H1 =
-      boost::none, boost::optional<Matrix&> H2 = boost::none) const {
-    Matrix *H1_ptr = H1 ? &(*H1) : nullptr;
-    Matrix *H2_ptr = H2 ? &(*H2) : nullptr;
-	return evaluateError(x1, x2, H1_ptr, H2_ptr);
-  }
+      boost::none, boost::optional<Matrix&> H2 = boost::none) const  = 0;
+
+#else
+  /**
+   *  Override this method to finish implementing a binary factor.
+   *  If any of the optional Matrix pointer arguments are specified, it should compute
+   *  both the function evaluation and its derivative(s) in X1 (and/or X2).
+   */
+  virtual Vector evaluateError(const X1 &, const X2 &, Matrix *H1 = nullptr,
+                               Matrix *H2 = nullptr) const  = 0;
 #endif
 
 private:
@@ -545,27 +554,31 @@ public:
 
   /** Calls the 3-key specific version of evaluateError, which is pure virtual
    * so must be implemented in the derived class. */
-  Vector unwhitenedError(const Values& x, std::vector<Matrix>* H = nullptr) const override {
+  Vector unwhitenedError_(const Values& x, std::vector<Matrix>* H = nullptr) const {
     if(this->active(x)) {
       if(H)
         return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), (*H)[0], (*H)[1], (*H)[2]);
       else
-        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), nullptr);
+        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]));
     } else {
       return Vector::Zero(this->dim());
     }
   }
 
-  /**
-   *  Override this method to finish implementing a trinary factor.
-   *  If any of the optional Matrix reference arguments are specified, it should compute
-   *  both the function evaluation and its derivative(s) in X1 (and/or X2, X3).
-   */
-  virtual Vector evaluateError(const X1 &, const X2 &, const X3 &,
-                               Matrix *H1 = nullptr, Matrix *H2 = nullptr,
-                               Matrix *H3 = nullptr) const ;
+#ifdef GTSAM_USE_BOOST
+  /** Calls the 2-key specific version of evaluateError */
+  virtual Vector unwhitenedError(const Values& x, boost::optional<std::vector<Matrix>&> H = boost::none) const override {
+    std::vector<Matrix> *H_ptr = H ? &(*H) : nullptr;
+	return unwhitenedError_(x, H_ptr);
+  }
+#else
+  /** Calls the 2-key specific version of evaluateError */
+  virtual Vector unwhitenedError(const Values& x, std::vector<Matrix>* H=nullptr) const override {
+	return unwhitenedError_(x, H);
+  }
+#endif
 
-#ifdef USE_BOOST
+#ifdef GTSAM_USE_BOOST
   /**
    *  If any of the optional Matrix reference arguments are specified, it should
    * compute both the function evaluation and its derivative(s) in X1 (and/or
@@ -575,13 +588,16 @@ public:
   evaluateError(const X1& x1, const X2& x2, const X3& x3,
       boost::optional<Matrix&> H1 = boost::none,
       boost::optional<Matrix&> H2 = boost::none,
-      boost::optional<Matrix&> H3 = boost::none) {
-	Matrix *H1_ptr = H1 ? &(*H1) : nullptr;
-    Matrix *H2_ptr = H2 ? &(*H2) : nullptr;
-    Matrix *H3_ptr = H3 ? &(*H3) : nullptr;
-	return evaluateError(x1, x2, x3, H1_ptr, H2_ptr, H3_ptr);
-
-  }
+      boost::optional<Matrix&> H3 = boost::none) const = 0;
+#else
+  /**
+   *  Override this method to finish implementing a trinary factor.
+   *  If any of the optional Matrix reference arguments are specified, it should compute
+   *  both the function evaluation and its derivative(s) in X1 (and/or X2, X3).
+   */
+  virtual Vector evaluateError(const X1 &, const X2 &, const X3 &,
+                               Matrix *H1 = nullptr, Matrix *H2 = nullptr,
+                               Matrix *H3 = nullptr) const = 0;
 #endif
 
 private:
@@ -642,18 +658,47 @@ public:
 
   /** Calls the 4-key specific version of evaluateError, which is pure virtual
    * so must be implemented in the derived class. */
-  Vector unwhitenedError(const Values& x, std::vector<Matrix>* H = nullptr) const override {
+  Vector unwhitenedError_(const Values& x, std::vector<Matrix>* H = nullptr) const {
     if(this->active(x)) {
       if(H)
         return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), (*H)[0], (*H)[1], (*H)[2], (*H)[3]);
       else
-        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), nullptr);
+        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]));
     } else {
       return Vector::Zero(this->dim());
     }
   }
 
+#ifdef GTSAM_USE_BOOST
+  /** Calls the 4-key specific version of evaluateError */
+  virtual Vector unwhitenedError(
+	  const Values &x,
+	  boost::optional<std::vector<Matrix> &> H = boost::none) const override {
+	std::vector<Matrix> *H_ptr = H ? &(*H) : nullptr;
+	return unwhitenedError_(x, H_ptr);
+  }
+#else
+  /** Calls the 4-key specific version of evaluateError */
+  virtual Vector unwhitenedError(const Values& x, std::vector<Matrix>* H = nullptr) const override {
+	return unwhitenedError_(x, H);
+  }
+#endif
+
+#ifdef GTSAM_USE_BOOST
   /**
+   *  Override this method to finish implementing a 4-way factor.
+   *  If any of the optional Matrix reference arguments are specified, it should
+   * compute both the function evaluation and its derivative(s) in X1 (and/or
+   * X2, X3).
+   */
+  virtual Vector
+  evaluateError(const X1 &x1, const X2 &x2, const X3 &x3, const X4 &x4,
+                boost::optional<Matrix &> H1 = boost::none,
+                boost::optional<Matrix &> H2 = boost::none,
+                boost::optional<Matrix &> H3 = boost::none,
+                boost::optional<Matrix &> H4 = boost::none) const = 0;
+#else
+/**
    *  Override this method to finish implementing a 4-way factor.
    *  If any of the optional Matrix reference arguments are specified, it should compute
    *  both the function evaluation and its derivative(s) in X1 (and/or X2, X3).
@@ -662,20 +707,6 @@ public:
                                Matrix *H1 = nullptr, Matrix *H2 = nullptr,
                                Matrix *H3 = nullptr,
                                Matrix *H4 = nullptr) const ;
-
-#ifdef USE_BOOST
-  virtual Vector
-  evaluateError(const X1 &x1, const X2 &x2, const X3 &x3, const X4 &x4,
-                boost::optional<Matrix &> H1 = boost::none,
-                boost::optional<Matrix &> H2 = boost::none,
-                boost::optional<Matrix &> H3 = boost::none,
-                boost::optional<Matrix &> H4 = boost::none) const {
-    Matrix *H1_ptr = H1 ? &(*H1) : nullptr;
-    Matrix *H2_ptr = H2 ? &(*H2) : nullptr;
-    Matrix *H3_ptr = H3 ? &(*H3) : nullptr;
-    Matrix *H4_ptr = H4 ? &(*H4) : nullptr;
-    return evaluateError(x1, x2, x3, x4, H1_ptr, H2_ptr, H3_ptr, H4_ptr);
-  }
 #endif
 
 private:
@@ -739,18 +770,47 @@ public:
 
   /** Calls the 5-key specific version of evaluateError, which is pure virtual
    * so must be implemented in the derived class. */
-  Vector unwhitenedError(const Values& x, std::vector<Matrix>* H = nullptr) const override {
+  Vector unwhitenedError_(const Values& x, std::vector<Matrix>* H = nullptr) const {
     if(this->active(x)) {
       if(H)
         return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), x.at<X5>(keys_[4]), (*H)[0], (*H)[1], (*H)[2], (*H)[3], (*H)[4]);
       else
-        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), x.at<X5>(keys_[4]), nullptr);
+        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), x.at<X5>(keys_[4]));
     } else {
       return Vector::Zero(this->dim());
     }
   }
 
-  /**
+#ifdef GTSAM_USE_BOOST
+  /** Calls the 5-key specific version of evaluateError, which is pure virtual
+   * so must be implemented in the derived class. Gets the pointer from the optional and
+   * passes it the above function */
+  virtual Vector unwhitenedError(const Values& x, boost::optional<std::vector<Matrix>&> H = boost::none) const override {
+	  std::vector<Matrix>* H_ptr = H ? &(*H) : nullptr;
+	  return unwhitenedError_(x, H_ptr);
+  }
+#else
+  /** Calls the 5-key specific version of evaluateError, which is pure virtual
+   * so must be implemented in the derived class. */
+  virtual Vector unwhitenedError(const Values& x, std::vector<Matrix>* H = nullptr) const override {
+	return unwhitenedError_(x, H);
+  }
+#endif
+
+#ifdef GTSAM_USE_BOOST
+  /** Override this method to finish implementing a 5-way factor.
+   *  If any of the optional Matrix reference arguments are specified, it should compute
+   *  both the function evaluation and its derivative(s) in X1 (and/or X2, X3).
+   */
+  virtual Vector
+  evaluateError(const X1 &x1, const X2 &x2, const X3 &x3, const X4 &x4,
+                const X5 &x5, boost::optional<Matrix &> H1 = boost::none,
+                boost::optional<Matrix &> H2 = boost::none,
+                boost::optional<Matrix &> H3 = boost::none,
+                boost::optional<Matrix &> H4 = boost::none,
+                boost::optional<Matrix &> H5 = boost::none) const = 0;
+#else
+/**
    *  Override this method to finish implementing a 5-way factor.
    *  If any of the optional Matrix reference arguments are specified, it should compute
    *  both the function evaluation and its derivative(s) in X1 (and/or X2, X3).
@@ -760,24 +820,6 @@ public:
                                Matrix *H2 = nullptr, Matrix *H3 = nullptr,
                                Matrix *H4 = nullptr,
                                Matrix *H5 = nullptr) const ;
-
-#ifdef USE_BOOST
-  virtual Vector
-  evaluateError(const X1 &x1, const X2 &x2, const X3 &x3, const X4 &x4,
-                const X5 &x5, boost::optional<Matrix &> H1 = boost::none,
-                boost::optional<Matrix &> H2 = boost::none,
-                boost::optional<Matrix &> H3 = boost::none,
-                boost::optional<Matrix &> H4 = boost::none,
-                boost::optional<Matrix &> H5 = boost::none) const {
-    Matrix *H1_ptr = H1 ? &(*H1) : nullptr;
-    Matrix *H2_ptr = H2 ? &(*H2) : nullptr;
-    Matrix *H3_ptr = H3 ? &(*H3) : nullptr;
-    Matrix *H4_ptr = H4 ? &(*H4) : nullptr;
-    Matrix *H5_ptr = H5 ? &(*H5) : nullptr;
-
-    return evaluateError(x1, x2, x3, x4, x5, H1_ptr, H2_ptr, H3_ptr, H4_ptr,
-                         H5_ptr);
-  }
 #endif
 
 private:
@@ -844,31 +886,39 @@ public:
 
   /** Calls the 6-key specific version of evaluateError, which is pure virtual
    * so must be implemented in the derived class. */
-  Vector unwhitenedError(const Values& x, std::vector<Matrix>* H = nullptr) const override {
+  Vector unwhitenedError_(const Values& x, std::vector<Matrix>* H = nullptr) const {
     if(this->active(x)) {
       if(H)
         return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), x.at<X5>(keys_[4]), x.at<X6>(keys_[5]), (*H)[0], (*H)[1], (*H)[2], (*H)[3], (*H)[4], (*H)[5]);
       else
-        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), x.at<X5>(keys_[4]), x.at<X6>(keys_[5]), nullptr);
+        return evaluateError(x.at<X1>(keys_[0]), x.at<X2>(keys_[1]), x.at<X3>(keys_[2]), x.at<X4>(keys_[3]), x.at<X5>(keys_[4]), x.at<X6>(keys_[5]));
     } else {
       return Vector::Zero(this->dim());
     }
   }
 
-  /**
-   *  Override this method to finish implementing a 6-way factor.
+#ifdef GTSAM_USE_BOOST
+  /** Calls the 5-key specific version of evaluateError, which is pure virtual
+   * so must be implemented in the derived class. Gets the pointer from the optional and
+   * passes it the above function */
+  virtual Vector unwhitenedError(const Values& x, boost::optional<std::vector<Matrix>&> H = boost::none) const override {
+	  std::vector<Matrix>* H_ptr = H ? &(*H) : nullptr;
+	  return unwhitenedError_(x, H_ptr);
+  }
+#else
+  /** Calls the 5-key specific version of evaluateError, which is pure virtual
+   * so must be implemented in the derived class. */
+  virtual Vector unwhitenedError(const Values& x, std::vector<Matrix>* H = nullptr) const override {
+	return unwhitenedError_(x, H);
+  }
+#endif
+
+#ifdef GTSAM_USE_BOOST
+  /** Overrride this method to finish implementing a 6-way factor.
    *  If any of the optional Matrix reference arguments are specified, it should
    * compute both the function evaluation and its derivative(s) in X1 (and/or
    * X2, X3).
    */
-
-  virtual Vector evaluateError(const X1 &, const X2 &, const X3 &, const X4 &,
-                               const X5 &, const X6 &, Matrix *H1 = nullptr,
-                               Matrix *H2 = nullptr, Matrix *H3 = nullptr,
-                               Matrix *H4 = nullptr, Matrix *H5 = nullptr,
-                               Matrix *H6 = nullptr) const ;
-
-#ifdef USE_BOOST
   virtual Vector
   evaluateError(const X1 &x1, const X2 &x2, const X3 &x3, const X4 &x4,
                 const X5 &x5, const X6 &x6,
@@ -877,17 +927,19 @@ public:
                 boost::optional<Matrix &> H3 = boost::none,
                 boost::optional<Matrix &> H4 = boost::none,
                 boost::optional<Matrix &> H5 = boost::none,
-                boost::optional<Matrix &> H6 = boost::none) const {
-    Matrix *H1_ptr = H1 ? &(*H1) : nullptr;
-    Matrix *H2_ptr = H2 ? &(*H2) : nullptr;
-    Matrix *H3_ptr = H3 ? &(*H3) : nullptr;
-    Matrix *H4_ptr = H4 ? &(*H4) : nullptr;
-    Matrix *H5_ptr = H5 ? &(*H5) : nullptr;
-    Matrix *H6_ptr = H6 ? &(*H6) : nullptr;
-
-    return evaluateError(x1, x2, x3, x4, x5, x6, H1_ptr, H2_ptr, H3_ptr, H4_ptr,
-                         H5_ptr, H6_ptr);
-  }
+                boost::optional<Matrix &> H6 = boost::none) const = 0; 
+#else
+  /**
+   *  Override this method to finish implementing a 6-way factor.
+   *  If any of the optional Matrix reference arguments are specified, it should
+   * compute both the function evaluation and its derivative(s) in X1 (and/or
+   * X2, X3).
+   */
+  virtual Vector evaluateError(const X1 &, const X2 &, const X3 &, const X4 &,
+                               const X5 &, const X6 &, Matrix *H1 = nullptr,
+                               Matrix *H2 = nullptr, Matrix *H3 = nullptr,
+                               Matrix *H4 = nullptr, Matrix *H5 = nullptr,
+                               Matrix *H6 = nullptr) const = 0;
 #endif
 
 private:

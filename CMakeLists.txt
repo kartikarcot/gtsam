@@ -54,7 +54,7 @@ option(GTSAM_USE_BOOST "Require and use boost" ON)
 # Libraries:
 if (GTSAM_USE_BOOST)
   include(cmake/HandleBoost.cmake)            # Boost
-  add_definitions(-DUSE_BOOST)
+  add_definitions(-DGTSAM_USE_BOOST)
 endif()
   
 include(cmake/HandleCCache.cmake)           # ccache
