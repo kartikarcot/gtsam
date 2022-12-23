@@ -129,11 +129,9 @@ namespace gtsam {
     }
 
     /// Evaluate error h(x)-z and optionally derivatives
-    Vector unwhitenedError(const Values& x, boost::optional<std::vector<Matrix>&> H = boost::none) const override {
-
+    Vector unwhitenedErrorImpl(const Values& x, std::vector<Matrix>* H = nullptr) const override {
       Vector a;
       return a;
-
 //      Point3 point = x.at<Point3>(*keys_.end());
 //
 //      std::vector<KeyType>::iterator vit;
@@ -159,7 +157,6 @@ namespace gtsam {
 //          return reprojectionError;
 //        }
 //      }
-
     }
 
 

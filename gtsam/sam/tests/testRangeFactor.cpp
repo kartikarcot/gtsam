@@ -243,7 +243,11 @@ TEST( RangeFactor, Jacobian2DWithTransform ) {
 
   // Use the factor to calculate the Jacobians
   std::vector<Matrix> actualHs(2);
+#ifdef GTSAM_USE_BOOST
   factor.unwhitenedError({{poseKey, genericValue(pose)}, {pointKey, genericValue(point)}}, actualHs); 
+#else
+  factor.unwhitenedError({{poseKey, genericValue(pose)}, {pointKey, genericValue(point)}}, &actualHs); 
+#endif
   const Matrix& H1Actual = actualHs.at(0);
   const Matrix& H2Actual = actualHs.at(1);
 
@@ -270,7 +274,11 @@ TEST( RangeFactor, Jacobian3D ) {
 
   // Use the factor to calculate the Jacobians
   std::vector<Matrix> actualHs(2);
+#ifdef GTSAM_USE_BOOST
   factor.unwhitenedError({{poseKey, genericValue(pose)}, {pointKey, genericValue(point)}}, actualHs); 
+#else
+  factor.unwhitenedError({{poseKey, genericValue(pose)}, {pointKey, genericValue(point)}}, &actualHs); 
+#endif
   const Matrix& H1Actual = actualHs.at(0);
   const Matrix& H2Actual = actualHs.at(1);
 
@@ -302,7 +310,11 @@ TEST( RangeFactor, Jacobian3DWithTransform ) {
 
   // Use the factor to calculate the Jacobians
   std::vector<Matrix> actualHs(2);
+#ifdef GTSAM_USE_BOOST
   factor.unwhitenedError({{poseKey, genericValue(pose)}, {pointKey, genericValue(point)}}, actualHs); 
+#else
+  factor.unwhitenedError({{poseKey, genericValue(pose)}, {pointKey, genericValue(point)}}, &actualHs); 
+#endif
   const Matrix& H1Actual = actualHs.at(0);
   const Matrix& H2Actual = actualHs.at(1);
 

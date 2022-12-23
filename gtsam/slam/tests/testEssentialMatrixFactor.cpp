@@ -117,7 +117,11 @@ TEST(EssentialMatrixFactor, ExpressionFactor) {
     Vector expected(1);
     expected << 0;
     vector<Matrix> Hactual(1);
+#ifdef GTSAM_USE_BOOST
     Vector actual = factor.unwhitenedError(values, Hactual);
+#else
+    Vector actual = factor.unwhitenedError(values, &Hactual);
+#endif
     EXPECT(assert_equal(expected, actual, 1e-7));
   }
 }
@@ -150,7 +154,11 @@ TEST(EssentialMatrixFactor, ExpressionFactorRotationOnly) {
     Vector expected(1);
     expected << 0;
     vector<Matrix> Hactual(1);
+#ifdef GTSAM_USE_BOOST
     Vector actual = factor.unwhitenedError(values, Hactual);
+#else
+    Vector actual = factor.unwhitenedError(values, &Hactual);
+#endif
     EXPECT(assert_equal(expected, actual, 1e-7));
   }
 }

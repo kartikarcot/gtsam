@@ -180,7 +180,11 @@ TEST (BetweenFactorEM, jacobian ) {
   Vector actual_err_wh_inlier = Vector3(actual_err_wh[0], actual_err_wh[1], actual_err_wh[2]);
 //  CHECK( assert_equal(actual_err_wh_stnd, actual_err_wh_inlier, 1e-8));
   std::vector<gtsam::Matrix> H_actual_stnd_unwh(2);
+#ifdef GTSAM_USE_BOOST
   (void)h.unwhitenedError(values, H_actual_stnd_unwh);
+#else
+  (void)h.unwhitenedError(values, &H_actual_stnd_unwh);
+#endif
   Matrix H1_actual_stnd_unwh = H_actual_stnd_unwh[0];
   Matrix H2_actual_stnd_unwh = H_actual_stnd_unwh[1];
   Matrix H1_actual_stnd = model_inlier->Whiten(H1_actual_stnd_unwh);

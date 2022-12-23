@@ -133,10 +133,17 @@ TEST( InvDepthFactor, Jacobian3D ) {
   InverseDepthFactor factor(expected_uv, sigma, poseKey, pointKey, invDepthKey, K);
 
   std::vector<Matrix> actualHs(3);
+#ifdef GTSAM_USE_BOOST
   factor.unwhitenedError({{poseKey, genericValue(level_pose)},
                           {pointKey, genericValue(inv_landmark)},
                           {invDepthKey,genericValue(inv_depth)}},
                          actualHs);
+#else
+  factor.unwhitenedError({{poseKey, genericValue(level_pose)},
+                          {pointKey, genericValue(inv_landmark)},
+                          {invDepthKey,genericValue(inv_depth)}},
+                         &actualHs);
+#endif
 
   const Matrix& H1Actual = actualHs.at(0);
   const Matrix& H2Actual = actualHs.at(1);

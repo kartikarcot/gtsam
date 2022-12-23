@@ -68,7 +68,11 @@ TEST( SmartRangeFactor, unwhitenedError ) {
 
   // Check Jacobian for n==1
   vector<Matrix> H1(1);
+#ifdef GTSAM_USE_BOOST
   f.unwhitenedError(values, H1); // with H now !
+#else
+  f.unwhitenedError(values, &H1); // with H now !
+#endif
   CHECK(assert_equal(Matrix::Zero(3,1), H1.front()));
 
   // Whenever there are two ranges or less, error should be zero
@@ -85,7 +89,11 @@ TEST( SmartRangeFactor, unwhitenedError ) {
   EXPECT(assert_equal((Vector(1) << 0.0).finished(), actual3));
 
   // Check keys and Jacobian
+#ifdef GTSAM_USE_BOOST
   Vector actual4 = f.unwhitenedError(values, H); // with H now !
+#else
+  Vector actual4 = f.unwhitenedError(values, &H); // with H now !
+#endif
   EXPECT(assert_equal((Vector(1) << 0.0).finished(), actual4));
   CHECK(assert_equal((Matrix(1, 3) << 0.0,-1.0,0.0).finished(), H.front()));
   CHECK(assert_equal((Matrix(1, 3) << sqrt(2.0)/2,-sqrt(2.0)/2,0.0).finished(), H.back()));
