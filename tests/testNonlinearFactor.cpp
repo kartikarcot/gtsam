@@ -371,7 +371,11 @@ TEST(NonlinearFactor, NoiseModelFactor1) {
                 "X type incorrect");
   EXPECT(assert_equal(tf.key(), L(1)));
   std::vector<Matrix> H = {Matrix()};
+#ifdef GTSAM_USE_BOOST
   EXPECT(assert_equal(Vector1(1.0), tf.unwhitenedError(tv, H)));
+#else
+  EXPECT(assert_equal(Vector1(1.0), tf.unwhitenedError(tv, H)));
+#endif
 
   // Test constructors
   TestFactor1 tf2(noiseModel::Unit::Create(1), L(1));

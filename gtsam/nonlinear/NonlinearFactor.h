@@ -145,6 +145,31 @@ public:
 
 }; // \class NonlinearFactor
 
+class UnwhitenedErrorInterface {
+public:
+#ifdef GTSAM_USE_BOOST
+  /**
+   * Error function *without* the NoiseModel, \f$ z-h(x) \f$.
+   * If the optional arguments is specified, it should compute
+   * both the function evaluation and its derivative(s) in H.
+   * The optional arguments here use boost optional
+   */
+  virtual Vector unwhitenedError(
+	  const Values &x,
+	  boost::optional<std::vector<Matrix> &> H = boost::none) const = 0;
+#else
+  /**
+   * Error function *without* the NoiseModel, \f$ z-h(x) \f$.
+   * Override this method to finish implementing an N-way factor.
+   * If the optional arguments is specified, it should compute
+   * both the function evaluation and its derivative(s) in H.
+   * The optional arguments here uses a pointer
+   */
+  virtual Vector unwhitenedError(const Values &x,
+								 std::vector<Matrix> *H = nullptr) const = 0;
+#endif
+};
+
 /// traits
 template<> struct traits<NonlinearFactor> : public Testable<NonlinearFactor> {
 };
@@ -160,7 +185,7 @@ template<> struct traits<NonlinearFactor> : public Testable<NonlinearFactor> {
 
  * The noise model is typically Gaussian, but robust and constrained error models are also supported.
  */
-class GTSAM_EXPORT NoiseModelFactor: public NonlinearFactor {
+class GTSAM_EXPORT NoiseModelFactor: public NonlinearFactor, UnwhitenedErrorInterface {
 
 protected:
 
@@ -185,7 +210,8 @@ public:
    */
   template<typename CONTAINER>
   NoiseModelFactor(const SharedNoiseModel& noiseModel, const CONTAINER& keys) :
-    Base(keys), noiseModel_(noiseModel) {}
+    Base(keys), noiseModel_(noiseModel) {} 
+
 
 protected:
 
@@ -214,19 +240,64 @@ public:
   }
 
   /**
-   * Error function *without* the NoiseModel, \f$ z-h(x) \f$.
-   * Override this method to finish implementing an N-way factor.
-   * If the optional arguments is specified, it should compute
-   * both the function evaluation and its derivative(s) in H.
-   */
-  virtual Vector unwhitenedError(const Values& x,
-      boost::optional<std::vector<Matrix>&> H = boost::none) const = 0;
-
-  /**
    * Vector of errors, whitened
    * This is the raw error, i.e., i.e. \f$ (h(x)-z)/\sigma \f$ in case of a Gaussian
    */
   Vector whitenedError(const Values& c) const;
+
+
+  /**
+   * Override this interface instead of boost specific interface
+   * if you want your factors to be compatible in both boost and non-boost
+   */
+  virtual Vector unwhitenedErrorImpl(const Values &x,
+                                     std::vector<Matrix> *H = nullptr) const {
+    throw std::runtime_error(
+        "NoiseModelFactor::unwhitenedErrorImpl(): Attempting to call "
+        "unwhitenedErrorImpl() on a factor with no unwhitenedErrorImpl() "
+        "implemented!");
+  }
+
+#ifdef GTSAM_USE_BOOST
+   /**
+   * Error function *without* the NoiseModel, \f$ z-h(x) \f$.
+   * If the optional arguments is specified, it should compute
+   * both the function evaluation and its derivative(s) in H.
+   * The optional arguments here use boost optional
+   */
+  virtual Vector unwhitenedError(
+      const Values &x,
+      boost::optional<std::vector<Matrix> &> H = boost::none) const override {
+	  // call the other version of unwhitenedError by default
+	  std::vector<Matrix>* Hptr = H ? &*H : nullptr;
+	  return unwhitenedErrorImpl(x, Hptr);
+  }
+
+  /**
+   * A wrapper function that will pass the pointer to the version of function
+   * that takes the optional argument. This is required because we want to maintain
+   * compatability of the interface with the old version of the function.
+   */
+  Vector unwhitenedError(const Values &x, std::vector<Matrix> *H) const {
+    // create a boost optional
+    boost::optional<std::vector<Matrix> &> Hopt =
+        H ? boost::optional<std::vector<Matrix> &>(*H) : boost::none;
+    return unwhitenedError(x, Hopt);
+  }
+#else
+  /**
+   * Error function *without* the NoiseModel, \f$ z-h(x) \f$.
+   * Override this method to finish implementing an N-way factor.
+   * If the optional arguments is specified, it should compute
+   * both the function evaluation and its derivative(s) in H.
+   * The optional arguments here uses a pointer
+   */
+  virtual Vector
+  unwhitenedError(const Values &x,
+                  std::vector<Matrix> *H = nullptr) const override {
+    return unwhitenedErrorImpl(x, H);
+  }
+#endif
 
   /**
    * Vector of errors, whitened, but unweighted by any loss function
@@ -270,7 +341,6 @@ public:
   }
 
 }; // \class NoiseModelFactor
-
 
 /* ************************************************************************* */
 /**
@@ -455,12 +525,11 @@ class NoiseModelFactorN : public NoiseModelFactor {
    * @param[out] H A vector of (dynamic) matrices whose size should be equal to
    * n.  The Jacobians w.r.t. each variable will be output in this parameter.
    */
-  Vector unwhitenedError(
-      const Values& x,
-      boost::optional<std::vector<Matrix>&> H = boost::none) const override {
-    return unwhitenedError(boost::mp11::index_sequence_for<ValueTypes...>{}, x,
-                           H);
-  }
+  virtual Vector unwhitenedErrorImpl(const Values &x,
+									 std::vector<Matrix> *H = nullptr) const override {
+	// for the time being let's just throw an exception
+    return unwhitenedError_(boost::mp11::index_sequence_for<ValueTypes...>{}, x, H);
+  };
 
   /// @}
   /// @name Virtual methods
@@ -527,10 +596,9 @@ class NoiseModelFactorN : public NoiseModelFactor {
    *    `const Vector error = unwhitenedError(0, 1, values, H);`
    */
   template <std::size_t... Indices>
-  inline Vector unwhitenedError(
+  inline Vector unwhitenedError_(
       boost::mp11::index_sequence<Indices...>,  //
-      const Values& x,
-      boost::optional<std::vector<Matrix>&> H = boost::none) const {
+      const Values& x, std::vector<Matrix>* H = nullptr) const {
     if (this->active(x)) {
       if (H) {
         return evaluateError(x.at<ValueTypes>(keys_[Indices])...,
