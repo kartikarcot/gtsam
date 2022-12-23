@@ -336,7 +336,11 @@ TEST(ExpressionFactor, Compose1) {
 
   // Check unwhitenedError
   std::vector<Matrix> H(2);
+#ifdef GTSAM_USE_BOOST
   Vector actual = f.unwhitenedError(values, H);
+#else
+  Vector actual = f.unwhitenedError(values, &H);
+#endif
   EXPECT(assert_equal(I_3x3, H[0],1e-9));
   EXPECT(assert_equal(I_3x3, H[1],1e-9));
 
@@ -365,7 +369,11 @@ TEST(ExpressionFactor, compose2) {
 
   // Check unwhitenedError
   std::vector<Matrix> H(1);
+#ifdef GTSAM_USE_BOOST
   Vector actual = f.unwhitenedError(values, H);
+#else
+  Vector actual = f.unwhitenedError(values, &H);
+#endif
   EXPECT_LONGS_EQUAL(1, H.size());
   EXPECT(assert_equal(2*I_3x3, H[0],1e-9));
 
@@ -394,7 +402,11 @@ TEST(ExpressionFactor, compose3) {
 
   // Check unwhitenedError
   std::vector<Matrix> H(1);
+#ifdef GTSAM_USE_BOOST
   Vector actual = f.unwhitenedError(values, H);
+#else
+  Vector actual = f.unwhitenedError(values, &H);
+#endif
   EXPECT_LONGS_EQUAL(1, H.size());
   EXPECT(assert_equal(I_3x3, H[0],1e-9));
 
@@ -437,7 +449,11 @@ TEST(ExpressionFactor, composeTernary) {
 
   // Check unwhitenedError
   std::vector<Matrix> H(3);
+#ifdef GTSAM_USE_BOOST
   Vector actual = f.unwhitenedError(values, H);
+#else
+  Vector actual = f.unwhitenedError(values, &H);
+#endif
   EXPECT_LONGS_EQUAL(3, H.size());
   EXPECT(assert_equal(I_3x3, H[0],1e-9));
   EXPECT(assert_equal(I_3x3, H[1],1e-9));
@@ -724,7 +740,11 @@ TEST(ExpressionFactor, variadicTemplate) {
 
   // Check unwhitenedError
   std::vector<Matrix> H(4);
+#ifdef GTSAM_USE_BOOST
   Vector actual = f.unwhitenedError(values, H);
+#else
+  Vector actual = f.unwhitenedError(values, &H);
+#endif
   EXPECT_LONGS_EQUAL(4, H.size());
   EXPECT(assert_equal(Eigen::Vector3d(-5.63578115, -4.85353243, -1.4801204), actual, 1e-5));
   

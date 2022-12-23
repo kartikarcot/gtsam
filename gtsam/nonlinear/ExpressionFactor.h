@@ -96,8 +96,7 @@ protected:
    * We override this method to provide
    * both the function evaluation and its derivative(s) in H.
    */
-  Vector unwhitenedError(const Values& x,
-    boost::optional<std::vector<Matrix>&> H = boost::none) const override {
+  Vector unwhitenedErrorImpl(const Values& x, std::vector<Matrix>* H = nullptr) const override {
     if (H) {
       const T value = expression_.valueAndDerivatives(x, keys_, dims_, *H);
       // NOTE(hayk): Doing the reverse, AKA Local(measured_, value) is not correct here
@@ -318,7 +317,7 @@ public:
     values.insert(this->keys_[0], a1);
     values.insert(this->keys_[1], a2);
     std::vector<Matrix> H(2);
-    Vector error = ExpressionFactor<T>::unwhitenedError(values, H);
+    Vector error = ExpressionFactor<T>::unwhitenedError(values, &H);
     if (H1) (*H1) = H[0];
     if (H2) (*H2) = H[1];
     return error;

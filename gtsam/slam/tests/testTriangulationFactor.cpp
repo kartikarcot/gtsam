@@ -104,8 +104,13 @@ TEST( triangulation, TriangulationFactorStereo ) {
   values.insert(pointKey, landmark);
 
   vector<Matrix> HActual1(1), HActual2(1);
+#ifdef GTAM_USE_BOOST
   Vector error1 = factor.unwhitenedError(values, HActual1);
   Vector error2 = eFactor.unwhitenedError(values, HActual2);
+#else
+  Vector error1 = factor.unwhitenedError(values, &HActual1);
+  Vector error2 = eFactor.unwhitenedError(values, &HActual2);
+#endif
   EXPECT(assert_equal(error1, error2));
   EXPECT(assert_equal(HActual1[0], HActual2[0]));
 }

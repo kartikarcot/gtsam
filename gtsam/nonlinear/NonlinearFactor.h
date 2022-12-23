@@ -145,7 +145,7 @@ public:
 
 }; // \class NonlinearFactor
 
-class GTSAM_EXPORT UnwhitenedErrorInterface {
+class UnwhitenedErrorInterface {
 public:
   virtual Vector unwhitenedErrorImpl(const Values &x,
                                      std::vector<Matrix> *H = nullptr) const {
@@ -260,6 +260,19 @@ public:
 	  // call the other version of unwhitenedError by default
 	  std::vector<Matrix>* Hptr = H ? &*H : nullptr;
 	  return unwhitenedErrorImpl(x, Hptr);
+  }
+#else
+  /**
+   * Error function *without* the NoiseModel, \f$ z-h(x) \f$.
+   * Override this method to finish implementing an N-way factor.
+   * If the optional arguments is specified, it should compute
+   * both the function evaluation and its derivative(s) in H.
+   * The optional arguments here uses a pointer
+   */
+  virtual Vector
+  unwhitenedError(const Values &x,
+                  std::vector<Matrix> *H = nullptr) const override {
+    return unwhitenedErrorImpl(x, H);
   }
 #endif
 
@@ -381,7 +394,7 @@ public:
   /// @{
 
 
-#ifdef GTSAM_USE_BOOST
+// #ifdef GTSAM_USE_BOOST
   /**
    *  Override this method to finish implementing a unary factor.
    *  If the optional Matrix reference argument is specified, it should compute
@@ -390,15 +403,15 @@ public:
    */
   virtual Vector
   evaluateError(const X &x, boost::optional<Matrix &> H = boost::none) const = 0;
-#else
+// #else
   /**
    *  Override this method to finish implementing a unary factor.
    *  If the optional Matrix reference argument is specified, it should compute
    *  both the function evaluation and its derivative in X. This function uses pointers
    *  to pass the optional matrices.
    */
-  virtual Vector evaluateError(const X &x, Matrix *H = nullptr) const = 0;
-#endif
+  // virtual Vector evaluateError(const X &x, Matrix *H = nullptr) const = 0;
+// #endif
 
   /// @}
 
@@ -468,7 +481,7 @@ public:
     }
   }
 
-#ifdef GTSAM_USE_BOOST
+// #ifdef GTSAM_USE_BOOST
   /**
    *  If any of the optional Matrix reference arguments are specified, it should
    * compute both the function evaluation and its derivative(s) in X1 (and/or
@@ -478,15 +491,15 @@ public:
   evaluateError(const X1& x1, const X2& x2, boost::optional<Matrix&> H1 =
       boost::none, boost::optional<Matrix&> H2 = boost::none) const  = 0;
 
-#else
+// #else
   /**
    *  Override this method to finish implementing a binary factor.
    *  If any of the optional Matrix pointer arguments are specified, it should compute
    *  both the function evaluation and its derivative(s) in X1 (and/or X2).
    */
-  virtual Vector evaluateError(const X1 &, const X2 &, Matrix *H1 = nullptr,
-                               Matrix *H2 = nullptr) const  = 0;
-#endif
+  // virtual Vector evaluateError(const X1 &, const X2 &, Matrix *H1 = nullptr,
+  //                             Matrix *H2 = nullptr) const  = 0;
+// #endif
 
 private:
 
@@ -554,7 +567,7 @@ public:
     }
   }
 
-#ifdef GTSAM_USE_BOOST
+// #ifdef GTSAM_USE_BOOST
   /**
    *  If any of the optional Matrix reference arguments are specified, it should
    * compute both the function evaluation and its derivative(s) in X1 (and/or
@@ -565,16 +578,16 @@ public:
       boost::optional<Matrix&> H1 = boost::none,
       boost::optional<Matrix&> H2 = boost::none,
       boost::optional<Matrix&> H3 = boost::none) const = 0;
-#else
+// #else
   /**
    *  Override this method to finish implementing a trinary factor.
    *  If any of the optional Matrix reference arguments are specified, it should compute
    *  both the function evaluation and its derivative(s) in X1 (and/or X2, X3).
    */
-  virtual Vector evaluateError(const X1 &, const X2 &, const X3 &,
-                               Matrix *H1 = nullptr, Matrix *H2 = nullptr,
-                               Matrix *H3 = nullptr) const = 0;
-#endif
+  // virtual Vector evaluateError(const X1 &, const X2 &, const X3 &,
+  //                             Matrix *H1 = nullptr, Matrix *H2 = nullptr,
+  //                             Matrix *H3 = nullptr) const = 0;
+// #endif
 
 private:
 
@@ -645,7 +658,7 @@ public:
     }
   }
 
-#ifdef GTSAM_USE_BOOST
+// #ifdef GTSAM_USE_BOOST
   /**
    *  Override this method to finish implementing a 4-way factor.
    *  If any of the optional Matrix reference arguments are specified, it should
@@ -658,17 +671,17 @@ public:
                 boost::optional<Matrix &> H2 = boost::none,
                 boost::optional<Matrix &> H3 = boost::none,
                 boost::optional<Matrix &> H4 = boost::none) const = 0;
-#else
+// #else
 /**
    *  Override this method to finish implementing a 4-way factor.
    *  If any of the optional Matrix reference arguments are specified, it should compute
    *  both the function evaluation and its derivative(s) in X1 (and/or X2, X3).
    */
-  virtual Vector evaluateError(const X1 &, const X2 &, const X3 &, const X4 &,
-                               Matrix *H1 = nullptr, Matrix *H2 = nullptr,
-                               Matrix *H3 = nullptr,
-                               Matrix *H4 = nullptr) const ;
-#endif
+  // virtual Vector evaluateError(const X1 &, const X2 &, const X3 &, const X4 &,
+  //                             Matrix *H1 = nullptr, Matrix *H2 = nullptr,
+  //                             Matrix *H3 = nullptr,
+  //                             Matrix *H4 = nullptr) const ;
+// #endif
 
 private:
 
@@ -742,7 +755,7 @@ public:
     }
   }
 
-#ifdef GTSAM_USE_BOOST
+// #ifdef GTSAM_USE_BOOST
   /** Override this method to finish implementing a 5-way factor.
    *  If any of the optional Matrix reference arguments are specified, it should compute
    *  both the function evaluation and its derivative(s) in X1 (and/or X2, X3).
@@ -754,18 +767,18 @@ public:
                 boost::optional<Matrix &> H3 = boost::none,
                 boost::optional<Matrix &> H4 = boost::none,
                 boost::optional<Matrix &> H5 = boost::none) const = 0;
-#else
+// #else
 /**
    *  Override this method to finish implementing a 5-way factor.
    *  If any of the optional Matrix reference arguments are specified, it should compute
    *  both the function evaluation and its derivative(s) in X1 (and/or X2, X3).
    */
-  virtual Vector evaluateError(const X1 &, const X2 &, const X3 &, const X4 &,
-                               const X5 &, Matrix *H1 = nullptr,
-                               Matrix *H2 = nullptr, Matrix *H3 = nullptr,
-                               Matrix *H4 = nullptr,
-                               Matrix *H5 = nullptr) const ;
-#endif
+  // virtual Vector evaluateError(const X1 &, const X2 &, const X3 &, const X4 &,
+  //                             const X5 &, Matrix *H1 = nullptr,
+  //                             Matrix *H2 = nullptr, Matrix *H3 = nullptr,
+  //                             Matrix *H4 = nullptr,
+  //                             Matrix *H5 = nullptr) const ;
+// #endif
 
 private:
 
@@ -842,7 +855,7 @@ public:
     }
   }
 
-#ifdef GTSAM_USE_BOOST
+// #ifdef GTSAM_USE_BOOST
   /** Overrride this method to finish implementing a 6-way factor.
    *  If any of the optional Matrix reference arguments are specified, it should
    * compute both the function evaluation and its derivative(s) in X1 (and/or
@@ -857,19 +870,19 @@ public:
                 boost::optional<Matrix &> H4 = boost::none,
                 boost::optional<Matrix &> H5 = boost::none,
                 boost::optional<Matrix &> H6 = boost::none) const = 0; 
-#else
+// #else
   /**
    *  Override this method to finish implementing a 6-way factor.
    *  If any of the optional Matrix reference arguments are specified, it should
    * compute both the function evaluation and its derivative(s) in X1 (and/or
    * X2, X3).
    */
-  virtual Vector evaluateError(const X1 &, const X2 &, const X3 &, const X4 &,
-                               const X5 &, const X6 &, Matrix *H1 = nullptr,
-                               Matrix *H2 = nullptr, Matrix *H3 = nullptr,
-                               Matrix *H4 = nullptr, Matrix *H5 = nullptr,
-                               Matrix *H6 = nullptr) const = 0;
-#endif
+  // virtual Vector evaluateError(const X1 &, const X2 &, const X3 &, const X4 &,
+  //                              const X5 &, const X6 &, Matrix *H1 = nullptr,
+  //                              Matrix *H2 = nullptr, Matrix *H3 = nullptr,
+  //                              Matrix *H4 = nullptr, Matrix *H5 = nullptr,
+  //                              Matrix *H6 = nullptr) const = 0;
+// #endif
 
 private:
 

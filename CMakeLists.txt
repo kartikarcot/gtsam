@@ -52,8 +52,9 @@ include(cmake/HandleGeneralOptions.cmake)   # CMake build options
 
 option(GTSAM_USE_BOOST "Require and use boost" ON)
 # Libraries:
+# we will shift this inside the conditional once everything
+include(cmake/HandleBoost.cmake)            # Boost
 if (GTSAM_USE_BOOST)
-  include(cmake/HandleBoost.cmake)            # Boost
   add_definitions(-DGTSAM_USE_BOOST)
 endif()
   
