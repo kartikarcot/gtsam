@@ -145,6 +145,11 @@ public:
 
 }; // \class NonlinearFactor
 
+/// traits
+template<> struct traits<NonlinearFactor> : public Testable<NonlinearFactor> {
+};
+
+
 class UnwhitenedErrorInterface {
 public:
 #ifdef GTSAM_USE_BOOST
@@ -157,6 +162,18 @@ public:
   virtual Vector unwhitenedError(
 	  const Values &x,
 	  boost::optional<std::vector<Matrix> &> H = boost::none) const = 0;
+
+  /**
+   * A wrapper function that will pass the pointer to the version of function
+   * that takes the optional argument. This is required because we want to maintain
+   * compatability of the interface with the old version of the function.
+   */
+  Vector unwhitenedError(const Values &x, std::vector<Matrix> *H) const {
+    // create a boost optional
+    boost::optional<std::vector<Matrix> &> Hopt =
+        H ? boost::optional<std::vector<Matrix> &>(*H) : boost::none;
+    return unwhitenedError(x, Hopt);
+  }
 #else
   /**
    * Error function *without* the NoiseModel, \f$ z-h(x) \f$.
@@ -167,11 +184,15 @@ public:
    */
   virtual Vector unwhitenedError(const Values &x,
 								 std::vector<Matrix> *H = nullptr) const = 0;
-#endif
-};
 
-/// traits
-template<> struct traits<NonlinearFactor> : public Testable<NonlinearFactor> {
+  /**
+   * A wrapper that will take vectors and pass it to the interface above
+   */
+  Vector unwhitenedError(const Values &x,
+						 std::vector<Matrix> &H) const {
+	return unwhitenedError(x, &H);
+  }
+#endif
 };
 
 /* ************************************************************************* */
@@ -185,7 +206,7 @@ template<> struct traits<NonlinearFactor> : public Testable<NonlinearFactor> {
 
  * The noise model is typically Gaussian, but robust and constrained error models are also supported.
  */
-class GTSAM_EXPORT NoiseModelFactor: public NonlinearFactor, UnwhitenedErrorInterface {
+class GTSAM_EXPORT NoiseModelFactor: public NonlinearFactor, public UnwhitenedErrorInterface {
 
 protected:
 
@@ -197,6 +218,8 @@ protected:
 
 public:
 
+  // https://stackoverflow.com/questions/411103/function-with-same-name-but-different-signature-in-derived-class
+  using UnwhitenedErrorInterface::unwhitenedError;
   typedef boost::shared_ptr<This> shared_ptr;
 
   /** Default constructor for I/O only */
@@ -273,17 +296,6 @@ public:
 	  return unwhitenedErrorImpl(x, Hptr);
   }
 
-  /**
-   * A wrapper function that will pass the pointer to the version of function
-   * that takes the optional argument. This is required because we want to maintain
-   * compatability of the interface with the old version of the function.
-   */
-  Vector unwhitenedError(const Values &x, std::vector<Matrix> *H) const {
-    // create a boost optional
-    boost::optional<std::vector<Matrix> &> Hopt =
-        H ? boost::optional<std::vector<Matrix> &>(*H) : boost::none;
-    return unwhitenedError(x, Hopt);
-  }
 #else
   /**
    * Error function *without* the NoiseModel, \f$ z-h(x) \f$.

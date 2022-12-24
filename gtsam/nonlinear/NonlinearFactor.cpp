@@ -147,7 +147,7 @@ boost::shared_ptr<GaussianFactor> NoiseModelFactor::linearize(
 
   // Call evaluate error to get Jacobians and RHS vector b
   std::vector<Matrix> A(size());
-  Vector b = -unwhitenedError(x, &A);
+  Vector b = -unwhitenedError(x, A);
   check(noiseModel_, b.size());
 
   // Whiten the corresponding system now
