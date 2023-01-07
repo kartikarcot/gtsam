@@ -420,6 +420,8 @@ class NoiseModelFactorN
   /// N is the number of variables (N-way factor)
   enum { N = sizeof...(ValueTypes) };
 
+  using NoiseModelFactor::unwhitenedError;
+
 protected:
   using Base = NoiseModelFactor;
   using This = NoiseModelFactorN<ValueTypes...>;
