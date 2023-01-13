@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <gtsam/inference/EliminateableFactorGraph.h>
 #include <gtsam/inference/FactorGraph.h>
 #include <gtsam/linear/Errors.h>  // Included here instead of fw-declared so we can use Errors::iterator
@@ -424,7 +425,7 @@ namespace gtsam {
 #ifdef GTSAM_ALLOW_DEPRECATED_SINCE_V42
    /** @deprecated */
    VectorValues GTSAM_DEPRECATED
-   optimize(boost::none_t, const Eliminate& function =
+   optimize(std::nullptr_t, const Eliminate& function =
                                EliminationTraitsType::DefaultEliminate) const {
      return optimize(function);
    }
