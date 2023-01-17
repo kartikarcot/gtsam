@@ -71,9 +71,9 @@ TEST(GaussianMixture, Equals) {
 
   Vector2 d1(0.2, 0.5), d2(0.5, 0.2);
 
-  auto conditional0 = boost::make_shared<GaussianConditional>(X(1), d1, R1,
+  auto conditional0 = std::make_shared<GaussianConditional>(X(1), d1, R1,
                                                               X(2), S1, model),
-       conditional1 = boost::make_shared<GaussianConditional>(X(1), d2, R2,
+       conditional1 = std::make_shared<GaussianConditional>(X(1), d2, R2,
                                                               X(2), S2, model);
 
   // Create decision tree
@@ -101,9 +101,9 @@ TEST(GaussianMixture, Error) {
 
   SharedDiagonal model = noiseModel::Diagonal::Sigmas(Vector2(1.0, 0.34));
 
-  auto conditional0 = boost::make_shared<GaussianConditional>(X(1), d1, R1,
+  auto conditional0 = std::make_shared<GaussianConditional>(X(1), d1, R1,
                                                               X(2), S1, model),
-       conditional1 = boost::make_shared<GaussianConditional>(X(1), d2, R2,
+       conditional1 = std::make_shared<GaussianConditional>(X(1), d2, R2,
                                                               X(2), S2, model);
 
   // Create decision tree
@@ -144,9 +144,9 @@ static GaussianMixture createSimpleGaussianMixture() {
   // Create Gaussian mixture Z(0) = X(0) + noise.
   // TODO(dellaert): making copies below is not ideal !
   Matrix1 I = Matrix1::Identity();
-  const auto conditional0 = boost::make_shared<GaussianConditional>(
+  const auto conditional0 = std::make_shared<GaussianConditional>(
       GaussianConditional::FromMeanAndStddev(Z(0), I, X(0), Vector1(0), 0.5));
-  const auto conditional1 = boost::make_shared<GaussianConditional>(
+  const auto conditional1 = std::make_shared<GaussianConditional>(
       GaussianConditional::FromMeanAndStddev(Z(0), I, X(0), Vector1(0), 3));
   return GaussianMixture({Z(0)}, {X(0)}, {mode}, {conditional0, conditional1});
 }

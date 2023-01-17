@@ -116,7 +116,7 @@ namespace gtsam {
       Key j = keys()[i];
       dkeys.push_back(DiscreteKey(j, cardinality(j)));
     }
-    return boost::make_shared<DecisionTreeFactor>(dkeys, result);
+    return std::make_shared<DecisionTreeFactor>(dkeys, result);
   }
 
   /* ************************************************************************ */
@@ -149,7 +149,7 @@ namespace gtsam {
         continue;
       dkeys.push_back(DiscreteKey(j, cardinality(j)));
     }
-    return boost::make_shared<DecisionTreeFactor>(dkeys, result);
+    return std::make_shared<DecisionTreeFactor>(dkeys, result);
   }
 
   /* ************************************************************************ */

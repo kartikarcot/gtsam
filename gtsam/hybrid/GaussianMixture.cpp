@@ -170,7 +170,7 @@ KeyVector GaussianMixture::continuousParents() const {
 }
 
 /* ************************************************************************* */
-boost::shared_ptr<GaussianMixtureFactor> GaussianMixture::likelihood(
+std::shared_ptr<GaussianMixtureFactor> GaussianMixture::likelihood(
     const VectorValues &frontals) const {
   // Check that values has all frontals
   for (auto &&kv : frontals) {
@@ -187,7 +187,7 @@ boost::shared_ptr<GaussianMixtureFactor> GaussianMixture::likelihood(
             conditional->likelihood(frontals),
             conditional->logNormalizationConstant()};
       });
-  return boost::make_shared<GaussianMixtureFactor>(
+  return std::make_shared<GaussianMixtureFactor>(
       continuousParentKeys, discreteParentKeys, likelihoods);
 }
 
@@ -226,7 +226,7 @@ GaussianMixture::prunerFunc(const DecisionTreeFactor &decisionTree) {
     if (gaussianMixtureKeySet == decisionTreeKeySet) {
       if (decisionTree(values) == 0.0) {
         // empty aka null pointer
-        boost::shared_ptr<GaussianConditional> null;
+        std::shared_ptr<GaussianConditional> null;
         return null;
       } else {
         return conditional;

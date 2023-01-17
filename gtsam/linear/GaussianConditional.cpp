@@ -310,7 +310,7 @@ double GaussianConditional::evaluate(const VectorValues& x) const {
     for (auto&& key : parents()) newKeys.push_back(key);
 
     // Hopefully second newAb copy below is optimized out...
-    return boost::make_shared<JacobianFactor>(newKeys, newAb, model_);
+    return std::make_shared<JacobianFactor>(newKeys, newAb, model_);
   }
 
   /* **************************************************************************/

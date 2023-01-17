@@ -70,9 +70,9 @@ TEST(HybridGaussianFactorGraph, Creation) {
   GaussianMixture gm({X(0)}, {X(1)}, DiscreteKeys(DiscreteKey{M(0), 2}),
                      GaussianMixture::Conditionals(
                          M(0),
-                         boost::make_shared<GaussianConditional>(
+                         std::make_shared<GaussianConditional>(
                              X(0), Z_3x1, I_3x3, X(1), I_3x3),
-                         boost::make_shared<GaussianConditional>(
+                         std::make_shared<GaussianConditional>(
                              X(0), Vector3::Ones(), I_3x3, X(1), I_3x3)));
   hfg.add(gm);
 
@@ -123,8 +123,8 @@ TEST(HybridGaussianFactorGraph, eliminateFullSequentialEqualChance) {
   // Add a gaussian mixture factor ϕ(x1, c1)
   DiscreteKey m1(M(1), 2);
   DecisionTree<Key, GaussianFactor::shared_ptr> dt(
-      M(1), boost::make_shared<JacobianFactor>(X(1), I_3x3, Z_3x1),
-      boost::make_shared<JacobianFactor>(X(1), I_3x3, Vector3::Ones()));
+      M(1), std::make_shared<JacobianFactor>(X(1), I_3x3, Z_3x1),
+      std::make_shared<JacobianFactor>(X(1), I_3x3, Vector3::Ones()));
   hfg.add(GaussianMixtureFactor({X(1)}, {m1}, dt));
 
   auto result = hfg.eliminateSequential();
@@ -149,8 +149,8 @@ TEST(HybridGaussianFactorGraph, eliminateFullSequentialSimple) {
   hfg.add(JacobianFactor(X(0), I_3x3, X(1), -I_3x3, Z_3x1));
 
   std::vector<GaussianFactor::shared_ptr> factors = {
-      boost::make_shared<JacobianFactor>(X(1), I_3x3, Z_3x1),
-      boost::make_shared<JacobianFactor>(X(1), I_3x3, Vector3::Ones())};
+      std::make_shared<JacobianFactor>(X(1), I_3x3, Z_3x1),
+      std::make_shared<JacobianFactor>(X(1), I_3x3, Vector3::Ones())};
   hfg.add(GaussianMixtureFactor({X(1)}, {m1}, factors));
 
   // Discrete probability table for c1
@@ -175,8 +175,8 @@ TEST(HybridGaussianFactorGraph, eliminateFullMultifrontalSimple) {
 
   hfg.add(GaussianMixtureFactor(
       {X(1)}, {{M(1), 2}},
-      {boost::make_shared<JacobianFactor>(X(1), I_3x3, Z_3x1),
-       boost::make_shared<JacobianFactor>(X(1), I_3x3, Vector3::Ones())}));
+      {std::make_shared<JacobianFactor>(X(1), I_3x3, Z_3x1),
+       std::make_shared<JacobianFactor>(X(1), I_3x3, Vector3::Ones())}));
 
   hfg.add(DecisionTreeFactor(m1, {2, 8}));
   // TODO(Varun) Adding extra discrete variable not connected to continuous
@@ -204,8 +204,8 @@ TEST(HybridGaussianFactorGraph, eliminateFullMultifrontalCLG) {
 
   // Decision tree with different modes on x1
   DecisionTree<Key, GaussianFactor::shared_ptr> dt(
-      M(1), boost::make_shared<JacobianFactor>(X(1), I_3x3, Z_3x1),
-      boost::make_shared<JacobianFactor>(X(1), I_3x3, Vector3::Ones()));
+      M(1), std::make_shared<JacobianFactor>(X(1), I_3x3, Z_3x1),
+      std::make_shared<JacobianFactor>(X(1), I_3x3, Vector3::Ones()));
 
   // Hybrid factor P(x1|c1)
   hfg.add(GaussianMixtureFactor({X(1)}, {m}, dt));
@@ -235,12 +235,12 @@ TEST(HybridGaussianFactorGraph, eliminateFullMultifrontalTwoClique) {
   {
     hfg.add(GaussianMixtureFactor(
         {X(0)}, {{M(0), 2}},
-        {boost::make_shared<JacobianFactor>(X(0), I_3x3, Z_3x1),
-         boost::make_shared<JacobianFactor>(X(0), I_3x3, Vector3::Ones())}));
+        {std::make_shared<JacobianFactor>(X(0), I_3x3, Z_3x1),
+         std::make_shared<JacobianFactor>(X(0), I_3x3, Vector3::Ones())}));
 
     DecisionTree<Key, GaussianFactor::shared_ptr> dt1(
-        M(1), boost::make_shared<JacobianFactor>(X(2), I_3x3, Z_3x1),
-        boost::make_shared<JacobianFactor>(X(2), I_3x3, Vector3::Ones()));
+        M(1), std::make_shared<JacobianFactor>(X(2), I_3x3, Z_3x1),
+        std::make_shared<JacobianFactor>(X(2), I_3x3, Vector3::Ones()));
 
     hfg.add(GaussianMixtureFactor({X(2)}, {{M(1), 2}}, dt1));
   }
@@ -252,14 +252,14 @@ TEST(HybridGaussianFactorGraph, eliminateFullMultifrontalTwoClique) {
 
   {
     DecisionTree<Key, GaussianFactor::shared_ptr> dt(
-        M(3), boost::make_shared<JacobianFactor>(X(3), I_3x3, Z_3x1),
-        boost::make_shared<JacobianFactor>(X(3), I_3x3, Vector3::Ones()));
+        M(3), std::make_shared<JacobianFactor>(X(3), I_3x3, Z_3x1),
+        std::make_shared<JacobianFactor>(X(3), I_3x3, Vector3::Ones()));
 
     hfg.add(GaussianMixtureFactor({X(3)}, {{M(3), 2}}, dt));
 
     DecisionTree<Key, GaussianFactor::shared_ptr> dt1(
-        M(2), boost::make_shared<JacobianFactor>(X(5), I_3x3, Z_3x1),
-        boost::make_shared<JacobianFactor>(X(5), I_3x3, Vector3::Ones()));
+        M(2), std::make_shared<JacobianFactor>(X(5), I_3x3, Z_3x1),
+        std::make_shared<JacobianFactor>(X(5), I_3x3, Vector3::Ones()));
 
     hfg.add(GaussianMixtureFactor({X(5)}, {{M(2), 2}}, dt1));
   }
@@ -507,8 +507,8 @@ TEST(HybridGaussianFactorGraph, optimize) {
   hfg.add(JacobianFactor(X(0), I_3x3, X(1), -I_3x3, Z_3x1));
 
   DecisionTree<Key, GaussianFactor::shared_ptr> dt(
-      C(1), boost::make_shared<JacobianFactor>(X(1), I_3x3, Z_3x1),
-      boost::make_shared<JacobianFactor>(X(1), I_3x3, Vector3::Ones()));
+      C(1), std::make_shared<JacobianFactor>(X(1), I_3x3, Z_3x1),
+      std::make_shared<JacobianFactor>(X(1), I_3x3, Vector3::Ones()));
 
   hfg.add(GaussianMixtureFactor({X(1)}, {c1}, dt));
 
@@ -662,9 +662,9 @@ TEST(HybridGaussianFactorGraph, EliminateTiny1) {
   // Create Gaussian mixture on X(0).
   using tiny::mode;
   // regression, but mean checked to be 5.0 in both cases:
-  const auto conditional0 = boost::make_shared<GaussianConditional>(
+  const auto conditional0 = std::make_shared<GaussianConditional>(
                  X(0), Vector1(14.1421), I_1x1 * 2.82843),
-             conditional1 = boost::make_shared<GaussianConditional>(
+             conditional1 = std::make_shared<GaussianConditional>(
                  X(0), Vector1(10.1379), I_1x1 * 2.02759);
   expectedBayesNet.emplace_back(
       new GaussianMixture({X(0)}, {}, {mode}, {conditional0, conditional1}));
@@ -694,9 +694,9 @@ TEST(HybridGaussianFactorGraph, EliminateTiny2) {
   // Create Gaussian mixture on X(0).
   using tiny::mode;
   // regression, but mean checked to be 5.0 in both cases:
-  const auto conditional0 = boost::make_shared<GaussianConditional>(
+  const auto conditional0 = std::make_shared<GaussianConditional>(
                  X(0), Vector1(17.3205), I_1x1 * 3.4641),
-             conditional1 = boost::make_shared<GaussianConditional>(
+             conditional1 = std::make_shared<GaussianConditional>(
                  X(0), Vector1(10.274), I_1x1 * 2.0548);
   expectedBayesNet.emplace_back(
       new GaussianMixture({X(0)}, {}, {mode}, {conditional0, conditional1}));
