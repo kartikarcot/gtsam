@@ -1,3 +1,6 @@
+// Defined only if boost serialization is enabled
+#ifdef GTSAM_ENABLE_BOOST_SERIALIZATION
+
 // A hack to serialize std::optional<T> to boost::archive
 // Don't know if it will work. Trying to follow this:
 // PR: https://github.com/boostorg/serialization/pull/148/files#
@@ -61,4 +64,4 @@ void serialize(Archive& ar, std::optional<T>& t, const unsigned int version) {
 
 }  // namespace serialization
 }  // namespace boost
-
+#endif

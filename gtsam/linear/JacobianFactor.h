@@ -430,7 +430,6 @@ namespace gtsam {
         ar << BOOST_SERIALIZATION_NVP(model_);
       }
     }
-#endif
 
     template<class ARCHIVE>
     void load(ARCHIVE & ar, const unsigned int version) {
@@ -449,6 +448,7 @@ namespace gtsam {
     }
 
     BOOST_SERIALIZATION_SPLIT_MEMBER()
+#endif
   }; // JacobianFactor
 /// traits
 template<>
@@ -457,7 +457,9 @@ struct traits<JacobianFactor> : public Testable<JacobianFactor> {
 
 } // \ namespace gtsam
 
+#ifdef GTSAM_ENABLE_BOOST_SERIALIZATION
 BOOST_CLASS_VERSION(gtsam::JacobianFactor, 1)
+#endif
 
 #include <gtsam/linear/JacobianFactor-inl.h>
 
