@@ -212,6 +212,7 @@ class GTSAM_EXPORT GaussianMixture
 
  private:
   /** Serialization function */
+#ifdef GTSAM_ENABLE_BOOST_SERIALIZATION
   friend class boost::serialization::access;
   template <class Archive>
   void serialize(Archive &ar, const unsigned int /*version*/) {
@@ -219,6 +220,7 @@ class GTSAM_EXPORT GaussianMixture
     ar &BOOST_SERIALIZATION_BASE_OBJECT_NVP(BaseConditional);
     ar &BOOST_SERIALIZATION_NVP(conditionals_);
   }
+#endif
 };
 
 /// Return the DiscreteKey vector as a set.
