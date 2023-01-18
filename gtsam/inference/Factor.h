@@ -166,8 +166,8 @@ typedef FastSet<FactorIndex> FactorIndexSet;
     iterator end() { return keys_.end(); }
 
   private:
-    /** Serialization function */
 #ifdef GTSAM_ENABLE_BOOST_SERIALIZATION
+    /** Serialization function */
     friend class boost::serialization::access;
     template<class Archive>
     void serialize(Archive & ar, const unsigned int /*version*/) {
