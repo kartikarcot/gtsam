@@ -29,10 +29,11 @@
 #include <gtsam/linear/RegularHessianFactor.h>
 #include <gtsam/geometry/CameraSet.h>
 
-#include <optional>
 #ifdef GTSAM_ENABLE_BOOST_SERIALIZATION
 #include <boost/serialization/optional.hpp>
 #endif
+
+#include <optional>
 #include <vector>
 
 namespace gtsam {
