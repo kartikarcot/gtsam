@@ -31,7 +31,7 @@ namespace gtsam {
     // do RQ decomposition to get s*K and cRw angles
     Matrix3 sK;
     Vector3 xyz;
-    boost::tie(sK, xyz) = RQ(A);
+    std::tie(sK, xyz) = RQ(A);
 
     // Recover scale factor s and K
     double s = sK(2, 2);

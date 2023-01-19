@@ -235,7 +235,7 @@ hybridElimination(const HybridGaussianFactorGraph &factors,
 
     std::shared_ptr<GaussianConditional> conditional;
     std::shared_ptr<GaussianFactor> newFactor;
-    boost::tie(conditional, newFactor) =
+    std::tie(conditional, newFactor) =
         EliminatePreferCholesky(graph_z.graph, frontalKeys);
 
     // Get the log of the log normalization constant inverse and
