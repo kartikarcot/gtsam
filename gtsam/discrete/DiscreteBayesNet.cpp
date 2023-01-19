@@ -55,8 +55,9 @@ DiscreteValues DiscreteBayesNet::optimize(DiscreteValues result) const {
 #else
 #warning "DiscreteBayesNet::optimize (deprecated) does not compute MPE!"
 #endif
-  for (auto conditional : boost::adaptors::reverse(*this))
-    conditional->solveInPlace(&result);
+  for (auto it = std::make_reverse_iterator(end()); it != std::make_reverse_iterator(begin()); ++it) {
+    (*it)->solveInPlace(&result);
+  }
   return result;
 }
 #endif
@@ -69,8 +70,9 @@ DiscreteValues DiscreteBayesNet::sample() const {
 
 DiscreteValues DiscreteBayesNet::sample(DiscreteValues result) const {
   // sample each node in turn in topological sort order (parents first)
-  for (auto conditional : boost::adaptors::reverse(*this))
-    conditional->sampleInPlace(&result);
+  for (auto it = std::make_reverse_iterator(end()); it != std::make_reverse_iterator(begin()); ++it) {
+    (*it)->sampleInPlace(&result);
+  }
   return result;
 }
 
