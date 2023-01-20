@@ -17,7 +17,6 @@
  */
 
 #include <gtsam/nonlinear/NonlinearFactor.h>
-#include <boost/make_shared.hpp>
 #include <boost/format.hpp>
 
 namespace gtsam {

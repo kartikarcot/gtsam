@@ -26,7 +26,6 @@
 #include <gtsam/linear/GaussianDensity.h>
 #include <gtsam/linear/GaussianBayesNet.h>
 
-#include <boost/make_shared.hpp>
 
 #include <iostream>
 #include <sstream>

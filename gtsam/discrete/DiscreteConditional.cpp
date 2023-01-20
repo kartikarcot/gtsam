@@ -23,7 +23,6 @@
 #include <gtsam/inference/Conditional-inst.h>
 
 #include <algorithm>
-#include <boost/make_shared.hpp>
 #include <random>
 #include <set>
 #include <stdexcept>
