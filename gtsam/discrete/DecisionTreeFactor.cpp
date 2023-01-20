@@ -21,7 +21,6 @@
 #include <gtsam/discrete/DecisionTreeFactor.h>
 #include <gtsam/discrete/DiscreteConditional.h>
 
-#include <boost/format.hpp>
 #include <utility>
 
 using namespace std;
@@ -68,8 +67,9 @@ namespace gtsam {
                                  const KeyFormatter& formatter) const {
     cout << s;
     cout << " f[";
-    for (auto&& key : keys())
-      cout << boost::format(" (%1%,%2%),") % formatter(key) % cardinality(key);
+    for (auto&& key : keys()) {
+      cout << " (" << formatter(key) << "," << cardinality(key) << "),";
+    }
     cout << " ]" << endl;
     ADT::print("", formatter);
   }
@@ -93,13 +93,12 @@ namespace gtsam {
   /* ************************************************************************ */
   DecisionTreeFactor::shared_ptr DecisionTreeFactor::combine(
       size_t nrFrontals, ADT::Binary op) const {
-    if (nrFrontals > size())
+    if (nrFrontals > size()) {
       throw invalid_argument(
-          (boost::format(
-               "DecisionTreeFactor::combine: invalid number of frontal "
-               "keys %d, nr.keys=%d") %
-           nrFrontals % size())
-              .str());
+          "DecisionTreeFactor::combine: invalid number of frontal "
+          "keys " +
+          std::to_string(nrFrontals) + ", nr.keys=" + std::to_string(size()));
+    }
 
     // sum over nrFrontals keys
     size_t i;
@@ -121,13 +120,13 @@ namespace gtsam {
   /* ************************************************************************ */
   DecisionTreeFactor::shared_ptr DecisionTreeFactor::combine(
       const Ordering& frontalKeys, ADT::Binary op) const {
-    if (frontalKeys.size() > size())
+    if (frontalKeys.size() > size()) {
       throw invalid_argument(
-          (boost::format(
-               "DecisionTreeFactor::combine: invalid number of frontal "
-               "keys %d, nr.keys=%d") %
-           frontalKeys.size() % size())
-              .str());
+          "DecisionTreeFactor::combine: invalid number of frontal "
+          "keys " +
+          std::to_string(frontalKeys.size()) + ", nr.keys=" +
+          std::to_string(size()));
+    }
 
     // sum over nrFrontals keys
     size_t i;
@@ -182,7 +181,9 @@ namespace gtsam {
 
   /* ************************************************************************ */
   static std::string valueFormatter(const double& v) {
-    return (boost::format("%4.2g") % v).str();
+    std::stringstream ss;
+    ss << std::setw(4) << std::setprecision(2) << std::fixed << v;
+    return ss.str();
   }
 
   /** output to graphviz format, stream version */

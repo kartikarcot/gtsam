@@ -17,7 +17,6 @@
  */
 
 #include <gtsam/nonlinear/NonlinearFactor.h>
-#include <boost/format.hpp>
 
 namespace gtsam {
 
@@ -85,12 +84,12 @@ NoiseModelFactor::shared_ptr NoiseModelFactor::cloneWithNewNoiseModel(
 
 /* ************************************************************************* */
 static void check(const SharedNoiseModel& noiseModel, size_t m) {
-  if (noiseModel && m != noiseModel->dim())
+  if (noiseModel && m != noiseModel->dim()) {
     throw std::invalid_argument(
-        boost::str(
-            boost::format(
-                "NoiseModelFactor: NoiseModel has dimension %1% instead of %2%.")
-                % noiseModel->dim() % m));
+        "NoiseModelFactor: NoiseModel has dimension " +
+        std::to_string(noiseModel->dim()) +
+        " instead of " + std::to_string(m) + ".");
+  }
 }
 
 /* ************************************************************************* */
