@@ -29,6 +29,20 @@ set (excluded_headers # "")
     "${CMAKE_CURRENT_SOURCE_DIR}/slam/serialization.h"
 )
 
+# if GTSAM_USE_BOOST_FEATURES is not set, then we need to exclude the following:
+# * QPSParser
+# * QPSSolver
+if(NOT GTSAM_USE_BOOST_FEATURES)
+    set (excluded_sources ${excluded_sources}
+        "${CMAKE_CURRENT_SOURCE_DIR}/linear/QPSParser.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/linear/QPSSolver.cpp"
+    )
+    set (excluded_headers ${excluded_headers}
+        "${CMAKE_CURRENT_SOURCE_DIR}/linear/QPSParser.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/linear/QPSSolver.h"
+    )
+endif()
+
 # assemble core libraries
 foreach(subdir ${gtsam_unstable_subdirs})
     # Build convenience libraries

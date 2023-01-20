@@ -53,6 +53,7 @@ endif()
 # TODO(kartikarcot): Determine a proper home for this option
 # a flag to enable or disable serialization with GTSAM_ENABLE_BOOST_SERIALIZATION
 option(GTSAM_ENABLE_BOOST_SERIALIZATION "Enable Boost serialization" ON)
+option(GTSAM_USE_BOOST_FEATURES "Enable Features that use Boost" OFF)
 # set a compiler flag to enable or disable serialization with GTSAM_DISABLE_BOOST_SERIALIZATION
 if(GTSAM_ENABLE_BOOST_SERIALIZATION)
   add_definitions(-DGTSAM_ENABLE_BOOST_SERIALIZATION)
