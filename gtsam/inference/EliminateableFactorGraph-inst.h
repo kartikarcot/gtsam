@@ -21,6 +21,15 @@
 #include <gtsam/inference/EliminateableFactorGraph.h>
 #include <gtsam/inference/inferenceExceptions.h>
 
+// some helper functions
+namespace {
+  // A function to take a reference_wrapper object and return the underlying pointer
+  template<typename T>
+  T* get_pointer(std::reference_wrapper<T> ref) {
+    return &ref.get();
+  }
+}
+
 namespace gtsam {
 
   /* ************************************************************************* */
@@ -230,7 +239,7 @@ namespace gtsam {
   template<class FACTORGRAPH>
   std::shared_ptr<typename EliminateableFactorGraph<FACTORGRAPH>::BayesNetType>
     EliminateableFactorGraph<FACTORGRAPH>::marginalMultifrontalBayesNet(
-    boost::variant<const Ordering&, const KeyVector&> variables,
+    OrderingKeyVectorVariant variables,
     const Eliminate& function, OptionalVariableIndex variableIndex) const
   {
     if(!variableIndex) {
@@ -240,10 +249,10 @@ namespace gtsam {
     } else {
       // No ordering was provided for the marginalized variables, so order them using constrained
       // COLAMD.
-      bool unmarginalizedAreOrdered = (boost::get<const Ordering&>(&variables) != 0);
-      const KeyVector* variablesOrOrdering =
-        unmarginalizedAreOrdered ?
-        boost::get<const Ordering&>(&variables) : boost::get<const KeyVector&>(&variables);
+      bool unmarginalizedAreOrdered = (std::get_if<const OrderingConstRef>(&variables) != nullptr);
+      const KeyVector* variablesOrOrdering = unmarginalizedAreOrdered
+                                                 ? get_pointer(std::get<const OrderingConstRef>(variables))
+                                                 : get_pointer(std::get<const KeyVectorConstRef>(variables));
 
       Ordering totalOrdering =
         Ordering::ColamdConstrainedLast(*variableIndex, *variablesOrOrdering, unmarginalizedAreOrdered);
@@ -254,7 +263,7 @@ namespace gtsam {
       Ordering marginalVarsOrdering(totalOrdering.end() - nVars, totalOrdering.end());
 
       // Call this function again with the computed orderings
-      return marginalMultifrontalBayesNet(marginalVarsOrdering, marginalizationOrdering, function, variableIndex);
+      return marginalMultifrontalBayesNet(std::cref(marginalVarsOrdering), marginalizationOrdering, function, variableIndex);
     }
   }
 
@@ -262,7 +271,7 @@ namespace gtsam {
   template<class FACTORGRAPH>
   std::shared_ptr<typename EliminateableFactorGraph<FACTORGRAPH>::BayesNetType>
     EliminateableFactorGraph<FACTORGRAPH>::marginalMultifrontalBayesNet(
-    boost::variant<const Ordering&, const KeyVector&> variables,
+    OrderingKeyVectorVariant variables,
     const Ordering& marginalizedVariableOrdering,
     const Eliminate& function, OptionalVariableIndex variableIndex) const
   {
@@ -279,8 +288,9 @@ namespace gtsam {
       std::tie(bayesTree,factorGraph) =
         eliminatePartialMultifrontal(marginalizedVariableOrdering, function, variableIndex);
 
-      if(const Ordering* varsAsOrdering = boost::get<const Ordering&>(&variables))
+      if(std::get_if<const OrderingConstRef>(&variables))
       {
+        const Ordering* varsAsOrdering = get_pointer(std::get<const OrderingConstRef>(variables));
         // An ordering was also provided for the unmarginalized variables, so we can also
         // eliminate them in the order requested.
         return factorGraph->eliminateSequential(*varsAsOrdering, function);
@@ -297,7 +307,7 @@ namespace gtsam {
   template<class FACTORGRAPH>
   std::shared_ptr<typename EliminateableFactorGraph<FACTORGRAPH>::BayesTreeType>
     EliminateableFactorGraph<FACTORGRAPH>::marginalMultifrontalBayesTree(
-    boost::variant<const Ordering&, const KeyVector&> variables,
+    OrderingKeyVectorVariant variables,
     const Eliminate& function, OptionalVariableIndex variableIndex) const
   {
     if(!variableIndex) {
@@ -307,10 +317,10 @@ namespace gtsam {
     } else {
       // No ordering was provided for the marginalized variables, so order them using constrained
       // COLAMD.
-      bool unmarginalizedAreOrdered = (boost::get<const Ordering&>(&variables) != 0);
-      const KeyVector* variablesOrOrdering =
-        unmarginalizedAreOrdered ?
-        boost::get<const Ordering&>(&variables) : boost::get<const KeyVector&>(&variables);
+      bool unmarginalizedAreOrdered = (std::get_if<const OrderingConstRef>(&variables) != 0);
+      const KeyVector* variablesOrOrdering = unmarginalizedAreOrdered
+                                                 ? get_pointer(std::get<const OrderingConstRef>(variables))
+                                                 : get_pointer(std::get<const KeyVectorConstRef>(variables));
 
       Ordering totalOrdering =
         Ordering::ColamdConstrainedLast(*variableIndex, *variablesOrOrdering, unmarginalizedAreOrdered);
@@ -321,7 +331,7 @@ namespace gtsam {
       Ordering marginalVarsOrdering(totalOrdering.end() - nVars, totalOrdering.end());
 
       // Call this function again with the computed orderings
-      return marginalMultifrontalBayesTree(marginalVarsOrdering, marginalizationOrdering, function, variableIndex);
+      return marginalMultifrontalBayesTree(std::cref(marginalVarsOrdering), marginalizationOrdering, function, variableIndex);
     }
   }
 
@@ -329,7 +339,7 @@ namespace gtsam {
   template<class FACTORGRAPH>
   std::shared_ptr<typename EliminateableFactorGraph<FACTORGRAPH>::BayesTreeType>
     EliminateableFactorGraph<FACTORGRAPH>::marginalMultifrontalBayesTree(
-    boost::variant<const Ordering&, const KeyVector&> variables,
+    OrderingKeyVectorVariant variables,
     const Ordering& marginalizedVariableOrdering,
     const Eliminate& function, OptionalVariableIndex variableIndex) const
   {
@@ -346,8 +356,9 @@ namespace gtsam {
       std::tie(bayesTree,factorGraph) =
         eliminatePartialMultifrontal(marginalizedVariableOrdering, function, variableIndex);
 
-      if(const Ordering* varsAsOrdering = boost::get<const Ordering&>(&variables))
+      if(std::get_if<const OrderingConstRef>(&variables))
       {
+        const Ordering* varsAsOrdering = get_pointer(std::get<const OrderingConstRef>(variables));
         // An ordering was also provided for the unmarginalized variables, so we can also
         // eliminate them in the order requested.
         return factorGraph->eliminateMultifrontal(*varsAsOrdering, function);

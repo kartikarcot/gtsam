@@ -22,12 +22,19 @@
 #include <cstddef>
 #include <functional>
 #include <optional>
-#include <boost/variant.hpp>
+#include <variant>
 
 #include <gtsam/inference/Ordering.h>
 #include <gtsam/inference/VariableIndex.h>
 
 namespace gtsam {
+  // Creating an alias for the variant type since it is verbose
+  template <typename T>
+    using ref_wrap = std::reference_wrapper<T>;
+  using OrderingConstRef = std::reference_wrapper<const Ordering>;
+  using KeyVectorConstRef = std::reference_wrapper<const KeyVector>;
+  using OrderingKeyVectorVariant = 
+    std::variant<const OrderingConstRef, const KeyVectorConstRef>;
 
   /// Traits class for eliminateable factor graphs, specifies the types that result from
   /// elimination, etc.  This must be defined for each factor graph that inherits from
@@ -224,7 +231,7 @@ namespace gtsam {
      *  @param variableIndex Optional pre-computed VariableIndex for the factor graph, if not
      *         provided one will be computed. */
     std::shared_ptr<BayesNetType> marginalMultifrontalBayesNet(
-      boost::variant<const Ordering&, const KeyVector&> variables,
+      OrderingKeyVectorVariant variables,
       const Eliminate& function = EliminationTraitsType::DefaultEliminate,
       OptionalVariableIndex variableIndex = {}) const;
 
@@ -239,7 +246,7 @@ namespace gtsam {
      *  @param variableIndex Optional pre-computed VariableIndex for the factor graph, if not
      *         provided one will be computed. */
     std::shared_ptr<BayesNetType> marginalMultifrontalBayesNet(
-      boost::variant<const Ordering&, const KeyVector&> variables,
+      OrderingKeyVectorVariant variables,
       const Ordering& marginalizedVariableOrdering,
       const Eliminate& function = EliminationTraitsType::DefaultEliminate,
       OptionalVariableIndex variableIndex = {}) const;
@@ -254,7 +261,7 @@ namespace gtsam {
      *  @param variableIndex Optional pre-computed VariableIndex for the factor graph, if not
      *         provided one will be computed. */
     std::shared_ptr<BayesTreeType> marginalMultifrontalBayesTree(
-      boost::variant<const Ordering&, const KeyVector&> variables,
+      OrderingKeyVectorVariant variables,
       const Eliminate& function = EliminationTraitsType::DefaultEliminate,
       OptionalVariableIndex variableIndex = {}) const;
 
@@ -269,7 +276,7 @@ namespace gtsam {
      *  @param variableIndex Optional pre-computed VariableIndex for the factor graph, if not
      *         provided one will be computed. */
     std::shared_ptr<BayesTreeType> marginalMultifrontalBayesTree(
-      boost::variant<const Ordering&, const KeyVector&> variables,
+      OrderingKeyVectorVariant variables,
       const Ordering& marginalizedVariableOrdering,
       const Eliminate& function = EliminationTraitsType::DefaultEliminate,
       OptionalVariableIndex variableIndex = {}) const;
@@ -326,7 +333,7 @@ namespace gtsam {
 
     /** @deprecated */
     std::shared_ptr<BayesNetType> GTSAM_DEPRECATED marginalMultifrontalBayesNet(
-      boost::variant<const Ordering&, const KeyVector&> variables,
+      OrderingKeyVectorVariant variables,
       std::nullptr_t,
       const Eliminate& function = EliminationTraitsType::DefaultEliminate,
       OptionalVariableIndex variableIndex = {}) const {
@@ -335,7 +342,7 @@ namespace gtsam {
 
     /** @deprecated */
     std::shared_ptr<BayesTreeType> GTSAM_DEPRECATED marginalMultifrontalBayesTree(
-      boost::variant<const Ordering&, const KeyVector&> variables,
+      OrderingKeyVectorVariant variables,
       std::nullptr_t,
       const Eliminate& function = EliminationTraitsType::DefaultEliminate,
       OptionalVariableIndex variableIndex = {}) const {
