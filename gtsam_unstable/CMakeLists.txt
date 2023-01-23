@@ -36,10 +36,12 @@ if(NOT GTSAM_USE_BOOST_FEATURES)
     set (excluded_sources ${excluded_sources}
         "${CMAKE_CURRENT_SOURCE_DIR}/linear/QPSParser.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/linear/QPSSolver.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/linear/Scheduler.cpp"
     )
     set (excluded_headers ${excluded_headers}
         "${CMAKE_CURRENT_SOURCE_DIR}/linear/QPSParser.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/linear/QPSSolver.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/linear/Scheduler.h"
     )
 endif()
 
