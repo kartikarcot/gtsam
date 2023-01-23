@@ -11,6 +11,4 @@ if (NOT GTSAM_USE_BOOST)
       )
 endif()
 
-message(STATUS "Excluded examples!!: ${excluded_examples}")
-
 gtsamAddExamplesGlob("*.cpp" "${excluded_examples}" "gtsam;gtsam_unstable;${Boost_PROGRAM_OPTIONS_LIBRARY}")
