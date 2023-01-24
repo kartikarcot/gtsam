@@ -91,6 +91,16 @@ TEST(SimpleParser, jibberish_in_middle) {
   EXPECT(compare_tables(table, expectedTable));
 }
 
+// A test with slash in the end
+TEST(SimpleParser, slash_in_end) {
+  gtsam::SignatureParser::Table table, expectedTable;
+  expectedTable = {{1, 1}, };
+  bool ret = gtsam::SignatureParser::parse("1/1 2/", table);
+  EXPECT(ret);
+  // compare the tables
+  EXPECT(compare_tables(table, expectedTable));
+}
+
 int main() {
   TestResult tr;
   return TestRegistry::runAllTests(tr);
