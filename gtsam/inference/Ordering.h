@@ -58,7 +58,6 @@ public:
       Base(keys.begin(), keys.end()) {
   }
 
-#ifdef GTSAM_USE_BOOST_FEATURES
   /// Add new variables to the ordering as ordering += key1, key2, ...  Equivalent to calling
   /// push_back.
   boost::assign::list_inserter<boost::assign_detail::call_push_back<This> > operator+=(
@@ -66,16 +65,6 @@ public:
     return boost::assign::make_list_inserter(
         boost::assign_detail::call_push_back<This>(*this))(key);
   }
-#else
-  /** A simple inserter to insert one key at a time
-   * @param key The key to insert
-   * @return The ordering
-   */
-  This& operator+=(Key key) {
-    push_back(key);
-    return *this;
-  }
-#endif
 
   /**
    * @brief Append new keys to the ordering as `ordering += keys`.
