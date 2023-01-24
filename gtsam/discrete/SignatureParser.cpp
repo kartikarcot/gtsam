@@ -29,6 +29,8 @@ bool static ParseConditional(const std::string& token, std::vector<double>& row)
       // can throw exception
       row.push_back(std::stod(s));
     }
+    // if we ended with a '/' then return false
+    if (token.back() == '/') return false;
   } catch (...) {
     return false;
   }
